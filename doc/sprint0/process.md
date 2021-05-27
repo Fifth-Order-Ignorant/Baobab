@@ -25,8 +25,8 @@ We set a self-imposed deadline to make sure there is enough time to polish up la
 
 - How did you make decisions?
 
-Dividing tasks between ourseleves:
-we held a meeting and discussed the deliverables. There were several volunteers for each task, so no problems came up in that regard.
+Dividing tasks between ourselves:
+We held a meeting and discussed the deliverables. There were several volunteers for each task, so no problems came up in that regard.
 
 Making decisions on the project:
 We discussed options on Discord as they came up and weighed the pros and cons of each alternative. If we couldn't reach a quick conclusion through text, we would hold a meeting or ask the instruction team and the product owner.
@@ -52,7 +52,7 @@ We held big group meetings 1-2 times per week to talk about the project and Spri
 
 - What lessons should you take forward to the next phase?
 
-We noticed that communication with the product owner is very important and helpful in making decisions for the project, specially user stories. This is something we'd like to continue to do as the project moves forward.
+We noticed that communication with the product owner is very important and helpful in making decisions for the project, especially user stories. This is something we'd like to continue to do as the project moves forward.
 
 We would also like to continue holding small group meetings frequently, as they are beneficial for producing high-quality work and keeping motivation up.
 
