@@ -1,14 +1,19 @@
-# Project Name
-
-TBD (IMAGE)
+# Baobab
 
 ## Description
 
-TBD
+The African Impact Challenge is a non-profit investing in aspiring young African 
+entrepreneurs. Participants work on building market innovations that tackle 
+their country’s challenges with technology. This project provides a community 
+and e-learning platform for the moderators and participants of the challenge.
 
 ### Features
 
-- TBD
+- Individual and organization profiles.
+- Discussion board for networking.
+- Direct text messaging.
+- Learning materials and deliverables hosting.
+- Real time conferencing.
 
 ## Installation
 
@@ -61,4 +66,11 @@ The following procedure should be followed when contributing to the project.
 4. When both the contributor and code reviewer are satisfied with the pull
    request, it can be merged into `develop`.
    
-5. On release days, TBD
+5. On release days (sprint deadlines), a member from the team will create a pull 
+   request that merges `develop` into `main`.
+   
+6. Two or more members from the team (can include the member who created the 
+   pull request) will review the pull request, requesting changes as necessary.
+   
+7. When at least two members from the team are satisfied with the pull request, 
+   it can be merged into `main`.
