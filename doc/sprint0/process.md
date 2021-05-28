@@ -4,8 +4,6 @@
 
 ### Team Organization
 
-- How did you organize the team? Which tools did you use, if any?
-
 We used multiple Google Docs to keep track of everything we did for Sprint 0. To divide tasks between us equally, we held a group meeting on Discord which went on for about two hours. We went through the deliverables and decided on who would primarily work on which task.
 
 | Task            | Assignee(s)     | Deadline for Assignee(s) | Proofreader(s)    |
@@ -23,8 +21,6 @@ We set a self-imposed deadline to make sure there is enough time to polish up la
 
 ### Decision Making
 
-- How did you make decisions?
-
 Dividing tasks between ourselves:
 We held a meeting and discussed the deliverables. There were several volunteers for each task, so no problems came up in that regard.
 
@@ -35,22 +31,18 @@ We keep track of all the decisions we have made through several documents on Goo
 
 ### Prioritizing User Stories
 
-- How did you define priority and/or points of user stories?
-- How many rounds of voting (on average) did you need to come to a consensus for the point estimate?
+We defined points as follows:
+1 => Something we have done previously or know exactly how to do
+2 => Something that’s two times more difficult than anything we’ve done previously
+k => Something that’s k times more difficult than anything we’ve done previously
 
-TODO
-
-Talking to Efosa
+To reach a consensus for the point estimate, we voted for a point based on the criteria of satisfaction of the user story. Then we discussed our reasoning behind our votes, and voted again until we were all in agreement. We voted 2-3 times on average before reaching a unanimous decision.
 
 ### Meetings
-
-- How frequently did you meet?
 
 We held big group meetings 1-2 times per week to talk about the project and Sprint 0. We held smaller group meetings (between people whose tasks were more related) as discussions came up. We also held meetings where we simply worked on Sprint 0 together.
 
 ### Next Phase
-
-- What lessons should you take forward to the next phase?
 
 We noticed that communication with the product owner is very important and helpful in making decisions for the project, especially user stories. This is something we'd like to continue to do as the project moves forward.
 
