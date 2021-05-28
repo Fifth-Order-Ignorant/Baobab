@@ -1,4 +1,4 @@
-# Proces
+# Process
 
 ### Team Organization
 
