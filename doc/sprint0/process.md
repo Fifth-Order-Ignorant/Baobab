@@ -31,7 +31,13 @@ We keep track of all the decisions we have made through several documents on Goo
 
 ### Prioritizing User Stories
 
-We defined points as follows:
+We had a meeting early in Sprint 0 where we discussed important user stories; we made sure to document our questions to discuss with the product owner.
+
+We went to Efosa's office hours and asked him specific questions from our Q&A document. He gave us an understanding of how important the features would be. We used this information to prioritize user stories.
+
+The high-priority features are in the earlier sprints. These are the features that Efosa mentioned are important. We left other features in Sprint 4 and the "extra features" section. These are features that are nice to have which we were told by Efosa to do if we have the time; e.g. more admin permissions, audio conferencing, feedback, etc.
+
+We defined points of user stories as follows:
 
 1 => Something we have done previously or know exactly how to do
 
