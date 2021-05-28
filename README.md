@@ -4,8 +4,9 @@
 
 The African Impact Challenge is a non-profit investing in aspiring young African 
 entrepreneurs. Participants work on building market innovations that tackle 
-their country’s challenges with technology. This project provides a community 
-and e-learning platform for the moderators and participants of the challenge.
+their country’s challenges with technology. The motivation of this project is to 
+provide a user-friendly community and e-learning platform for the moderators and 
+participants of the challenge.
 
 ### Features
 
