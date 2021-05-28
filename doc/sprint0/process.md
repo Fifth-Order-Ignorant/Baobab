@@ -1,6 +1,4 @@
-# Process
-
-
+# Proces
 
 ### Team Organization
 
@@ -21,10 +19,12 @@ We set a self-imposed deadline to make sure there is enough time to polish up la
 
 ### Decision Making
 
-Dividing tasks between ourselves:
+**Dividing tasks between ourselves:**
+
 We held a meeting and discussed the deliverables. There were several volunteers for each task, so no problems came up in that regard.
 
-Making decisions on the project:
+**Making decisions on the project:**
+
 We discussed options on Discord as they came up and weighed the pros and cons of each alternative. If we couldn't reach a quick conclusion through text, we would hold a meeting or ask the instruction team and the product owner.
 
 We keep track of all the decisions we have made through several documents on Google Docs.
@@ -32,8 +32,11 @@ We keep track of all the decisions we have made through several documents on Goo
 ### Prioritizing User Stories
 
 We defined points as follows:
+
 1 => Something we have done previously or know exactly how to do
+
 2 => Something that’s two times more difficult than anything we’ve done previously
+
 k => Something that’s k times more difficult than anything we’ve done previously
 
 To reach a consensus for the point estimate, we voted for a point based on the criteria of satisfaction of the user story. Then we discussed our reasoning behind our votes, and voted again until we were all in agreement. We voted 2-3 times on average before reaching a unanimous decision.
