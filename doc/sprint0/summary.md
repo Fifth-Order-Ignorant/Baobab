@@ -26,7 +26,7 @@ Rahul — a 30 year old investment broker, who would like to make more informed 
 
 ### Scenario 1: Learning
 
-Eidi has discovered that her magnetic rail system will require several different raw materials to manufacture, and also require many different tools to create each part. She needs to learn how to source the materials, finance this cost, and also manufacture the materials.
+Eidi has a concrete plan and design for her magnetic rail system, however, she is unsure how to turn this solution into a company, how to get investors, and how to grow the company. She needs to learn how to get a company started, and how to grow and scale her product.
 
 
 ### Scenario 2: Networking
@@ -42,9 +42,9 @@ Harold has created an entire lesson plan (with drawings and documents) for an in
 ## Key Principles
 
 
-### Principle 1: Minimalism
+### Principle 1: Depth First
 
-Minimalism, over codebase size, first and foremost. The design should not be cluttered, but stream-lined, so if views can be consolidated, we will consolidate them. In general, the learning curve for using the application itself should be relatively small.
+Prioritize quality over quantity. The design should have fully-fleshed out services for a stellar user experience on what features we have for the product, over having more services with less capabilities.
 
 
 ### Principle 2: Entrepreneur First
