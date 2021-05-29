@@ -1,11 +1,7 @@
+# Product Backlog
 
+**Sprint 1**:
 
-<h1>Product Backlog</h1>
-
-
-<p>
-<strong>Sprint 1</strong>:
-</p>
 
 <table>
   <tr>
@@ -106,9 +102,8 @@
 </table>
 
 
-<p>
-<strong>Sprint 2</strong>:
-</p>
+**Sprint 2**:
+
 
 <table>
   <tr>
@@ -146,7 +141,7 @@
    </td>
   </tr>
   <tr>
-   <td>As Eidi, I can form a team and add members to my team. 
+   <td>As Eidi, I can form a team and add members to my team so that our deliverables can be submitted as a group. 
    </td>
    <td>
 <ul>
@@ -193,9 +188,8 @@
 </table>
 
 
-<p>
-<strong>Sprint 3</strong>:
-</p>
+**Sprint 3**:
+
 
 <table>
   <tr>
@@ -233,7 +227,7 @@
   <tr>
    <td>As any privileged role, I can click on a participant to see their content consumption rates and their submitted deliverables so that I can track student progress.
    </td>
-   <td>Admins, Service providers, investors, and corporations have a special tab where for any entrepreneur, when they can see:
+   <td>Admins, Service providers, investors, and corporations have a special tab where for any entrepreneur, they can see:
 <ul>
 
 <li>The number of videos an entrepreneur watched.
@@ -276,9 +270,8 @@
 </table>
 
 
-<p>
-<strong>Sprint 4</strong>:
-</p>
+**Sprint 4**:
+
 
 <table>
   <tr>
@@ -336,7 +329,7 @@
    </td>
   </tr>
   <tr>
-   <td>As a user, I want a responsive site that I can view on my mobile. 
+   <td>As a user, I want a responsive site so that I can view the website on my mobile. 
    </td>
    <td>
 <ul>
@@ -349,9 +342,8 @@
 </table>
 
 
-<p>
-<strong>Extra User Stories</strong>: These are user stories that we don’t plan to implement within the scope of the 4 sprints due to priority of other features. That being said, we will design our project with these features in mind as an extension point for the future.   
-</p>
+**Extra User Stories**: These are user stories that we don’t plan to implement within the scope of the 4 sprints due to priority of other features. That being said, we will design our project with these features in mind as an extension point for the future.   
+
 
 <table>
   <tr>
@@ -374,7 +366,7 @@
    </td>
   </tr>
   <tr>
-   <td>As a user, I can switch my language to “French” to use a more familiar system.
+   <td>As a user, I can switch my language to “French” so that I use a more familiar system for my language.
    </td>
    <td>
 <ul>
@@ -411,7 +403,7 @@
    </td>
   </tr>
   <tr>
-   <td>As a user, I can share my screen while attending a live conference.
+   <td>As a user, I can share my screen while attending a live conference so that I can show a demo of important changes.
    </td>
    <td>
 <ul>
@@ -422,5 +414,3 @@
    </td>
   </tr>
 </table>
-
-
