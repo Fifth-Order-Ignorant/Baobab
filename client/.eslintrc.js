@@ -24,6 +24,7 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "import/no-extraneous-dependencies": "error"
+        "import/no-extraneous-dependencies": "error",
+        "react/react-in-jsx-scope": "off" /* importing react is done automatically by Next.js */
     }
 };
