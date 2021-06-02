@@ -1,0 +1,8 @@
+{
+  "name": "baobab-workspace",
+  "workspaces": [
+    "server",
+    "common",
+    "client"
+  ]
+}
