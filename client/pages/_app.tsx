@@ -2,7 +2,12 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { Layout } from 'antd';
 import React from 'react';
-import Navbar from '../src/components/Navbar';
+import dynamic from 'next/dynamic';
+
+// the navbar cannot be SSR'd since its contents are different depending on user
+const Navbar = dynamic(() => import('../src/components/Navbar'), {
+  ssr: false,
+});
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
