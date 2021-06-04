@@ -1,5 +1,5 @@
 import { identity } from "rxjs";
-import { UsersInMemory, usersDAO } from "./users";
+import { UsersInMemory, UsersDAO } from "./users";
 import { User } from "../entities/user"; 
 
 describe('User tests', () => {
@@ -12,12 +12,12 @@ describe('User tests', () => {
     })
 
     it('should return a valid user given id', () => {
-        let users: usersDAO;
+        let users: UsersDAO;
         users = new UsersInMemory();
-        let user_id: number; 
-        user_id = users.addUser('Michael', 'Sheinman Orenstrakh', 'michael092001@gmail.com');
+        let userId: number; 
+        userId = users.addUser('Michael', 'Sheinman Orenstrakh', 'michael092001@gmail.com');
         let user: User;
-        user = users.getById(user_id);
+        user = users.getById(userId);
         expect(user.getEmail() == 'michael092001@gmail.com');
     })
     

@@ -2,14 +2,14 @@
 import { User } from "../entities/user";
 
 
-export interface usersDAO {
+export interface UsersDAO {
     addUser(firstName: string, lastName: string, email: string): number;
     getUserCount(): number;
     getById(id: number): User;
 
 }
 
-export class UsersInMemory implements usersDAO {
+export class UsersInMemory implements UsersDAO {
     users: User[];
     highestId: number; 
     userCount: number;
@@ -20,7 +20,7 @@ export class UsersInMemory implements usersDAO {
     }
 
     public addUser(firstName: string, lastName: string, email: string) : number {
-        var newUser:User;
+        let newUser:User;
         newUser = new User(this.highestId, firstName, lastName, email);
         this.users.push(newUser);
         this.highestId++;
@@ -36,7 +36,6 @@ export class UsersInMemory implements usersDAO {
         let user: User; 
         
         this.users.forEach(element => {
-            console.log(element.getId(), id);
             if (element.getId() == id) {
                 user = element;
             }
