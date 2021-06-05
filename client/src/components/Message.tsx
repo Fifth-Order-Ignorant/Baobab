@@ -1,12 +1,14 @@
-import { Card, Typography } from 'antd';
+import { Comment, Tooltip, Avatar, Card } from 'antd';
+import styles from "../../styles/Message.module.css";
+import moment from 'moment';
 
 /**
  * Required props for rendering a message.
  */
 export interface MessageProps {
-    author: String;
-    postTime: String;
-    content: String;
+  author: string;
+  timestamp: string;
+  content: string;
 }
 
 /**
@@ -19,17 +21,30 @@ export interface MessageProps {
 export function Message(
   props: MessageProps
 ): JSX.Element {
+
+  // setup time
+  const currentDate: Date = new Date(props.timestamp);
+  const postTime: string = moment(currentDate).fromNow();
+
+  // get actions
+  const actions = [
+    <span>Reply to</span>
+  ]
+
   return (
-  <Card>
-    <p>
-    <Typography.Text type="secondary">
-      {props.author} made a post
-      <span>
-      &nbsp;&nbsp;{props.postTime}
-      </span>
-    </Typography.Text>
-    </p>
-    <p>{props.content}</p>
-  </Card>
+    <Card className={styles.messageCard}>
+      <Comment
+        className={styles.messageComment}
+        actions={actions}
+        author={props.author}
+        content={props.content}
+        avatar={<Avatar />}
+        datetime={
+          <Tooltip title={postTime}>
+            <span>{postTime}</span>
+          </Tooltip>
+        }
+      />
+    </Card>
   );
 }
