@@ -1,5 +1,5 @@
 import { Message, MessageProps } from "./Message";
-import { Col, Row } from "antd";
+import { Col, Row, Typography } from "antd";
 
 /**
  * Interface for Messages props which includes a list of MessageProps.
@@ -25,16 +25,22 @@ export interface MessagePropsWithID extends MessageProps {
  */
 export function Messages(messagesProps: MessagesProps): JSX.Element {
     return (
-        <Row gutter={[0, 36]}>
-            {messagesProps.messagePropsList.map((messageProps) => (
-                <Col key={messageProps.messageID} span={24}>
-                    <Message
-                        author={messageProps.author}
-                        postTime={messageProps.postTime}
-                        content={messageProps.content}
-                    />
-                </Col>
-            ))}
-        </Row>
+        <div>
+            <Typography>
+                <h2>Feed</h2>
+            </Typography>
+            <Row gutter={[0, 24]}>
+                {messagesProps.messagePropsList.map((messageProps) => (
+                    <Col key={messageProps.messageID} span={24}>
+                        <Message
+                            author={messageProps.author}
+                            timestamp={messageProps.timestamp}
+                            content={messageProps.content}
+                        />
+                    </Col>
+                ))}
+                <Col span={24} />
+            </Row>
+        </div>
     )
 }
