@@ -3,7 +3,7 @@ import { Card, Typography } from 'antd';
 /**
  * Required props for rendering a message.
  */
-interface MessageProps {
+export interface MessageProps {
     author: String;
     postTime: String;
     content: String;
@@ -16,7 +16,7 @@ interface MessageProps {
  * @param postTime How long a message was sent.
  * @param content Message content.
  */
-export default function Message(
+export function Message(
   props: MessageProps
 ): JSX.Element {
   return (
