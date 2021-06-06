@@ -5,17 +5,23 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 import { SessionPayload } from 'baobab-common';
+import NodeCache from 'node-cache';
+
+type StaleSession = {
+  time: number;
+  renewable: boolean;
+};
 
 @Injectable()
 export class AuthService {
-  // todo: handle jwt invalidation (change of password, change of name, etc)
-  private _staleJwts = [];
-  private _invalidJwts = [];
+  private _staleSessions: NodeCache;
 
   constructor(
     @Inject('UserDAO') private _userRepository: UserDAO,
     private _jwtService: JwtService,
-  ) {}
+  ) {
+    this._staleSessions = new NodeCache();
+  }
 
   verifyLogin(email: string, password: string): User {
     const user = this._userRepository.getByEmail(email);
@@ -46,6 +52,12 @@ export class AuthService {
   renew(jwt: string): { jwt: string; integrityString: string } {
     const payload = this._jwtService.decode(jwt) as SessionPayload;
 
+    const staleSession = this._staleSessions.get<StaleSession>(payload.id);
+
+    if (staleSession && staleSession.renewable) {
+      return this.genJwt(payload.id);
+    }
+
     const now = Date.now() / 1000; // in secs
 
     if (payload.exp - 60 < now && now < payload.exp) {
@@ -55,11 +67,30 @@ export class AuthService {
     return null;
   }
 
-  verifyJwt(jwt: string, integrityString: string): boolean {
+  async verifyJwt(jwt: string, integrityString: string): Promise<boolean> {
     const payload = this._jwtService.decode(jwt) as SessionPayload;
+
+    const staleSession = this._staleSessions.get<StaleSession>(payload.id);
+
+    if (staleSession && !staleSession.renewable) {
+      return false;
+    }
+
     return (
       payload.integrityHash ===
       crypto.createHash('sha256').update(integrityString).digest('hex')
+    );
+  }
+
+  // todo: when a user changes their password, their previous sessions should be marked stale and not renewable
+  markSessionsStale(userId: number, renewable: boolean) {
+    this._staleSessions.set<StaleSession>(
+      userId,
+      {
+        time: Date.now() / 1000,
+        renewable: renewable,
+      },
+      Date.now() / 1000 + 30 * 60,
     );
   }
 }
