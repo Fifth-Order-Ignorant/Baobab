@@ -2,6 +2,7 @@ import { Button, Form, Input } from 'antd';
 import { RegisterRequest, RegisterRequestSchema } from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 
 function RegisterForm(): JSX.Element {
   const {
@@ -12,7 +13,8 @@ function RegisterForm(): JSX.Element {
     resolver: yupResolver(RegisterRequestSchema),
   });
 
-  const onSubmit = (data: RegisterRequest) => console.log(data);
+  const onSubmit = (data: RegisterRequest) =>
+    axios.post('/api/user/register', data);
 
   return (
     <Form onFinish={handleSubmit(onSubmit)}>

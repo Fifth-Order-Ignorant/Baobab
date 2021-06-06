@@ -1,8 +1,8 @@
 import { object, SchemaOf, string } from 'yup';
 
-export type LoginRequest = {
-  email: string;
-  password: string;
+export class LoginRequest {
+  email!: string;
+  password!: string;
 }
 
 export const LoginRequestSchema: SchemaOf<LoginRequest> = object({

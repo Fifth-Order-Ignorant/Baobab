@@ -1,11 +1,8 @@
 import { Button, Form, Input } from 'antd';
-import {
-  LoginRequest,
-  LoginRequestSchema,
-  RegisterRequest,
-} from 'baobab-common';
+import { LoginRequest, LoginRequestSchema } from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 
 function LoginForm(): JSX.Element {
   const {
@@ -16,7 +13,7 @@ function LoginForm(): JSX.Element {
     resolver: yupResolver(LoginRequestSchema),
   });
 
-  const onSubmit = (data: RegisterRequest) => console.log(data);
+  const onSubmit = (data: LoginRequest) => axios.post('/api/auth/login', data);
 
   return (
     <Form onFinish={handleSubmit(onSubmit)}>
