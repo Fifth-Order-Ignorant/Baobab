@@ -1,5 +1,5 @@
 import { Message, MessageProps } from "./Message";
-import { Col, Row, Typography } from "antd";
+import { Col, Row } from "antd";
 
 /**
  * Interface for Messages props which includes a list of MessageProps.
@@ -19,7 +19,7 @@ export interface MessagePropsWithID extends MessageProps {
  * Renders a list of messages
  * @param messagesProps Props that include the following:
  *      - authorName: Author's name (first and last).
- *      - postTime: How long a message was sent.
+ *      - timestamp: How long a message was sent in Date toJSON form.
  *      - content: Message content.
  *      - messageID: Number that identifies the message.
  */
