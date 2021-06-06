@@ -1,5 +1,4 @@
-import { MessageList } from "../src/components/MessageList";
-import sampleMessages from "../src/constants/SampleMessageList";
+import MessageFeed from "../src/components/MessageFeed";
 import { Typography } from "antd";
 
 /**
@@ -11,7 +10,7 @@ export default function Feed(): JSX.Element{
             <Typography>
                 <h2>Feed</h2>
             </Typography>
-            <MessageList messagePropsList={sampleMessages} />
+            <MessageFeed />
         </div>
     )
 }
