@@ -26,9 +26,6 @@ export interface MessagePropsWithID extends MessageProps {
 export function MessageList(props: MessageListProps): JSX.Element {
     return (
         <div>
-            <Typography>
-                <h2>Feed</h2>
-            </Typography>
             <Row gutter={[0, 24]}>
                 {props.messagePropsList.map((messageProps) => (
                     <Col key={messageProps.messageID} span={24}>
