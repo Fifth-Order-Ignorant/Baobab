@@ -1,4 +1,5 @@
 import MessageFeed from "../src/components/MessageFeed";
+import { SendMessage } from "../src/components/SendMessage";
 import { Typography } from "antd";
 
 /**
@@ -10,6 +11,7 @@ export default function Feed(): JSX.Element{
             <Typography>
                 <h2>Feed</h2>
             </Typography>
+            <SendMessage author={"W. F. Wumbo"} />
             <MessageFeed />
         </div>
     )
