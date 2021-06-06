@@ -37,7 +37,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
     "yup": "^0.32.9",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "@nestjs/config": "^0.6.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
