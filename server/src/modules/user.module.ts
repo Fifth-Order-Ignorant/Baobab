@@ -1,24 +1,13 @@
-import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserController } from '../controllers/user.controller';
 import { UserService } from '../services/user.service';
 import { UsersInMemory } from '../dao/users';
-import { JwtStrategy } from '../controllers/jwt.strategy';
+import { AuthModule } from './auth.module';
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({
-      secret: 'helloworld',
-      signOptions: { expiresIn: '60m' },
-    }),
-  ],
+  imports: [forwardRef(() => AuthModule)],
   controllers: [UserController],
-  providers: [
-    { provide: 'UserRepository', useClass: UsersInMemory },
-    UserService,
-    JwtStrategy,
-  ],
+  providers: [{ provide: 'UserDAO', useClass: UsersInMemory }, UserService],
+  exports: [{ provide: 'UserDAO', useClass: UsersInMemory }],
 })
 export class UserModule {}

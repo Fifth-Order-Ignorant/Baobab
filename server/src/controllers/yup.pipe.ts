@@ -7,9 +7,9 @@ import { AnySchema } from 'yup';
 
 export class YupValidationPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
-    const schema: AnySchema = (
-      await import('baobab-common/' + metadata.metatype.name)
-    )[metadata.metatype.name + 'Schema'];
+    const schema = (await import('baobab-common'))[
+      metadata.metatype.name + 'Schema'
+    ] as AnySchema;
 
     if (schema) {
       try {

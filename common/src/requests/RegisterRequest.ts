@@ -1,10 +1,10 @@
 import { object, SchemaOf, string } from 'yup';
 
-export type RegisterRequest = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
+export class RegisterRequest {
+  firstName!: string;
+  lastName!: string;
+  email!: string;
+  password!: string;
 }
 
 export const RegisterRequestSchema: SchemaOf<RegisterRequest> = object({
