@@ -3,9 +3,9 @@ import sampleMessages from "../src/constants/SampleMessageList";
 import { Typography } from "antd";
 
 /**
- * Renders the MessageFeed page.
+ * Renders the feed page.
  */
-export default function MessageFeed(): JSX.Element{
+export default function Feed(): JSX.Element{
     return(
         <div style={{backgroundColor: "#f0f0f0"}}>
             <Typography>
