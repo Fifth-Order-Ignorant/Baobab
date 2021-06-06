@@ -4,7 +4,7 @@ import { Col, Row, Typography } from "antd";
 /**
  * Interface for Messages props which includes a list of MessageProps.
  */
-export interface MessagesProps {
+export interface MessageListProps {
     messagePropsList: MessagePropsWithID[];
 }
 
@@ -23,14 +23,14 @@ export interface MessagePropsWithID extends MessageProps {
  *      - content: Message content.
  *      - messageID: Number that identifies the message.
  */
-export function Messages(messagesProps: MessagesProps): JSX.Element {
+export function MessageList(props: MessageListProps): JSX.Element {
     return (
         <div>
             <Typography>
                 <h2>Feed</h2>
             </Typography>
             <Row gutter={[0, 24]}>
-                {messagesProps.messagePropsList.map((messageProps) => (
+                {props.messagePropsList.map((messageProps) => (
                     <Col key={messageProps.messageID} span={24}>
                         <Message
                             author={messageProps.author}
