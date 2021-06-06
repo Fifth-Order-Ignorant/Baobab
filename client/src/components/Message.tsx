@@ -1,4 +1,5 @@
-import { Comment, Tooltip, Avatar, Card } from 'antd';
+import { Comment, Tooltip, Avatar } from 'antd';
+import Card from './Card';
 import styles from "../../styles/Message.module.css";
 import moment from 'moment';
 
@@ -32,7 +33,7 @@ export function Message(
   ]
 
   return (
-    <Card className={styles.messageCard}>
+    <Card>
       <Comment
         className={styles.messageComment}
         actions={actions}
