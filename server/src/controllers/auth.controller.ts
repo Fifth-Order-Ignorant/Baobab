@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { RegisterRequest } from 'baobab-common';
+import { LoginRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import { AuthService } from '../services/auth.service';
 
@@ -19,7 +19,7 @@ export class AuthController {
 
   @Post('login')
   login(
-    @Body() reqBody: RegisterRequest,
+    @Body() reqBody: LoginRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
     const user = this._authService.verifyLogin(reqBody.email, reqBody.password);
@@ -46,5 +46,11 @@ export class AuthController {
   @Get('session')
   session(@Req() req) {
     return req.user.id;
+  }
+
+  @Get('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('SESSION_JWT');
+    res.clearCookie('SESSION_INT');
   }
 }
