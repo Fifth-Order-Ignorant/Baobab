@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 import { SessionPayload } from 'baobab-common';
-import NodeCache from 'node-cache';
+import * as NodeCache from 'node-cache';
 
 type StaleSession = {
   time: number;

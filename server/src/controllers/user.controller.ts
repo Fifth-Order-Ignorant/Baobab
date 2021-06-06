@@ -10,12 +10,14 @@ import { Response } from 'express';
 import { RegisterRequest } from 'baobab-common';
 import { AuthService } from '../services/auth.service';
 import { ValidationError } from 'yup';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('user')
 export class UserController {
   constructor(
     private _userService: UserService,
     private _authService: AuthService,
+    private _configService: ConfigService,
   ) {}
 
   @Post('register')
@@ -39,13 +41,13 @@ export class UserController {
     const { jwt, integrityString } = this._authService.genJwt(user.id);
 
     res.cookie('SESSION_JWT', jwt, {
-      secure: process.env.NODE_ENV === 'production',
+      secure: this._configService.get<boolean>('production'),
       sameSite: 'lax',
     });
 
     res.cookie('SESSION_INT', integrityString, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: this._configService.get<boolean>('production'),
       sameSite: 'lax',
     });
   }
