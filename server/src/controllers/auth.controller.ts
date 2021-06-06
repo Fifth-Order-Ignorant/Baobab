@@ -1,39 +1,31 @@
 import {
-  BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
+  Req,
   Res,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import { UserService } from '../services/user.service';
 import { Response } from 'express';
 import { RegisterRequest } from 'baobab-common';
+import { JwtAuthGuard } from './jwt.guard';
 import { AuthService } from '../services/auth.service';
-import { ValidationError } from 'yup';
 
-@Controller('user')
-export class UserController {
-  constructor(
-    private _userService: UserService,
-    private _authService: AuthService,
-  ) {}
+@Controller('auth')
+export class AuthController {
+  constructor(private _authService: AuthService) {}
 
-  @Post('register')
-  register(
+  @Post('login')
+  login(
     @Body() reqBody: RegisterRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = this._userService.registerUser(
-      reqBody.firstName,
-      reqBody.lastName,
-      reqBody.email,
-      reqBody.password,
-    );
+    const user = this._authService.verifyLogin(reqBody.email, reqBody.password);
 
     if (!user) {
-      throw new BadRequestException({
-        errors: [new ValidationError('Email taken.', reqBody.email, 'email')],
-      });
+      throw new UnauthorizedException();
     }
 
     const { jwt, integrityString } = this._authService.genJwt(user.id);
@@ -48,5 +40,11 @@ export class UserController {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('session')
+  session(@Req() req) {
+    return req.user.id;
   }
 }

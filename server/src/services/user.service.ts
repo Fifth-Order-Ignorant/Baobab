@@ -5,7 +5,7 @@ import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject('UsersInMemory') private _userRepository: UserDAO) {}
+  constructor(@Inject('UserDAO') private _userRepository: UserDAO) {}
 
   registerUser(
     firstName: string,
@@ -23,15 +23,6 @@ export class UserService {
           hashedPassword,
         ),
       );
-    }
-
-    return null;
-  }
-
-  verifyLogin(email: string, password: string): User {
-    const user = this._userRepository.getByEmail(email);
-    if (user && bcrypt.compareSync(password, user.password)) {
-      return user;
     }
 
     return null;

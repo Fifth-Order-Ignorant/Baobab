@@ -4,3 +4,4 @@
 
 export * from "./requests/LoginRequest";
 export * from "./requests/RegisterRequest";
+export * from "./responses/SessionPayload";
