@@ -13,6 +13,7 @@ import { LoginRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
+import { ValidationError } from 'yup';
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +30,12 @@ export class AuthController {
     const user = this._authService.verifyLogin(reqBody.email, reqBody.password);
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        errors: [
+          new ValidationError('Incorrect login.', reqBody.email, 'email'),
+          new ValidationError('Incorrect login.', reqBody.password, 'password'),
+        ],
+      });
     }
 
     const { jwt, integrityString } = this._authService.genJwt(user.id);

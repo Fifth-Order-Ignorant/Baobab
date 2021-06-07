@@ -25,26 +25,32 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const jwt = extractJwtFromCookie(request);
     const integrityString = request.cookies['SESSION_INT'];
 
-    if (jwt) {
-      if (!this._authService.verifyJwt(jwt, integrityString)) {
-        throw new UnauthorizedException();
+    if (
+      !super.canActivate(context) ||
+      !this._authService.verifyJwt(jwt, integrityString)
+    ) {
+      if (jwt) {
+        // remove invalid cookies
+        response.clearCookie('SESSION_JWT');
+        response.clearCookie('SESSION_INT');
       }
-
-      // handle auto renewal of session token
-      const renewed = this._authService.renew(jwt);
-      if (renewed) {
-        response.cookie('SESSION_JWT', renewed.jwt, {
-          secure: this._configService.get<boolean>('production'),
-          sameSite: 'lax',
-        });
-        response.cookie('SESSION_INT', renewed.integrityString, {
-          httpOnly: true,
-          secure: this._configService.get<boolean>('production'),
-          sameSite: 'lax',
-        });
-      }
+      throw new UnauthorizedException();
     }
 
-    return super.canActivate(context);
+    // handle auto renewal of session token
+    const renewed = this._authService.renew(jwt);
+    if (renewed) {
+      response.cookie('SESSION_JWT', renewed.jwt, {
+        secure: this._configService.get<boolean>('production'),
+        sameSite: 'lax',
+      });
+      response.cookie('SESSION_INT', renewed.integrityString, {
+        httpOnly: true,
+        secure: this._configService.get<boolean>('production'),
+        sameSite: 'lax',
+      });
+    }
+
+    return true;
   }
 }
