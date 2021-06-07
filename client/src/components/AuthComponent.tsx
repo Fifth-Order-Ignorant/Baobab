@@ -1,8 +1,8 @@
-import { Button, Form, Modal, Space, Typography } from 'antd';
+import { Button, Modal, Space, Typography } from 'antd';
 import { useContext, useState } from 'react';
 import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../providers/AuthProvider';
 import axios from 'axios';
 
 function AuthComponent(): JSX.Element {
@@ -10,7 +10,7 @@ function AuthComponent(): JSX.Element {
 
   const [isRegisterModal, setIsRegisterModal] = useState(true);
 
-  const { authState } = useContext(AuthContext);
+  const authState = useContext(AuthContext);
 
   if (authState.jwt === '') {
     return (
@@ -40,13 +40,11 @@ function AuthComponent(): JSX.Element {
           onCancel={() => setIsModalVisible(false)}
           footer={null}
         >
-          <Form.Provider
-            onFormFinish={() => {
-              setIsModalVisible(false);
-            }}
-          >
-            {isRegisterModal ? <RegisterForm /> : <LoginForm />}
-          </Form.Provider>
+          {isRegisterModal ? (
+            <RegisterForm onSuccess={() => setIsModalVisible(false)} />
+          ) : (
+            <LoginForm onSuccess={() => setIsModalVisible(false)} />
+          )}
         </Modal>
       </>
     );
@@ -54,7 +52,9 @@ function AuthComponent(): JSX.Element {
     return (
       <Space>
         <Typography.Text>{authState.payload?.fullName}</Typography.Text>
-        <Button onClick={() => axios.get('/api/auth/logout')}>Logout</Button>
+        <Button onClick={async () => await axios.get('/api/auth/logout')}>
+          Logout
+        </Button>
       </Space>
     );
   }

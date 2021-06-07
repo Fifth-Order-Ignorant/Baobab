@@ -1,20 +1,37 @@
 import { Button, Form, Input } from 'antd';
-import { RegisterRequest, RegisterRequestSchema } from 'baobab-common';
+import {
+  RegisterRequest,
+  RegisterRequestSchema,
+  ErrorResponse,
+} from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-function RegisterForm(): JSX.Element {
+function RegisterForm({ onSuccess }: { onSuccess: () => void }): JSX.Element {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<RegisterRequest>({
     resolver: yupResolver(RegisterRequestSchema),
   });
 
-  const onSubmit = (data: RegisterRequest) =>
-    axios.post('/api/user/register', data);
+  const onSubmit = async (data: RegisterRequest) => {
+    try {
+      await axios.post('/api/user/register', data);
+      onSuccess();
+    } catch (error) {
+      const { errors } = error.response.data as ErrorResponse;
+
+      for (const error of errors) {
+        setError(error.path as keyof RegisterRequest, {
+          message: error.message,
+        });
+      }
+    }
+  };
 
   return (
     <Form onFinish={handleSubmit(onSubmit)}>
