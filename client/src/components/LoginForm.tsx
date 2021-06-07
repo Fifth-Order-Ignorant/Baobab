@@ -1,19 +1,33 @@
 import { Button, Form, Input } from 'antd';
-import { LoginRequest, LoginRequestSchema } from 'baobab-common';
+import { ErrorResponse, LoginRequest, LoginRequestSchema } from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-function LoginForm(): JSX.Element {
+function LoginForm({ onSuccess }: { onSuccess: () => void }): JSX.Element {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginRequest>({
     resolver: yupResolver(LoginRequestSchema),
   });
 
-  const onSubmit = (data: LoginRequest) => axios.post('/api/auth/login', data);
+  const onSubmit = async (data: LoginRequest) => {
+    try {
+      await axios.post('/api/auth/login', data);
+      onSuccess();
+    } catch (error) {
+      const { errors } = error.response.data as ErrorResponse;
+
+      for (const error of errors) {
+        setError(error.path as keyof LoginRequest, {
+          message: error.message,
+        });
+      }
+    }
+  };
 
   return (
     <Form onFinish={handleSubmit(onSubmit)}>
