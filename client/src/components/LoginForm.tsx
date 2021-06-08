@@ -8,7 +8,7 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }): JSX.Element {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setError,
   } = useForm<LoginRequest>({
     resolver: yupResolver(LoginRequestSchema),
@@ -50,7 +50,7 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }): JSX.Element {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={isSubmitting}>
           Login
         </Button>
       </Form.Item>
