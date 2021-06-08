@@ -46,17 +46,6 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
-  it(`fails to register when given an extra field`, () => {
-    return request(app.getHttpServer())
-      .post('/user/register')
-      .send({
-        firstName: 'ethan',
-        email: 'ethan@mail.com',
-        fuck: 'me',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.BAD_REQUEST);
-  });
   it(`fails to register when given a non-email`, () => {
     return request(app.getHttpServer())
       .post('/user/register')
@@ -169,16 +158,6 @@ describe('AppController (e2e)', () => {
       .send({
         email: 'ethan@mail.com',
         password: '',
-      })
-      .expect(HttpStatus.BAD_REQUEST);
-  });
-  it(`fails login with extra fields`, () => {
-    return request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-        fuck: 'me',
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
