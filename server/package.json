@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^7.6.15",
+    "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.6.15",
     "@nestjs/jwt": "^7.2.0",
     "@nestjs/passport": "^7.1.5",
@@ -31,14 +32,14 @@
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "js-cookie": "^2.2.1",
+    "node-cache": "^5.1.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
-    "yup": "^0.32.9",
-    "node-cache": "^5.1.2",
-    "@nestjs/config": "^0.6.3"
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
@@ -70,7 +71,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": "test",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
