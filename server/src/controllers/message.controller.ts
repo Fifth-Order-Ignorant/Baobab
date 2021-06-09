@@ -14,18 +14,16 @@ import { JwtAuthGuard } from './jwt.guard';
 
 @Controller('message')
 export class MessageController {
-  constructor(
-    private _messageService: MessageService,
-  ) {}
+  constructor(private _messageService: MessageService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('message')
   createMessage(
     @Body() reqBody: MessageRequest,
     @Res({ passthrough: true }) res: Response,
-    @Req() req
+    @Req() req,
   ) {
-    var today = new Date();
+    const today = new Date();
     const message = this._messageService.createMessage(
       req.user.id,
       reqBody.content,
@@ -38,5 +36,4 @@ export class MessageController {
       });
     }
   }
-
 }
