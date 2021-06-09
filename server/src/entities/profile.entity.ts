@@ -1,9 +1,9 @@
-import { Post } from '../entities/message.entity';
+import { Message } from '../entities/message.entity';
 export class Profile {
   private _name: string;
   private _relatedOrgs: Profile[];
   private _bio: string;
-  private _posts: Post[]; //this must be a message entity
+  private _posts: Message[];
   private _externalLinks: string[];
   private _id: number;
 
@@ -32,7 +32,7 @@ export class Profile {
     return this._bio;
   }
 
-  get posts(): string[] {
+  get posts(): Message[] {
     return this._posts;
   }
 
@@ -40,7 +40,7 @@ export class Profile {
     return this._externalLinks;
   }
 
-  addPost(post: Post): void {
+  addPost(post: Message): void {
     this._posts.push(post);
   }
 

@@ -1,4 +1,4 @@
-import { UsersInMemory } from './users';
+import { UsersInMemory } from '../src/dao/users';
 
 describe('User tests', () => {
   it('should create a user', () => {
