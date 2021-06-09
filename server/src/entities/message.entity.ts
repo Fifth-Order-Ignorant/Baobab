@@ -1,7 +1,10 @@
+import { time } from "console";
+
 export class Message {
     private _id: number;
     private _userId: number;
     private _content: string;
+    private _timestamp: Date;
     private _childs: Message[];
     // If no parent, _parent is undefined.
     private _parent: Message;
@@ -10,11 +13,13 @@ export class Message {
       id: number,
       userId: number,
       content: string,
+      timestamp: Date,
       parent: Message,
     ) {
       this._id = id;
       this._userId = userId;
       this._content = content;
+      this._timestamp = timestamp;
       this._parent = parent;
       this._childs = [];
     }
@@ -37,6 +42,10 @@ export class Message {
 
     get parent(): Message {
         return this._parent;
+    }
+
+    get timestamp(): Date {
+      return this._timestamp
     }
   }
   
