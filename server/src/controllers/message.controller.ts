@@ -5,7 +5,6 @@ import {
   Post,
   Res,
   UseGuards,
-  Get,
   Req,
 } from '@nestjs/common';
 import { MessageService } from '../services/message.service';
@@ -20,7 +19,6 @@ export class MessageController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('session')
   @Post('message')
   createMessage(
     @Body() reqBody: MessageRequest,
