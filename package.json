@@ -1,7 +1,6 @@
 {
   "name": "baobab-workspace",
   "workspaces": [
-    "server",
     "common",
     "server",
     "client"
