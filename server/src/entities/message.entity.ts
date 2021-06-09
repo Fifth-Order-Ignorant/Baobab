@@ -3,6 +3,7 @@ export class Message {
     private _userId: number;
     private _content: string;
     private _childs: Message[];
+    // If no parent, _parent is undefined.
     private _parent: Message;
   
     public constructor(

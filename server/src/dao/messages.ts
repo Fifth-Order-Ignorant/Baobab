@@ -5,7 +5,7 @@ export interface MessageDAO {
     createMessage(
       userId: number,
       content: string,
-      parent: number
+      parent: Message
     ): number;
     getChilds(id: number): Message[];
     getById(id: number): Message;
@@ -27,9 +27,9 @@ export class MessageInMemory implements MessageDAO {
 
   public createMessage(userId: number,
     content: string,
-    parent: number): number {
+    parent: Message): number {
         let message: Message;
-        message = new Message(this.highestId, userId, content, parent,)
+        message = new Message(this.highestId, userId, content, parent)
         this.messages.push(message);
         this.highestId++;
         
