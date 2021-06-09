@@ -8,7 +8,7 @@ import styles from "../../styles/Profile.module.css";
 export interface AboutProps {
     name: string;
     role: string;
-    aboutMe: JSX.Element;
+    aboutMe: string;
 }
 
 /**
@@ -33,7 +33,7 @@ export function About(props: AboutProps): JSX.Element {
                     {props.role}
                 </Typography.Text>
             </span>
-            <Card>{props.aboutMe}</Card>
+            <Card>{<div>{props.aboutMe}</div>}</Card>
         </div>
     );
 }
