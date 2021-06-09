@@ -12,7 +12,14 @@
     "next": "10.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "antd": "^4.16.1"
+    "antd": "^4.16.1",
+    "@ant-design/icons": "^4.6.2",
+    "baobab-common": "^1.0.0",
+    "react-hook-form": "^7.7.1",
+    "@hookform/resolvers": "^2.5.2",
+    "axios": "^0.21.1",
+    "js-cookie": "^2.2.1",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "@types/react": "17.0.8",
@@ -24,6 +31,8 @@
     "prettier": "^2.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-import": "^2.23.4"
+    "eslint-plugin-import": "^2.23.4",
+    "@types/js-cookie": "^2.2.6",
+    "@types/jsonwebtoken": "^8.5.1"
   }
 }
