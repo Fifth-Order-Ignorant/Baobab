@@ -2,3 +2,26 @@
     display: inline-block;
     margin-right: 10px;
 }
+
+.header {
+    padding: 0 30px 0 30px;
+}
+
+.avatar {
+    width: 200px;
+    height: 200px;
+    margin-top:-100px;
+}
+
+.body {
+    background-color: #EBEBEB;
+    margin-top: 200px;
+}
+
+.about {
+    padding: 10px 30px 10px 30px;
+}
+
+.activity {
+    padding: 30px;
+}
