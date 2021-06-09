@@ -10,15 +10,14 @@ export class MessageService {
     userID: number,
     content: string,
     timestamp: Date,
-    parentID: number,
+    parent: Message,
   ): Message {
     return this._messageRepository.getByID(
-      this._messageRepository.createMessage(
-        userID,
-        content,
-        timestamp,
-        this._messageRepository.getByID(parentID),
-      ),
+      this._messageRepository.createMessage(userID, content, timestamp, parent),
     );
+  }
+
+  getParentMessage(parentID: number): Message {
+    return this._messageRepository.getByID(parentID);
   }
 }

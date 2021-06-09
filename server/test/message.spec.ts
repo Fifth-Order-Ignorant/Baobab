@@ -26,32 +26,48 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it(`lets you log in after registering`, () => {
+  it(`lets you create a message`, () => {
     request(app.getHttpServer()).post('/user/register').send({
       firstName: 'ethan',
       lastName: 'lam',
       email: 'ethan@mail.com',
       password: 'mcs',
     });
-    request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
+    request(app.getHttpServer()).post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
     request(app.getHttpServer())
       .post('/message/create')
       .send({
         content: 'hello',
         parentID: undefined,
       })
-    
+      .expect(HttpStatus.CREATED);
+  });
+  it(`doesn't let you create a message with a bad parent`, () => {
+    request(app.getHttpServer()).post('/user/register').send({
+      firstName: 'ethan',
+      lastName: 'lam',
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+    request(app.getHttpServer()).post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+    request(app.getHttpServer())
+      .post('/message/create')
+      .send({
+        content: 'hello',
+        parentID: 1,
+      })
+      .expect(HttpStatus.BAD_REQUEST);
   });
   afterAll(async () => {
     await app.close();
   });
 });
-
 
 describe('Message Basic Functionality', () => {
   it('should create a message with valid id', () => {
@@ -71,4 +87,19 @@ describe('Message Basic Functionality', () => {
     expect(message.parent == undefined);
   });
 
+  it('lets you create a message with a parent', () => {
+    const messages = new MessageInMemory();
+
+    const nowTime = new Date();
+    const message1 = messages.createMessage(1, 'hello', nowTime, undefined);
+    const parentMessage = messages.getByID(message1);
+    const message2 = messages.createMessage(
+      1,
+      'hello2',
+      nowTime,
+      parentMessage,
+    );
+    const message = messages.getByID(message2);
+    expect(message.parent == parentMessage);
+  });
 });
