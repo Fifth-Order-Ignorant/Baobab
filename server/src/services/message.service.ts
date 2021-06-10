@@ -32,11 +32,19 @@ export class MessageService {
   ): Record<string, string | number>[] {
     const messages: Record<string, string | number>[] =
       this._messageRepository.getMessages(start, end);
-    messages.forEach((element) => {
-      const id: number = element.author as number;
-      const profile: Profile = this._userRepository.getProfileByID(id);
-      element.author = profile.name;
-    });
+    messages.map((element) => (
+      Object({
+        author: this._userRepository.getProfileByID(element.author as number),
+        timestamp: element.timestamp,
+        content: element.content,
+        messageID: element.messageID,
+      })
+    ))
+    // messages.forEach((element) => {
+    //   const id: number = element.author as number;
+    //   const profile: Profile = this._userRepository.getProfileByID(id);
+    //   element.author = profile.name;
+    // });
     return messages;
   }
 }
