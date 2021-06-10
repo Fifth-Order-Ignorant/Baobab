@@ -22,6 +22,7 @@ export class UsersInMemory implements UserDAO {
   public constructor() {
     this.users = [];
     this.highestId = 0;
+    this.userCount = 0;
   }
 
   public addUser(

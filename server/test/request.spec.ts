@@ -1,4 +1,4 @@
-import { Role } from './../src/entities/role.entity';
+import { Role } from '../src/entities/role.entity';
 import { RequestInMemory } from '../src/dao/requests';
 
 import * as request from 'supertest';
@@ -10,7 +10,7 @@ import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 
-describe('AppController (e2e)', () => {
+describe('Role Request Tests', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -24,22 +24,23 @@ describe('AppController (e2e)', () => {
 
     app.useGlobalPipes(new YupValidationPipe());
     app.use(cookieParser());
-    jest.mock('js-cookie', () => jest.fn());
     await app.init();
   });
 
-  it(`lets you request a role`, () => {
-    request(app.getHttpServer()).post('/user/register').send({
-      firstName: 'ethan',
-      lastName: 'lam',
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
-    request(app.getHttpServer()).post('/auth/login').send({
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
-    request(app.getHttpServer())
+  it(`lets you request a role`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent
+      .post('/user/register')
+      .send({
+        firstName: 'ethan',
+        lastName: 'lam',
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
+
+    return agent
       .post('/request/role')
       .send({
         description: 'i want role',
@@ -47,18 +48,16 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.CREATED);
   });
-  it(`doesn't let you request a bad role`, () => {
-    request(app.getHttpServer()).post('/user/register').send({
-      firstName: 'ethan',
-      lastName: 'lam',
+
+  it(`doesn't let you request a bad role`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
       email: 'ethan@mail.com',
       password: 'mcs',
     });
-    request(app.getHttpServer()).post('/auth/login').send({
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
-    request(app.getHttpServer())
+
+    return agent
       .post('/request/role')
       .send({
         description: 'i want role',
@@ -82,7 +81,7 @@ describe('Request Basic Functionality', () => {
       new Date(),
       Role.INVESTOR_REP,
     );
-    expect(requests.getById(requestID).id == requestID);
+    return expect(requests.getById(requestID).id).toEqual(requestID);
   });
 
   it('should return a request with requested Role', () => {
@@ -95,6 +94,6 @@ describe('Request Basic Functionality', () => {
     );
 
     const request = requests.getById(requestID);
-    expect(request.role == Role.INVESTOR_REP);
+    return expect(request.role).toEqual(Role.INVESTOR_REP);
   });
 });

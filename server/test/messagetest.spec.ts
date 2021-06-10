@@ -5,7 +5,7 @@ describe('Message Basic Functionality', () => {
     const messages = new MessageInMemory();
 
     const messageId = messages.createMessage(1, 'hello', undefined);
-    expect(messages.getById(messageId).id == messageId);
+    expect(messages.getById(messageId).id).toEqual(messageId);
   });
 
   it('should return a message given an id', () => {
@@ -13,6 +13,6 @@ describe('Message Basic Functionality', () => {
     const messageId = messages.createMessage(1, 'hello', undefined);
 
     const message = messages.getById(messageId);
-    expect(message.parent == undefined);
+    expect(message.parent).toEqual(undefined);
   });
 });

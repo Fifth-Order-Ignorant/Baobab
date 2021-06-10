@@ -10,7 +10,7 @@ describe('User tests', () => {
       'michael092001@gmail.com',
       '12345',
     );
-    expect(users.getUserCount() == 1);
+    expect(users.getUserCount()).toEqual(1);
   });
 
   it('should return a valid user given id', () => {
@@ -22,6 +22,6 @@ describe('User tests', () => {
       '12345',
     );
     const user = users.getById(userId);
-    expect(user.email == 'michael092001@gmail.com');
+    expect(user.email).toEqual('michael092001@gmail.com');
   });
 });
