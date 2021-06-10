@@ -1,6 +1,6 @@
 export class Message {
   private _id: number;
-  private _userId: number;
+  private _userID: number;
   private _content: string;
   private _timestamp: Date;
   private _childs: Message[];
@@ -9,13 +9,13 @@ export class Message {
 
   public constructor(
     id: number,
-    userId: number,
+    userID: number,
     content: string,
     timestamp: Date,
     parent: Message,
   ) {
     this._id = id;
-    this._userId = userId;
+    this._userID = userID;
     this._content = content;
     this._timestamp = timestamp;
     this._parent = parent;
@@ -27,7 +27,7 @@ export class Message {
   }
 
   get userID(): number {
-    return this._userId;
+    return this._userID;
   }
 
   get content(): string {
