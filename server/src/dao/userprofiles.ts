@@ -94,7 +94,7 @@ export class UserProfileInMemory implements UserProfileDAO {
   ): Record<string, string>[] {
     const newProfiles: Record<string, string>[] = [];
     const n: number = this.profiles.length;
-    const i: number = start;
+    let i: number = start;
     while (i < end && i < n) {
       const profile: Profile = this.profiles[i];
       const newProfile: Record<string, string> = Object({
@@ -103,6 +103,7 @@ export class UserProfileInMemory implements UserProfileDAO {
         aboutMe: profile.bio,
       });
       newProfiles.push(newProfile);
+      i++;
     }
     return newProfiles;
   }
