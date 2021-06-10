@@ -5,7 +5,7 @@ export class Profile {
   private _externalLinks: string[];
   private _id: number;
   private _jobTitle: string;
-  private _role;
+  private _role: Role;
 
   public constructor(id: number, name: string) {
     this._id = id;

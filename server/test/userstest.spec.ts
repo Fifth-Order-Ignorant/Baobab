@@ -15,25 +15,25 @@ describe('User tests', () => {
 
   it('should return a valid user given id', () => {
     const users = new UserProfilesInMemory();
-    const userId = users.addUserProfile(
+    const userID = users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const user = users.getUserById(userId);
+    const user = users.getUserByID(userID);
     expect(user.email == 'michael092001@gmail.com');
   });
 
   it('should return a valid profile given id', () => {
     const users = new UserProfilesInMemory();
-    const userId = users.addUserProfile(
+    const userID = users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const profile = users.getProfileById(userId);
+    const profile = users.getProfileByID(userID);
     expect(profile.name == 'Michael Sheinman Orenstrakh');
   });
 });

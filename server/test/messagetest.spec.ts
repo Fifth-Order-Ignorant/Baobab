@@ -5,14 +5,14 @@ describe('Message Basic Functionality', () => {
     const messages = new MessageInMemory();
 
     const messageId = messages.createMessage(1, 'hello', undefined);
-    expect(messages.getById(messageId).id == messageId);
+    expect(messages.getByID(messageId).id == messageId);
   });
 
   it('should return a message given an id', () => {
     const messages = new MessageInMemory();
     const messageId = messages.createMessage(1, 'hello', undefined);
 
-    const message = messages.getById(messageId);
+    const message = messages.getByID(messageId);
     expect(message.parent == undefined);
   });
 });
