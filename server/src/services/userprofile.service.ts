@@ -40,20 +40,29 @@ export class UserProfileService {
     return true;
   }
 
-  editProfile(id: number, firstName: string, lastName: string, jobTitle: string, bio: string): void {
-    this._userProfileRepository.editProfile(id, firstName, lastName, jobTitle, bio);
+  editProfile(
+    id: number,
+    firstName: string,
+    lastName: string,
+    jobTitle: string,
+    bio: string,
+  ): void {
+    this._userProfileRepository.editProfile(
+      id,
+      firstName,
+      lastName,
+      jobTitle,
+      bio,
+    );
   }
 
   getProfile(id: number): [string, string, string, string] {
     const user = this._userProfileRepository.getUserByID(id);
     const profile = this._userProfileRepository.getProfileByID(id);
-    return [user.firstName, user.lastName, profile.jobTitle, profile.bio]
+    return [user.firstName, user.lastName, profile.jobTitle, profile.bio];
   }
 
-  getPaginatedProfiles(
-    start: number,
-    end: number,
-  ): Record<string, string>[] {
+  getPaginatedProfiles(start: number, end: number): Record<string, string>[] {
     return this._userProfileRepository.getPaginatedProfiles(start, end);
   }
 }

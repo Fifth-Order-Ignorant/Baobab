@@ -30,11 +30,19 @@ export class User {
   }
 
   get firstName(): string {
-    return this._firstName
+    return this._firstName;
+  }
+
+  set firstName(name: string) {
+    this._firstName = name;
   }
 
   get lastName(): string {
     return this._lastName;
+  }
+
+  set lastName(name: string) {
+    this._lastName = name;
   }
 
   get email(): string {
@@ -43,13 +51,5 @@ export class User {
 
   get password(): string {
     return this._password;
-  }
-
-  set firstName(name: string) {
-    this._firstName = name;
-  }
-
-  set lastName(name: string) {
-    this._lastName = name;
   }
 }

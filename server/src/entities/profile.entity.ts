@@ -24,8 +24,16 @@ export class Profile {
     return this._name;
   }
 
+  set name(newName: string) {
+    this._name = newName;
+  }
+
   get bio(): string {
     return this._bio;
+  }
+
+  set bio(newBio: string) {
+    this._bio = newBio;
   }
 
   get externalLinks(): string[] {
@@ -44,16 +52,8 @@ export class Profile {
     return this._jobTitle;
   }
 
-  set bio(newBio: string) {
-    this._bio = newBio;
-  }
-
   set jobTitle(newTitle: string) {
     this._jobTitle = newTitle;
-  }
-
-  set name(newName: string) {
-    this._name = newName;
   }
 
   addExternalLink(link: string): void {
