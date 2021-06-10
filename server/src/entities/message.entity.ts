@@ -1,6 +1,6 @@
 export class Message {
   private _id: number;
-  private _userId: number;
+  private _userID: number;
   private _content: string;
   private _childs: Message[];
   // If no parent, _parent is undefined.
@@ -8,12 +8,12 @@ export class Message {
 
   public constructor(
     id: number,
-    userId: number,
+    userID: number,
     content: string,
     parent: Message,
   ) {
     this._id = id;
-    this._userId = userId;
+    this._userID = userID;
     this._content = content;
     this._parent = parent;
     this._childs = [];
@@ -24,7 +24,7 @@ export class Message {
   }
 
   get userID(): number {
-    return this._userId;
+    return this._userID;
   }
 
   get content(): string {
