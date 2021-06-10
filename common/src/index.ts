@@ -3,6 +3,7 @@
  */
 
 export * from "./requests/LoginRequest";
+export * from "./requests/MessagePaginationRequest";
 export * from "./requests/MessageRequest";
 export * from "./requests/RegisterRequest";
 export * from "./responses/ErrorResponse";
