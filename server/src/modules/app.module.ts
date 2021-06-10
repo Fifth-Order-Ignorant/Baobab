@@ -13,7 +13,7 @@ import configuration from './configuration';
     }),
     UserModule,
     AuthModule,
-    RequestModule
+    RequestModule,
   ],
 })
 export class AppModule {}

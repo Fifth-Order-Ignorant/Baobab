@@ -14,11 +14,16 @@ export class RequestService {
     role: Role,
   ): Request {
     return this._requestRepository.getById(
-      this._requestRepository.createRequest(userID, description, timestamp, role),
+      this._requestRepository.createRequest(
+        userID,
+        description,
+        timestamp,
+        role,
+      ),
     );
   }
 
-  stringToRole(roleString: string) : Role {
+  stringToRole(roleString: string): Role {
     let role: Role;
     switch (roleString) {
       case 'default':

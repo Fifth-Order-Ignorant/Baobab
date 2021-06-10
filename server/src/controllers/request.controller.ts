@@ -12,7 +12,6 @@ import { RequestService } from '../services/request.service';
 import { Response } from 'express';
 import { RoleRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
-import { Role } from '../entities/role.entity';
 
 @Controller('request')
 export class RequestController {
