@@ -13,10 +13,11 @@ export interface UserProfileDAO {
   getUserByID(id: number): User;
   getUserByEmail(email: string): User;
   getProfileByID(id: number): Profile;
+  getPaginatedProfiles(start: number, end: number): Record<string, string>[];
 }
 
 @Injectable()
-export class UserProfilesInMemory implements UserProfileDAO {
+export class UserProfileInMemory implements UserProfileDAO {
   users: User[];
   profiles: Profile[];
   highestID: number;
