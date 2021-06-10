@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserDAO } from '../dao/users';
+import { UserProfileDAO } from '../dao/userprofiles';
 import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject('UserDAO') private _userRepository: UserDAO) {}
+  constructor(@Inject('UserDAO') private _userRepository: UserProfileDAO) {}
 
   registerUser(
     firstName: string,
@@ -13,10 +13,10 @@ export class UserService {
     email: string,
     password: string,
   ): User {
-    if (!this._userRepository.getByEmail(email)) {
+    if (!this._userRepository.getUserByEmail(email)) {
       const hashedPassword = bcrypt.hashSync(password, 10);
-      return this._userRepository.getById(
-        this._userRepository.addUser(
+      return this._userRepository.getUserByID(
+        this._userRepository.addUserProfile(
           firstName,
           lastName,
           email,
