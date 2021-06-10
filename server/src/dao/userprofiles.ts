@@ -13,10 +13,11 @@ export interface UserProfileDAO {
   getUserByID(id: number): User;
   getUserByEmail(email: string): User;
   getProfileByID(id: number): Profile;
+  getPaginatedProfiles(start: number, end: number): Record<string, string>[];
 }
 
 @Injectable()
-export class UserProfilesInMemory implements UserProfileDAO {
+export class UserProfileInMemory implements UserProfileDAO {
   users: User[];
   profiles: Profile[];
   highestID: number;
@@ -85,5 +86,25 @@ export class UserProfilesInMemory implements UserProfileDAO {
       }
     });
     return profile;
+  }
+
+  public getPaginatedProfiles(
+    start: number,
+    end: number,
+  ): Record<string, string>[] {
+    const newProfiles: Record<string, string>[] = [];
+    const n: number = this.profiles.length;
+    let i: number = start;
+    while (i < end && i < n) {
+      const profile: Profile = this.profiles[i];
+      const newProfile: Record<string, string> = Object({
+        name: profile.name,
+        role: profile.role,
+        aboutMe: profile.bio,
+      });
+      newProfiles.push(newProfile);
+      i++;
+    }
+    return newProfiles;
   }
 }

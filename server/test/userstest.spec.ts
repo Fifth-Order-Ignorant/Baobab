@@ -1,8 +1,8 @@
-import { UserProfilesInMemory } from '../src/dao/userprofiles';
+import { UserProfileInMemory } from '../src/dao/userprofiles';
 
 describe('User tests', () => {
   it('should create a user', () => {
-    const users = new UserProfilesInMemory();
+    const users = new UserProfileInMemory();
 
     users.addUserProfile(
       'Michael',
@@ -14,7 +14,7 @@ describe('User tests', () => {
   });
 
   it('should return a valid user given id', () => {
-    const users = new UserProfilesInMemory();
+    const users = new UserProfileInMemory();
     const userID = users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
@@ -26,7 +26,7 @@ describe('User tests', () => {
   });
 
   it('should return a valid profile given id', () => {
-    const users = new UserProfilesInMemory();
+    const users = new UserProfileInMemory();
     const userID = users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
