@@ -4,5 +4,6 @@
 
 export * from "./requests/LoginRequest";
 export * from "./requests/RegisterRequest";
+export * from "./requests/RoleRequest";
 export * from "./responses/ErrorResponse";
 export * from "./responses/SessionPayload";
