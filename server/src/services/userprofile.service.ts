@@ -32,4 +32,11 @@ export class UserProfileService {
 
     return null;
   }
+
+  public getPaginatedProfiles(
+    start: number,
+    end: number,
+  ): Record<string, string>[] {
+    return this._userProfileRepository.getPaginatedProfiles(start, end);
+  }
 }

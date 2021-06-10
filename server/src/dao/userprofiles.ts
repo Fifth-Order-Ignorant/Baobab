@@ -87,4 +87,24 @@ export class UserProfileInMemory implements UserProfileDAO {
     });
     return profile;
   }
+
+  public getPaginatedProfiles(
+    start: number,
+    end: number,
+  ): Record<string, string>[] {
+    const newProfiles: Record<string, string>[] = [];
+    let n : number = this.profiles.length;
+    let i: number = start;
+    while (i < end && i < n){
+      let profile: Profile = this.profiles[i];
+      let newProfile: Record<string, string> = Object({
+        name: profile.name,
+        role: profile.role,
+        aboutMe: profile.bio,
+      })
+      newProfiles.push(newProfile);
+    }
+    return newProfiles;
+  }
+
 }
