@@ -1,6 +1,7 @@
 import MessageFeed from "../src/components/MessageFeed";
 import { SendMessage } from "../src/components/SendMessage";
 import { Typography } from "antd";
+import sampleMessages from "../src/constants/SampleMessageList";
 
 /**
  * Renders the feed page.
@@ -12,7 +13,7 @@ export default function Feed(): JSX.Element{
                 <h2>Feed</h2>
             </Typography>
             <SendMessage author={"W. F. Wumbo"} />
-            <MessageFeed />
+            <MessageFeed onLoad={async() => {return sampleMessages}} initMessages={sampleMessages} />
         </div>
     )
 }
