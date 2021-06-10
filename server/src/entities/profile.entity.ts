@@ -44,12 +44,16 @@ export class Profile {
     return this._jobTitle;
   }
 
-  editBio(newBio: string): void {
+  set bio(newBio: string) {
     this._bio = newBio;
   }
 
-  editJobTitle(newTitle: string): void {
+  set jobTitle(newTitle: string) {
     this._jobTitle = newTitle;
+  }
+
+  set name(newName: string) {
+    this._name = newName;
   }
 
   addExternalLink(link: string): void {

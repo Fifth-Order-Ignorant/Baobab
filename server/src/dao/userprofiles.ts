@@ -14,6 +14,7 @@ export interface UserProfileDAO {
   getUserByEmail(email: string): User;
   getProfileByID(id: number): Profile;
   getPaginatedProfiles(start: number, end: number): Record<string, string>[];
+  editProfile(id: number, firstName: string, lastName: string, jobTitle: string, bio: string): void;
 }
 
 @Injectable()
@@ -86,6 +87,16 @@ export class UserProfileInMemory implements UserProfileDAO {
       }
     });
     return profile;
+  }
+
+  public editProfile(id: number, firstName: string, lastName: string, jobTitle: string, bio: string): void {
+    const profile = this.getProfileByID(id);
+    const user = this.getUserByID(id);
+    user.firstName = firstName;
+    user.lastName = lastName;
+    profile.name = user.fullName;
+    profile.jobTitle = jobTitle;
+    profile.bio = bio;
   }
 
   public getPaginatedProfiles(
