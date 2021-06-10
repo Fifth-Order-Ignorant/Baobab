@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserDAO } from '../dao/users';
+import { UserDAO } from '../dao/userprofiles';
 import { User } from '../entities/user.entity';
 
 @Injectable()

@@ -1,19 +1,19 @@
-import { Message } from '../entities/message.entity';
+import { Role } from './role.entity';
 export class Profile {
   private _name: string;
-  private _relatedOrgs: Profile[];
   private _bio: string;
-  private _posts: Message[];
   private _externalLinks: string[];
   private _id: number;
+  private _jobTitle: string;
+  private _role;
 
   public constructor(id: number, name: string) {
     this._id = id;
     this._name = name;
-    this._relatedOrgs = [];
     this._bio = '';
-    this._posts = [];
     this._externalLinks = [];
+    this._jobTitle = '';
+    this._role = Role.DEFAULT;
   }
 
   get id(): number {
@@ -24,38 +24,32 @@ export class Profile {
     return this._name;
   }
 
-  get relatedOrgs(): Profile[] {
-    return this._relatedOrgs;
-  }
-
   get bio(): string {
     return this._bio;
-  }
-
-  get posts(): Message[] {
-    return this._posts;
   }
 
   get externalLinks(): string[] {
     return this._externalLinks;
   }
 
-  addPost(post: Message): void {
-    this._posts.push(post);
+  get role(): Role {
+    return this._role;
+  }
+
+  changeRole(newRole: Role): void {
+    this._role = newRole;
+  }
+
+  get jobTitle(): string {
+    return this._jobTitle;
   }
 
   editBio(newBio: string): void {
     this._bio = newBio;
   }
 
-  addRelatedOrg(profile: Profile): void {
-    this._relatedOrgs.push(profile);
-  }
-
-  deleteRelatedOrg(index: number): void {
-    if (index > -1) {
-      this._relatedOrgs.splice(index, 1);
-    }
+  editJobTitle(newTitle: string): void {
+    this._jobTitle = newTitle;
   }
 
   addExternalLink(link: string): void {
@@ -64,7 +58,7 @@ export class Profile {
 
   deleteExternalLink(index: number): void {
     if (index > -1) {
-      this._relatedOrgs.splice(index, 1);
+      this._externalLinks.splice(index, 1);
     }
   }
 }
