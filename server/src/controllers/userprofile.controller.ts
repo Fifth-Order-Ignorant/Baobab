@@ -57,13 +57,12 @@ export class UserProfileController {
   @Get('pagination')
   pagination(
     @Body() reqBody: ProfilePaginationRequest,
-    @Res({ passthrough: true }) res: Response,
   ) {
     const paginatedProfiles = this._userProfileService.getPaginatedProfiles(
       reqBody.start,
       reqBody.end,
     );
 
-    return paginatedProfiles; 
+    return paginatedProfiles;
   }
 }
