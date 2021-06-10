@@ -15,7 +15,7 @@ export class UserService {
   ): User {
     if (!this._userRepository.getUserByEmail(email)) {
       const hashedPassword = bcrypt.hashSync(password, 10);
-      return this._userRepository.getUserById(
+      return this._userRepository.getUserByID(
         this._userRepository.addUserProfile(
           firstName,
           lastName,
