@@ -2,37 +2,49 @@ import { Injectable } from '@nestjs/common';
 import { Message } from '../entities/message.entity';
 
 export interface MessageDAO {
-  createMessage(userId: number, content: string, parent: Message): number;
+  createMessage(
+    userID: number,
+    content: string,
+    timestamp: Date,
+    parent: Message,
+  ): number;
   getChilds(id: number): Message[];
-  getById(id: number): Message;
+  getByID(id: number): Message;
   getParent(id: number): Message;
 }
 
 @Injectable()
 export class MessageInMemory implements MessageDAO {
   messages: Message[];
-  highestId: number;
+  highestID: number;
   messageCount: number;
 
   public constructor() {
     this.messages = [];
-    this.highestId = 0;
+    this.highestID = 0;
     this.messageCount = 0;
   }
 
   public createMessage(
-    userId: number,
+    userID: number,
     content: string,
+    timestamp: Date,
     parent: Message,
   ): number {
-    const message = new Message(this.highestId, userId, content, parent);
+    const message = new Message(
+      this.highestID,
+      userID,
+      content,
+      timestamp,
+      parent,
+    );
     this.messages.push(message);
-    this.highestId++;
+    this.highestID++;
 
-    return this.highestId - 1;
+    return this.highestID - 1;
   }
 
-  public getById(id: number): Message {
+  public getByID(id: number): Message {
     let message: Message;
     this.messages.forEach((element) => {
       if (element.id === id) {
@@ -43,10 +55,10 @@ export class MessageInMemory implements MessageDAO {
   }
 
   public getChilds(id: number): Message[] {
-    return this.getById(id).childs;
+    return this.getByID(id).childs;
   }
 
   public getParent(id: number): Message {
-    return this.getById(id).parent;
+    return this.getByID(id).parent;
   }
 }
