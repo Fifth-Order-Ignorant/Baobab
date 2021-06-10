@@ -24,11 +24,13 @@ participants of the challenge.
 - MongoDB Community Server 4.4.6
 
 After setting up the above requirements, clone the repository and run
-`npm install` to download the libraries this project relies on.
+`npm install` to download the libraries this project relies on followed by 
+`npm run build --workspace=common` to build code shared between the frontend and 
+backend of the project.
 
 To run the backend locally, use `npm start --workspace=server`.
 
-To run the frontend locally, use `npm start --workspace=client`.
+To run the frontend locally, use `npm dev --workspace=client`.
 
 ## Deployment
 
