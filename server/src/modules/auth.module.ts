@@ -2,7 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '../controllers/auth.controller';
-import { UserModule } from './user.module';
+import { UserProfileModule } from './userprofile.module';
 import { AuthService } from '../services/auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -17,7 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '30m' },
       }),
     }),
-    forwardRef(() => UserModule),
+    forwardRef(() => UserProfileModule),
   ],
   controllers: [AuthController],
   providers: [AuthService],
