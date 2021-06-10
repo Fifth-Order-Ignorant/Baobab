@@ -68,7 +68,7 @@ export class MessageInMemory implements MessageDAO {
     end: number,
   ): Record<string, string | number>[] {
     const messages: Message[] = this.messages;
-    const i: number = start;
+    let i: number = start;
     const lst: Record<string, string | number>[] = [];
     const n: number = messages.length;
     while (i < end && i < n) {
@@ -80,6 +80,7 @@ export class MessageInMemory implements MessageDAO {
         messageID: message.id,
       });
       lst.push(newMessage);
+      i++;
     }
     return lst;
   }
