@@ -7,7 +7,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
-import e, { Response } from 'express';
+import { Response } from 'express';
 import { RegisterRequest, ProfilePaginationRequest } from 'baobab-common';
 import { AuthService } from '../services/auth.service';
 import { ValidationError } from 'yup';
