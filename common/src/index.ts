@@ -3,6 +3,7 @@
  */
 
 export * from "./requests/LoginRequest";
+export * from "./requests/ProfilePaginationRequest";
 export * from "./requests/RegisterRequest";
 export * from "./responses/ErrorResponse";
 export * from "./responses/SessionPayload";

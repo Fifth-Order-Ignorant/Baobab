@@ -2,20 +2,21 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   Res,
 } from '@nestjs/common';
-import { UserService } from '../services/user.service';
+import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import { RegisterRequest } from 'baobab-common';
+import { RegisterRequest, ProfilePaginationRequest } from 'baobab-common';
 import { AuthService } from '../services/auth.service';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
 
 @Controller('user')
-export class UserController {
+export class UserProfileController {
   constructor(
-    private _userService: UserService,
+    private _userProfileService: UserProfileService,
     private _authService: AuthService,
     private _configService: ConfigService,
   ) {}
@@ -25,12 +26,13 @@ export class UserController {
     @Body() reqBody: RegisterRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = this._userService.registerUser(
+    const userProfile = this._userProfileService.registerUser(
       reqBody.firstName,
       reqBody.lastName,
       reqBody.email,
       reqBody.password,
     );
+    const user = userProfile ? userProfile[0] : null;
 
     if (!user) {
       throw new BadRequestException({
@@ -50,5 +52,16 @@ export class UserController {
       secure: this._configService.get<boolean>('production'),
       sameSite: 'lax',
     });
+  }
+
+  @Get('pagination')
+  pagination(
+    @Body() reqBody: ProfilePaginationRequest,
+  ): Record<string, string>[] {
+    const paginatedProfiles = this._userProfileService.getPaginatedProfiles(
+      reqBody.start,
+      reqBody.end,
+    );
+    return paginatedProfiles;
   }
 }
