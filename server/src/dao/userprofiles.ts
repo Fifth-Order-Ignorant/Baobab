@@ -11,6 +11,7 @@ export interface UserProfileDAO {
   ): number;
   getUserProfileCount(): number;
   getUserById(id: number): User;
+  getUserByEmail(email: string): User;
   getProfileById(id: number): Profile;
 }
 
@@ -58,6 +59,17 @@ export class UserProfilesInMemory implements UserProfileDAO {
 
     this.users.forEach((element) => {
       if (element.id === id) {
+        user = element;
+      }
+    });
+    return user;
+  }
+
+  public getUserByEmail(email: string): User {
+    let user: User;
+
+    this.users.forEach((element) => {
+      if (element.email === email) {
         user = element;
       }
     });
