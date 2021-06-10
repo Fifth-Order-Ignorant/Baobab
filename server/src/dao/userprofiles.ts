@@ -10,22 +10,22 @@ export interface UserProfileDAO {
     password: string,
   ): number;
   getUserProfileCount(): number;
-  getUserById(id: number): User;
+  getUserByID(id: number): User;
   getUserByEmail(email: string): User;
-  getProfileById(id: number): Profile;
+  getProfileByID(id: number): Profile;
 }
 
 @Injectable()
 export class UserProfilesInMemory implements UserProfileDAO {
   users: User[];
   profiles: Profile[];
-  highestId: number;
+  highestID: number;
   userProfileCount: number;
 
   public constructor() {
     this.users = [];
     this.profiles = [];
-    this.highestId = 0;
+    this.highestID = 0;
     this.userProfileCount = 0;
   }
 
@@ -36,25 +36,25 @@ export class UserProfilesInMemory implements UserProfileDAO {
     password: string,
   ): number {
     const newUser = new User(
-      this.highestId,
+      this.highestID,
       firstName,
       lastName,
       email,
       password,
     );
     this.users.push(newUser);
-    const newProfile = new Profile(this.highestId, firstName + ' ' + lastName);
+    const newProfile = new Profile(this.highestID, firstName + ' ' + lastName);
     this.profiles.push(newProfile);
-    this.highestId++;
+    this.highestID++;
     this.userProfileCount++;
-    return this.highestId - 1;
+    return this.highestID - 1;
   }
 
   public getUserProfileCount() {
     return this.userProfileCount;
   }
 
-  public getUserById(id: number): User {
+  public getUserByID(id: number): User {
     let user: User;
 
     this.users.forEach((element) => {
@@ -76,7 +76,7 @@ export class UserProfilesInMemory implements UserProfileDAO {
     return user;
   }
 
-  public getProfileById(id: number): Profile {
+  public getProfileByID(id: number): Profile {
     let profile: Profile;
 
     this.profiles.forEach((element) => {

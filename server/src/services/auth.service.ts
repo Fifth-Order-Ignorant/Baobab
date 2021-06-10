@@ -32,7 +32,7 @@ export class AuthService {
     return null;
   }
 
-  genJwt(userId: number): { jwt: string; integrityString: string } {
+  genJwt(userID: number): { jwt: string; integrityString: string } {
     const integrityString = crypto.randomBytes(50).toString('hex');
     const integrityHash = crypto
       .createHash('sha256')
@@ -41,8 +41,8 @@ export class AuthService {
 
     return {
       jwt: this._jwtService.sign({
-        id: userId,
-        fullName: this._userRepository.getUserById(userId).fullName,
+        id: userID,
+        fullName: this._userRepository.getUserByID(userID).fullName,
         integrityHash: integrityHash,
       }),
       integrityString: integrityString,
@@ -83,9 +83,9 @@ export class AuthService {
   }
 
   // todo: when a user changes their password, their previous sessions should be marked stale and not renewable
-  markSessionsStale(userId: number, renewable: boolean) {
+  markSessionsStale(userID: number, renewable: boolean) {
     this._staleSessions.set<StaleSession>(
-      userId,
+      userID,
       {
         time: Date.now() / 1000,
         renewable: renewable,
