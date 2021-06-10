@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Post,
+  Get,
   Res,
   UseGuards,
   Req,
@@ -10,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { MessageService } from '../services/message.service';
 import { Response } from 'express';
-import { MessageRequest } from 'baobab-common';
+import { MessageRequest, MessagePaginationRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 
 @Controller('message')
@@ -42,5 +43,16 @@ export class MessageController {
         errors: [],
       });
     }
+  }
+
+  @Get('pagination')
+  pagination(
+    @Body() reqBody: MessagePaginationRequest,
+  ): Record<string, string | number>[] {
+    const paginatedMessages = this._messageService.getPaginatedMessages(
+      reqBody.start,
+      reqBody.end,
+    );
+    return paginatedMessages;
   }
 }
