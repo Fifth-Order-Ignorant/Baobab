@@ -17,7 +17,7 @@ export class AuthService {
   private _staleSessions: NodeCache;
 
   constructor(
-    @Inject('UserDAO') private _userRepository: UserProfileDAO,
+    @Inject('UserProfileDAO') private _userRepository: UserProfileDAO,
     private _jwtService: JwtService,
   ) {
     this._staleSessions = new NodeCache();
