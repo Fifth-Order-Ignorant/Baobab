@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UserDAO } from '../dao/userprofiles';
+import { UserProfileDAO } from '../dao/userprofiles';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -17,14 +17,14 @@ export class AuthService {
   private _staleSessions: NodeCache;
 
   constructor(
-    @Inject('UserDAO') private _userRepository: UserDAO,
+    @Inject('UserDAO') private _userRepository: UserProfileDAO,
     private _jwtService: JwtService,
   ) {
     this._staleSessions = new NodeCache();
   }
 
   verifyLogin(email: string, password: string): User {
-    const user = this._userRepository.getByEmail(email);
+    const user = this._userRepository.getUserByEmail(email);
     if (user && bcrypt.compareSync(password, user.password)) {
       return user;
     }
@@ -42,7 +42,7 @@ export class AuthService {
     return {
       jwt: this._jwtService.sign({
         id: userId,
-        fullName: this._userRepository.getById(userId).fullName,
+        fullName: this._userRepository.getUserById(userId).fullName,
         integrityHash: integrityHash,
       }),
       integrityString: integrityString,
