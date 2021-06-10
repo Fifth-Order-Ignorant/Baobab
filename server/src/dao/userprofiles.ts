@@ -101,8 +101,8 @@ export class UserProfileInMemory implements UserProfileDAO {
       const newProfile: Record<string, string> = Object({
         firstName: user.firstName,
         lastName: user.lastName,
-        role: profile.jobTitle,
-        aboutMe: profile.bio,
+        jobTitle: profile.jobTitle,
+        bio: profile.bio,
       });
       newProfiles.push(newProfile);
       i++;
