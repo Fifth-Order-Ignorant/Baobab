@@ -31,8 +31,10 @@ export class MessageService {
   ): Record<string, string | number>[] {
     const messages: Record<string, string | number>[] =
       this._messageRepository.getMessages(start, end);
-    messages.forEach(element => {
-      element.author = this._userRepository.getProfileByID(element.author as number).name;
+    messages.forEach((element) => {
+      element.author = this._userRepository.getProfileByID(
+        element.author as number,
+      ).name;
     });
     return messages;
   }
