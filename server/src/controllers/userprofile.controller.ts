@@ -117,10 +117,7 @@ export class UserProfileController {
   ): void {
     const id = req.user.id;
     if (this._userProfileService.isValidProfile(id)) {
-      this._userProfileService.editJob(
-        id,
-        reqBody.jobTitle,
-      );
+      this._userProfileService.editJob(id, reqBody.jobTitle);
     } else {
       throw new BadRequestException({
         errors: [],
@@ -137,10 +134,7 @@ export class UserProfileController {
   ): void {
     const id = req.user.id;
     if (this._userProfileService.isValidProfile(id)) {
-      this._userProfileService.editBio(
-        id,
-        reqBody.bio,
-      );
+      this._userProfileService.editBio(id, reqBody.bio);
     } else {
       throw new BadRequestException({
         errors: [],

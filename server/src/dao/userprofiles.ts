@@ -91,11 +91,7 @@ export class UserProfileInMemory implements UserProfileDAO {
     return profile;
   }
 
-  public editName(
-    id: number,
-    firstName: string,
-    lastName: string,
-  ): void {
+  public editName(id: number, firstName: string, lastName: string): void {
     const profile = this.getProfileByID(id);
     const user = this.getUserByID(id);
     user.firstName = firstName;
@@ -103,18 +99,12 @@ export class UserProfileInMemory implements UserProfileDAO {
     profile.name = user.fullName;
   }
 
-  public editJob(
-    id: number,
-    jobTitle: string,
-  ): void {
+  public editJob(id: number, jobTitle: string): void {
     const profile = this.getProfileByID(id);
     profile.jobTitle = jobTitle;
   }
 
-  public editBio(
-    id: number,
-    bio: string,
-  ): void {
+  public editBio(id: number, bio: string): void {
     const profile = this.getProfileByID(id);
     profile.bio = bio;
   }
