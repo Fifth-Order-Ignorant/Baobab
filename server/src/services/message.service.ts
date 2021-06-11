@@ -6,7 +6,7 @@ import { UserProfileDAO } from '../dao/userprofiles';
 @Injectable()
 export class MessageService {
   constructor(
-    @Inject('UserDAO') private _userRepository: UserProfileDAO,
+    @Inject('UserProfileDAO') private _userRepository: UserProfileDAO,
     @Inject('MessageDAO') private _messageRepository: MessageDAO,
   ) {}
 
