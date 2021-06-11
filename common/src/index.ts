@@ -11,5 +11,6 @@ export * from "./requests/MessagePaginationRequest";
 export * from "./requests/MessageRequest";
 export * from "./requests/ProfilePaginationRequest";
 export * from "./requests/RegisterRequest";
+export * from "./requests/RoleRequest";
 export * from "./responses/ErrorResponse";
 export * from "./responses/SessionPayload";
