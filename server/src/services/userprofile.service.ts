@@ -37,6 +37,32 @@ export class UserProfileService {
     start: number,
     end: number,
   ): Record<string, string>[] {
+  isValidProfile(id: number): boolean {
+    if (!this._userProfileRepository.getProfileByID(id)) {
+      return false;
+    }
+    return true;
+  }
+
+  editJob(id: number, jobTitle: string): void {
+    this._userProfileRepository.editJob(id, jobTitle);
+  }
+
+  editName(id: number, firstName: string, lastName: string): void {
+    this._userProfileRepository.editName(id, firstName, lastName);
+  }
+
+  editBio(id: number, bio: string): void {
+    this._userProfileRepository.editBio(id, bio);
+  }
+
+  getProfile(id: number): [string, string, string, string] {
+    const user = this._userProfileRepository.getUserByID(id);
+    const profile = this._userProfileRepository.getProfileByID(id);
+    return [user.firstName, user.lastName, profile.jobTitle, profile.bio];
+  }
+
+  getPaginatedProfiles(start: number, end: number): Record<string, string>[] {
     return this._userProfileRepository.getPaginatedProfiles(start, end);
   }
 }
