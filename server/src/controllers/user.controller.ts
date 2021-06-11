@@ -8,7 +8,6 @@ import {
 import { UserService } from '../services/user.service';
 import { Response } from 'express';
 import { RegisterRequest } from 'baobab-common';
-import { AuthService } from '../services/auth.service';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
 
@@ -16,7 +15,6 @@ import { ConfigService } from '@nestjs/config';
 export class UserController {
   constructor(
     private _userService: UserService,
-    private _authService: AuthService,
     private _configService: ConfigService,
   ) {}
 
@@ -38,17 +36,7 @@ export class UserController {
       });
     }
 
-    const { jwt, integrityString } = this._authService.genJwt(user.id);
-
-    res.cookie('SESSION_JWT', jwt, {
-      secure: this._configService.get<boolean>('production'),
-      sameSite: 'lax',
-    });
-
-    res.cookie('SESSION_INT', integrityString, {
-      httpOnly: true,
-      secure: this._configService.get<boolean>('production'),
-      sameSite: 'lax',
-    });
+    // redirect to automatically login
+    res.redirect(307, '/auth/login');
   }
 }
