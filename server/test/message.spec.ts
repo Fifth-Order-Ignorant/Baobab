@@ -36,6 +36,11 @@ describe('Message Creation Tests', () => {
       password: 'mcs',
     });
 
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
     return agent
       .post('/message/create')
       .send({
