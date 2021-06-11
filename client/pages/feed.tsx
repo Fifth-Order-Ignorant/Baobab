@@ -17,8 +17,8 @@ export default function Feed(): JSX.Element{
     let c: number = 5;
 
     const getMessages = async () => {
-        console.log({start: c * i, end: c * (i + 1)});
-        const res = await axios.post('/api/message/pagination', {start: c * i, end: c * (i + 1)});
+        // TODO: Make start = c * i to make it more efficient
+        const res = await axios.post('/api/message/pagination', {start: 0, end: c * (i + 1)});
         const newMessages = res.data;
         if (newMessages.length !== 0){
             i++;
@@ -29,7 +29,6 @@ export default function Feed(): JSX.Element{
     const sendMessage = async (content: string) => {
         const mr: MessageRequest = {content: content, parentID: -1};
         await axios.post('/api/message/create', mr);
-        console.log(mr.content);
     }
 
     return(

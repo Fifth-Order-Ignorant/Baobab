@@ -19,7 +19,7 @@ export interface MessageFeedProps{
 export default function MessageFeed(props: MessageFeedProps): JSX.Element {
 
     const [loading, setLoading] = useState(false);
-    const [messageList, setMessageList] = useState<MessagePropsWithID[]>([]);
+    const [messageList, setMessageList] = useState([]);
 
     useEffect(async () => {
         window.addEventListener('scroll', handleScroll);
@@ -28,12 +28,11 @@ export default function MessageFeed(props: MessageFeedProps): JSX.Element {
     }, []);
 
     const getMessage = async () => {
-        setLoading(true);
+        await setLoading(true);
         const messagePropsList: MessagePropsWithID[] = await props.onLoad();
         const newMessageList = messageList.concat(messagePropsList);
-        setMessageList(newMessageList);
-        console.log(newMessageList);
-        setLoading(false);
+        await setMessageList(newMessageList);
+        await setLoading(false);
     }
 
     const handleScroll = async (e: Event) => {
