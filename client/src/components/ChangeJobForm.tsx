@@ -1,5 +1,5 @@
 import { Form, Button, Input, Typography } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ErrorResponse, EditJobRequest, EditJobRequestSchema } from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,6 +21,7 @@ function ChangeJobForm(): JSX.Element {
       });
     
       const onSubmit = async (data: EditJobRequest) => {
+        setInfo(data.jobTitle);
         try {
           await axios.post('/api/user/editjob', data);
           changeState();
@@ -38,19 +39,26 @@ function ChangeJobForm(): JSX.Element {
       const GetInfo = () => {
         axios.get('/api/user/profile')
         .then((response) => {
-            var returned = response as unknown as [string, string, string, string];
-            setInfo(returned[2]);
+          const returned = response.data as unknown as [
+            string,
+            string,
+            string,
+            string,
+          ];
+          var string = returned[2];
+          if (string == "") {
+            string = "no job listed";
+          }
+            setInfo(string);
         })
         .catch( error => {
-          console.log(error);
-            //const { errors } = error.response.data as ErrorResponse;
-    /*
+            const { errors } = error.response.data as ErrorResponse;
+    
           for (const error of errors) {
             setError(error.path as keyof EditJobRequest, {
               message: error.message,
             });
           }
-          */
         }
         )
         return info;
@@ -69,12 +77,16 @@ function ChangeJobForm(): JSX.Element {
         }
     }
 
+    useEffect(() => {
+      GetInfo();
+    }, []);
+
     return(
         <Form onFinish={handleSubmit(onSubmit)}>
             <Form.Item>
                 <p onClick={()=>changeState()}>
                 {
-                    state === 'default' && <h3 color="grey">{GetInfo()}</h3>
+                    state === 'default' && <h3 color="grey">{info}</h3>
                 }
                 </p>
                 {
@@ -83,7 +95,7 @@ function ChangeJobForm(): JSX.Element {
                     validateStatus={errors.jobTitle ? 'error' : ''}
                     help={errors.jobTitle?.message}
                   >
-                    <Input defaultValue={GetInfo()} {...register('jobTitle')}/>
+                    <Input defaultValue={info} {...register('jobTitle')}/>
                   </Form.Item>
                 }
                 {

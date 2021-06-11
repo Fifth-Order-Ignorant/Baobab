@@ -1,6 +1,6 @@
 import { Form, Button, Input } from 'antd';
 import Card from "./Card";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ErrorResponse, EditBioRequest, EditBioRequestSchema } from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';

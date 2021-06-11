@@ -29,9 +29,11 @@ function ChangeNameForm(): JSX.Element {
   });
 
   const onSubmit = async (data: EditNameRequest) => {
-    console.log(data);
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
     try {
-      await axios.post('/api/profile/editname', data);
+      await axios.post('/api/user/editname', data);
+      changeState();
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
 
@@ -45,7 +47,7 @@ function ChangeNameForm(): JSX.Element {
 
   const GetFirstName = () => {
     axios
-      .get('/api/profile/myprofile')
+      .get('/api/user/profile')
       .then((response) => {
         const returned = response.data as unknown as [
           string,
@@ -68,9 +70,8 @@ function ChangeNameForm(): JSX.Element {
 
   const GetLastName = () => {
     axios
-      .get('/api/profile/myprofile')
+      .get('/api/user/profile')
       .then((response) => {
-        console.log(response);
         const returned = response.data as unknown as [
           string,
           string,
@@ -91,7 +92,6 @@ function ChangeNameForm(): JSX.Element {
   };
 
   const changeState = () => {
-    console.log(state);
     if (state == 'default') {
       setState('edit');
     } else if (state == 'edit') {
@@ -119,7 +119,7 @@ function ChangeNameForm(): JSX.Element {
           >
             <Input
               size="large"
-              defaultValue={firstName}
+              placeholder={firstName}
               {...register('firstName')}
             />
           </Form.Item>
@@ -133,13 +133,13 @@ function ChangeNameForm(): JSX.Element {
           >
             <Input
               size="large"
-              defaultValue={lastName}
+              placeholder={lastName}
               {...register('lastName')}
             />
           </Form.Item>
         )}
         {state === 'edit' && (
-          <Button type="primary" htmlType="submit" loading={isSubmitting} onSubmit={()=>changeState()}>
+          <Button type="primary" htmlType="submit" loading={isSubmitting}>
             Change Name
           </Button>
         )}
