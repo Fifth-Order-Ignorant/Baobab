@@ -39,12 +39,15 @@ describe('End to end profile editing tests', () => {
       })
       .expect(HttpStatus.CREATED);
 
-    await agent.post('/auth/login').send({
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
+    await agent
+      .post('/auth/login')
+      .send({
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
 
-    return agent.get('/user/profile').send({}).expect(HttpStatus.OK);
+    return agent.get('/profile/myprofile').send({}).expect(HttpStatus.OK);
   });
 
   it(`lets you change your name`, async () => {
@@ -56,7 +59,7 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/user/editname')
+      .post('/profile/editname')
       .send({
         firstName: 'ethan2',
         lastName: 'lam2',
@@ -72,7 +75,7 @@ describe('End to end profile editing tests', () => {
       password: 'mcs',
     });
 
-    const response = await agent.get('/user/profile').send({});
+    const response = await agent.get('/profile/myprofile').send({});
 
     expect(response.body[0]).toBe('ethan2');
     expect(response.body[1]).toBe('lam2');
@@ -90,7 +93,7 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/user/editjob')
+      .post('/profile/editjob')
       .send({
         jobTitle: 'marketing vp',
       })
@@ -105,7 +108,7 @@ describe('End to end profile editing tests', () => {
       password: 'mcs',
     });
 
-    const response = await agent.get('/user/profile').send({});
+    const response = await agent.get('/profile/myprofile').send({});
 
     expect(response.body[0]).toBe('ethan2');
     expect(response.body[1]).toBe('lam2');
@@ -123,7 +126,7 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/user/editbio')
+      .post('/profile/editbio')
       .send({
         bio: 'haha!',
       })
@@ -138,7 +141,7 @@ describe('End to end profile editing tests', () => {
       password: 'mcs',
     });
 
-    const response = await agent.get('/user/profile').send({});
+    const response = await agent.get('/profile/myprofile').send({});
 
     expect(response.body[0]).toBe('ethan2');
     expect(response.body[1]).toBe('lam2');
