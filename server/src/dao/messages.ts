@@ -11,6 +11,7 @@ export interface MessageDAO {
   getChilds(id: number): Message[];
   getByID(id: number): Message;
   getParent(id: number): Message;
+  getMessages(start: number, end: number): Record<string, string | number>[];
 }
 
 @Injectable()
@@ -60,5 +61,27 @@ export class MessageInMemory implements MessageDAO {
 
   public getParent(id: number): Message {
     return this.getByID(id).parent;
+  }
+
+  public getMessages(
+    start: number,
+    end: number,
+  ): Record<string, string | number>[] {
+    const messages: Message[] = this.messages;
+    let i: number = start;
+    const lst: Record<string, string | number>[] = [];
+    const n: number = messages.length;
+    while (i < end && i < n) {
+      const message: Message = messages[i];
+      const newMessage: Record<string, string | number> = Object({
+        author: message.userID,
+        timestamp: message.timestamp.toISOString(),
+        content: message.content,
+        messageID: message.id,
+      });
+      lst.push(newMessage);
+      i++;
+    }
+    return lst;
   }
 }
