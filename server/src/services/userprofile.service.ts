@@ -40,20 +40,16 @@ export class UserProfileService {
     return true;
   }
 
-  editProfile(
-    id: number,
-    firstName: string,
-    lastName: string,
-    jobTitle: string,
-    bio: string,
-  ): void {
-    this._userProfileRepository.editProfile(
-      id,
-      firstName,
-      lastName,
-      jobTitle,
-      bio,
-    );
+  editJob(id: number, jobTitle: string): void {
+    this._userProfileRepository.editJob(id, jobTitle);
+  }
+
+  editName(id: number, firstName: string, lastName: string): void {
+    this._userProfileRepository.editName(id, firstName, lastName);
+  }
+
+  editBio(id: number, bio: string): void {
+    this._userProfileRepository.editBio(id, bio);
   }
 
   getProfile(id: number): [string, string, string, string] {
