@@ -28,9 +28,9 @@ After setting up the above requirements, clone the repository and run
 `npm run build --workspace=common` to build code shared between the frontend and 
 backend of the project.
 
-To run the backend locally, use `npm start --workspace=server`.
+To run the backend locally, use `npm run start --workspace=server`.
 
-To run the frontend locally, use `npm dev --workspace=client`.
+To run the frontend locally, use `npm run dev --workspace=client`.
 
 ## Deployment
 
