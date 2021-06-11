@@ -6,7 +6,7 @@ import styles from "../../styles/Message.module.css";
 /**
  * Interface for MessageFeed.
  */
-export interface MessageFeedProps{
+export interface MessageFeedProps {
     onLoad: () => Promise<MessagePropsWithID[]>;
     initMessages: MessagePropsWithID[];
 }
@@ -19,20 +19,21 @@ export interface MessageFeedProps{
 export default function MessageFeed(props: MessageFeedProps): JSX.Element {
 
     const [loading, setLoading] = useState(false);
-    const [messageList, setMessageList] = useState([]);
+    const [messageList, setMessageList] = useState<MessagePropsWithID[]>([]);
 
-    useEffect(async () => {
-        window.addEventListener('scroll', handleScroll);
-        await getMessage();
-        return () => window.removeEventListener('scroll', handleScroll);
+    useEffect(() => {
+        getMessage().then(() => {
+            window.addEventListener('scroll', handleScroll);
+            return () => window.removeEventListener('scroll', handleScroll);
+        })
     }, []);
 
     const getMessage = async () => {
-        await setLoading(true);
+        setLoading(true);
         const messagePropsList: MessagePropsWithID[] = await props.onLoad();
-        const newMessageList = messageList.concat(messagePropsList);
-        await setMessageList(newMessageList);
-        await setLoading(false);
+        const newMessageList: MessagePropsWithID[] = messageList.concat(messagePropsList);
+        setMessageList(newMessageList);
+        setLoading(false);
     }
 
     const handleScroll = async (e: Event) => {
@@ -44,7 +45,7 @@ export default function MessageFeed(props: MessageFeedProps): JSX.Element {
         <div>
             <MessageList messagePropsList={messageList} />
             <div className={styles.messageLoading}>
-            {loading && <Spin size={'large'} />}
+                {loading && <Spin size={'large'} />}
             </div>
         </div>
     );

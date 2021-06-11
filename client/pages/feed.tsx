@@ -1,8 +1,7 @@
 import MessageFeed from '../src/components/MessageFeed';
 import { SendMessage, SendMessageProps } from '../src/components/SendMessage';
 import { Typography, Row, Col } from 'antd';
-import sampleMessages from '../src/constants/SampleMessageList';
-import { MessagePaginationRequest, MessageRequest } from 'baobab-common';
+import { MessageRequest } from 'baobab-common';
 import axios from 'axios';
 
 import styles from '../styles/Message.module.css';
@@ -40,7 +39,7 @@ export default function Feed(): JSX.Element {
           <Typography>
             <h2>Feed</h2>
           </Typography>
-          <SendMessage author={'W. F. Wumbo'} sendMessage={sendMessage} />
+          <SendMessage author={'You!'} sendMessage={sendMessage} />
           <MessageFeed onLoad={getMessages} initMessages={[]} />
         </Col>
       </Row>
