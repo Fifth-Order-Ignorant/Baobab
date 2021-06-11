@@ -8,31 +8,35 @@ import {
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import { RegisterRequest, ProfilePaginationRequest } from 'baobab-common';
-import { AuthService } from '../services/auth.service';
+import {
+  RegisterRequest,
+  ProfilePaginationRequest,
+} from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserProfileController {
   constructor(
     private _userProfileService: UserProfileService,
-    private _authService: AuthService,
     private _configService: ConfigService,
   ) {}
 
   @Post('register')
+  @ApiResponse({ status: 201, description: 'The user registered.'})
+  @ApiResponse({ status: 400, description: 'The email is taken.'})
+
   register(
     @Body() reqBody: RegisterRequest,
-    @Res({ passthrough: true }) res: Response,
+    // @Res({ passthrough: true }) res: Response,
   ) {
-    const userProfile = this._userProfileService.registerUser(
+    const user = this._userProfileService.registerUser(
       reqBody.firstName,
       reqBody.lastName,
       reqBody.email,
       reqBody.password,
     );
-    const user = userProfile ? userProfile[0] : null;
 
     if (!user) {
       throw new BadRequestException({
@@ -40,21 +44,11 @@ export class UserProfileController {
       });
     }
 
-    const { jwt, integrityString } = this._authService.genJwt(user.id);
-
-    res.cookie('SESSION_JWT', jwt, {
-      secure: this._configService.get<boolean>('production'),
-      sameSite: 'lax',
-    });
-
-    res.cookie('SESSION_INT', integrityString, {
-      httpOnly: true,
-      secure: this._configService.get<boolean>('production'),
-      sameSite: 'lax',
-    });
+    // redirect to automatically login (will work once we set up CORS later)
+    // res.redirect(307, 'http://localhost:3001/auth/login');
   }
 
-  @Get('pagination')
+  @Post('pagination')
   pagination(
     @Body() reqBody: ProfilePaginationRequest,
   ): Record<string, string>[] {
