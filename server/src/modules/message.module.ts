@@ -2,20 +2,16 @@ import { Module } from '@nestjs/common';
 import { MessageController } from '../controllers/message.controller';
 import { MessageService } from '../services/message.service';
 import { MessageInMemory } from '../dao/messages';
-import { UserProfilesInMemory } from '../dao/userprofiles';
 import { AuthModule } from './auth.module';
+import { UserModule } from './user.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, UserModule],
   controllers: [MessageController],
   providers: [
     { provide: 'MessageDAO', useClass: MessageInMemory },
-    { provide: 'UserProfileDAO', useClass: UserProfilesInMemory },
     MessageService,
   ],
-  exports: [
-    { provide: 'MessageDAO', useClass: MessageInMemory },
-    { provide: 'UserProfileDAO', useClass: UserProfilesInMemory },
-  ],
+  exports: [{ provide: 'MessageDAO', useClass: MessageInMemory }],
 })
 export class MessageModule {}
