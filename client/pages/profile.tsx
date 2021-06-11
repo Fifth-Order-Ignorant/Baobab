@@ -9,6 +9,7 @@ import sampleProfile from "../src/constants/SampleProfile";
  * Renders the profile page.
  */
 export default function Profile(): JSX.Element {
+    
     return (
         <div>
             <div className={styles.body}>
@@ -17,7 +18,7 @@ export default function Profile(): JSX.Element {
                         <Avatar size="large" className={styles.avatar} />
                     </Col>
                     <Col className={styles.about}>
-                        <About name={sampleProfile.name} role={sampleProfile.role} aboutMe={sampleProfile.aboutMe} />
+                        <About/>
                     </Col>
                 </Row>
                 <Row justify="center">
