@@ -39,10 +39,13 @@ describe('End to end profile editing tests', () => {
       })
       .expect(HttpStatus.CREATED);
 
-    await agent.post('/auth/login').send({
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
+    await agent
+      .post('/auth/login')
+      .send({
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
 
     return agent.get('/user/profile').send({}).expect(HttpStatus.OK);
   });
