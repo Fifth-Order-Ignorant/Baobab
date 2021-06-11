@@ -1,4 +1,6 @@
-import { Avatar, List } from 'antd';
+import { Avatar, List
+
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/ProfileList.module.css';
 import axios from 'axios';
@@ -19,7 +21,6 @@ const ProfileList = () => {
           });
         }
         setUserList(lst);
-        console.log(lst);
       });
   }, []);
   return (
