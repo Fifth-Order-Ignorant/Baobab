@@ -8,6 +8,7 @@ import styles from "../../styles/Message.module.css";
  */
 export interface SendMessageProps {
     author: string;
+    sendMessage: () => Promise<void>;
 }
 
 /**
@@ -22,6 +23,10 @@ export function SendMessage(props: SendMessageProps): JSX.Element {
         setMessage(event.target.value);
     };
 
+    const sendMessage = async () => {
+        await props.sendMessage(message);
+    }
+
     return (
         <Row gutter={[0, 24]}>
             <Col span={24}>
@@ -35,7 +40,11 @@ export function SendMessage(props: SendMessageProps): JSX.Element {
                                 <Input.TextArea rows={4} onChange={onMessageChange} value={message} />
                             </Form.Item>
                         }
-                        actions={[<Button type="primary">Send</Button>]}
+                        actions={[
+                        <Button type="primary" onClick={sendMessage}>
+                            Send
+                        </Button>
+                        ]}
                     />
                 </Card>
             </Col>
