@@ -35,8 +35,9 @@ describe('Message Creation Tests', () => {
       email: 'ethan@mail.com',
       password: 'mcs',
     });
-    
-    return agent.post('/message/create')
+
+    return agent
+      .post('/message/create')
       .send({
         content: 'hello1',
         parentID: -1,
