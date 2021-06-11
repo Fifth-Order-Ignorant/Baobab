@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './user.module';
+import { UserProfileModule } from './userprofile.module';
 import { AuthModule } from './auth.module';
 import { RequestModule } from './request.module';
+import { MessageModule } from './message.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
 
@@ -11,9 +12,10 @@ import configuration from './configuration';
       isGlobal: true,
       load: [configuration],
     }),
-    UserModule,
+    UserProfileModule,
     AuthModule,
     RequestModule,
+    MessageModule,
   ],
 })
 export class AppModule {}
