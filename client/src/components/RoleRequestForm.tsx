@@ -6,7 +6,7 @@ import {
 } from 'baobab-common';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import styles from "/styles/RoleRequest.module.css";
 
@@ -58,7 +58,7 @@ validateStatus={errors.role ? 'error' : ''}
 help={errors.role?.message}
 >
 <Controller
-render={(field) => (
+render={({field}) => (
 <Select {...field}>
   <Select.Option value="default">default</Select.Option>
   <Select.Option value="entrepeneur">entrepeneur</Select.Option>
