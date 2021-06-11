@@ -1,19 +1,48 @@
 import { Spin } from 'antd';
-import { MessageList } from "./MessageList";
-import sampleMessages from "../constants/SampleMessageList";
-import { useState } from "react";
+import { MessageList, MessagePropsWithID } from "./MessageList";
+import { useEffect, useState } from "react";
 import styles from "../../styles/Message.module.css";
 
 /**
- * Renders the infinite scrolling message feed.
+ * Interface for MessageFeed.
  */
-export default function MessageFeed(): JSX.Element {
+export interface MessageFeedProps{
+    onLoad: () => Promise<MessagePropsWithID[]>;
+    initMessages: MessagePropsWithID[];
+}
+
+/**
+ * Renders the infinite scrolling message feed.
+ * @param MessageFeedProps Props that contain the following:
+ *      - onLoad: async function that is called while loading
+ */
+export default function MessageFeed(props: MessageFeedProps): JSX.Element {
 
     const [loading, setLoading] = useState(false);
+    const [messageList, setMessageList] = useState([]);
+
+    useEffect(async () => {
+        window.addEventListener('scroll', handleScroll);
+        await getMessage();
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const getMessage = async () => {
+        await setLoading(true);
+        const messagePropsList: MessagePropsWithID[] = await props.onLoad();
+        const newMessageList = messageList.concat(messagePropsList);
+        await setMessageList(newMessageList);
+        await setLoading(false);
+    }
+
+    const handleScroll = async (e: Event) => {
+        if (document.documentElement.scrollTop + window.innerHeight !== document.documentElement.scrollHeight) return;
+        await getMessage();
+    }
 
     return (
         <div>
-            <MessageList messagePropsList={sampleMessages} />
+            <MessageList messagePropsList={messageList} />
             <div className={styles.messageLoading}>
             {loading && <Spin size={'large'} />}
             </div>
