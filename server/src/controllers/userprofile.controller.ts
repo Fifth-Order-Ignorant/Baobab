@@ -50,7 +50,7 @@ export class UserProfileController {
     // res.redirect(307, 'http://localhost:3001/auth/login');
   }
 
-  @Get('pagination')
+  @Post('pagination')
   pagination(
     @Body() reqBody: ProfilePaginationRequest,
   ): Record<string, string>[] {
