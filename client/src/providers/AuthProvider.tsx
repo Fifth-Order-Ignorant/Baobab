@@ -24,6 +24,16 @@ function AuthProvider({
   const [authState, setAuthState] = useState(initialState);
 
   useEffect(() => {
+    const token = Cookies.get('SESSION_JWT');
+
+    const payload =
+      token == undefined ? null : (jwt.decode(token) as SessionPayload);
+
+    setAuthState({
+      jwt: token == undefined ? '' : token,
+      payload: payload,
+    });
+
     axios.defaults.withCredentials = true;
     axios.interceptors.response.use((value) => {
       const token = Cookies.get('SESSION_JWT');
