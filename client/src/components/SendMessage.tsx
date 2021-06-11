@@ -8,7 +8,7 @@ import styles from "../../styles/Message.module.css";
  */
 export interface SendMessageProps {
     author: string;
-    sendMessage: () => Promise<void>;
+    sendMessage: (content: string) => Promise<void>;
 }
 
 /**
