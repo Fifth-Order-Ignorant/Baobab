@@ -4,6 +4,7 @@ import { UserProfileService } from '../services/userprofile.service';
 import { UserProfileInMemory } from '../dao/userprofiles';
 
 @Module({
+  imports: [],
   controllers: [UserProfileController],
   providers: [
     { provide: 'UserProfileDAO', useClass: UserProfileInMemory },
