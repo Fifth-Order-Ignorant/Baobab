@@ -7,7 +7,7 @@ import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 
-describe('AppController (e2e)', () => {
+describe('Authentication Tests', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -21,12 +21,11 @@ describe('AppController (e2e)', () => {
 
     app.useGlobalPipes(new YupValidationPipe());
     app.use(cookieParser());
-    jest.mock('js-cookie', () => jest.fn());
     await app.init();
   });
 
-  it(`creates a user correctly`, () => {
-    return request(app.getHttpServer())
+  it(`creates & logs in a user correctly`, async () => {
+    await request(app.getHttpServer())
       .post('/user/register')
       .send({
         firstName: 'ethan',
@@ -35,7 +34,15 @@ describe('AppController (e2e)', () => {
         password: 'mcs',
       })
       .expect(HttpStatus.CREATED);
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: 'ethan@mail.com', password: 'mcs' })
+      .expect(HttpStatus.CREATED);
+
+    expect(res.get('Set-Cookie')).toHaveLength(2);
   });
+
   it(`fails to register when missing a field`, () => {
     return request(app.getHttpServer())
       .post('/user/register')
@@ -46,6 +53,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
   it(`fails to register when given a non-email`, () => {
     return request(app.getHttpServer())
       .post('/user/register')
@@ -57,6 +65,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
   it(`fails to register when given a blank name`, () => {
     return request(app.getHttpServer())
       .post('/user/register')
@@ -68,6 +77,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
   it(`fails to register when given a blank password`, () => {
     return request(app.getHttpServer())
       .post('/user/register')
@@ -79,13 +89,8 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
   it(`doesn't let you register with an existing email`, () => {
-    request(app.getHttpServer()).post('/user/register').send({
-      firstName: 'ethan',
-      lastName: 'lam',
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
     return request(app.getHttpServer())
       .post('/user/register')
       .send({
@@ -96,28 +101,8 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
-  it(`lets you log in after registering`, () => {
-    request(app.getHttpServer()).post('/user/register').send({
-      firstName: 'ethan',
-      lastName: 'lam',
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
-    return request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-  });
+
   it(`fails login with a bad password`, () => {
-    request(app.getHttpServer()).post('/user/register').send({
-      firstName: 'ethan',
-      lastName: 'lam',
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
     return request(app.getHttpServer())
       .post('/auth/login')
       .send({
@@ -126,6 +111,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.UNAUTHORIZED);
   });
+
   it(`fails login if the account you're trying to create hasn't been created`, () => {
     return request(app.getHttpServer())
       .post('/auth/login')
@@ -135,6 +121,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.UNAUTHORIZED);
   });
+
   it(`fails login given an non email string`, () => {
     return request(app.getHttpServer())
       .post('/auth/login')
@@ -144,6 +131,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
   it(`fails login when missing a field`, () => {
     return request(app.getHttpServer())
       .post('/auth/login')
@@ -152,6 +140,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
   it(`fails login when password is blank`, () => {
     return request(app.getHttpServer())
       .post('/auth/login')

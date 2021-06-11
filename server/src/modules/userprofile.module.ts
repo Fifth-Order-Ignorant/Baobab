@@ -1,11 +1,9 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { UserProfileController } from '../controllers/userprofile.controller';
 import { UserProfileService } from '../services/userprofile.service';
 import { UserProfileInMemory } from '../dao/userprofiles';
-import { AuthModule } from './auth.module';
 
 @Module({
-  imports: [forwardRef(() => AuthModule)],
   controllers: [UserProfileController],
   providers: [
     { provide: 'UserProfileDAO', useClass: UserProfileInMemory },
