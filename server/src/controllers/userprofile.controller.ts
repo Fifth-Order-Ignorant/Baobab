@@ -3,15 +3,22 @@ import {
   Body,
   Controller,
   Get,
+  UseGuards,
   Post,
   Res,
+  Req,
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import { RegisterRequest, ProfilePaginationRequest } from 'baobab-common';
+import {
+  RegisterRequest,
+  ProfilePaginationRequest,
+  EditProfileRequest,
+} from 'baobab-common';
 import { AuthService } from '../services/auth.service';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
+import { JwtAuthGuard } from './jwt.guard';
 
 @Controller('user')
 export class UserProfileController {
@@ -63,5 +70,41 @@ export class UserProfileController {
       reqBody.end,
     );
     return paginatedProfiles;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Req() req) {
+    const id = req.user.id;
+    if (this._userProfileService.isValidProfile(id)) {
+      return this._userProfileService.getProfile(id);
+    } else {
+      throw new BadRequestException({
+        errors: [],
+      });
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('edit')
+  editProfile(
+    @Body() reqBody: EditProfileRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Req() req,
+  ): void {
+    const id = req.user.id;
+    if (this._userProfileService.isValidProfile(id)) {
+      this._userProfileService.editProfile(
+        id,
+        reqBody.firstName,
+        reqBody.lastName,
+        reqBody.jobTitle,
+        reqBody.bio,
+      );
+    } else {
+      throw new BadRequestException({
+        errors: [],
+      });
+    }
   }
 }
