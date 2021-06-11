@@ -21,7 +21,7 @@ export class UserController {
   @Post('register')
   register(
     @Body() reqBody: RegisterRequest,
-    @Res({ passthrough: true }) res: Response,
+    // @Res({ passthrough: true }) res: Response,
   ) {
     const user = this._userService.registerUser(
       reqBody.firstName,
@@ -36,7 +36,7 @@ export class UserController {
       });
     }
 
-    // redirect to automatically login
-    res.redirect(307, '/auth/login');
+    // redirect to automatically login (will work once we set up CORS later)
+    // res.redirect(307, 'http://localhost:3001/auth/login');
   }
 }
