@@ -42,13 +42,15 @@ function ChangeJobForm(): JSX.Element {
             setInfo(returned[2]);
         })
         .catch( error => {
-            const { errors } = error.response.data as ErrorResponse;
-    
+          console.log(error);
+            //const { errors } = error.response.data as ErrorResponse;
+    /*
           for (const error of errors) {
             setError(error.path as keyof EditJobRequest, {
               message: error.message,
             });
           }
+          */
         }
         )
         return info;

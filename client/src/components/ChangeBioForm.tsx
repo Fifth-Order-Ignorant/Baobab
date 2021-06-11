@@ -42,10 +42,13 @@ function ChangeBioForm(): JSX.Element {
       const GetInfo = () => {
         axios.get('/api/user/profile')
         .then((response) => {
+          console.log(response);
             var returned = response as unknown as [string, string, string, string];
+            console.log(returned);
             setInfo(returned[3]);
         })
         .catch( error => {
+          console.log(error);
             const { errors } = error.response.data as ErrorResponse;
     
           for (const error of errors) {
