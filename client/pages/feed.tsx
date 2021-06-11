@@ -4,6 +4,8 @@ import { Typography } from "antd";
 import sampleMessages from "../src/constants/SampleMessageList";
 import { MessagePaginationRequest, MessageRequest } from "baobab-common";
 import axios from 'axios';
+import { Row, Col } from 'antd';
+import styles from "../styles/Message.module.css";
 
 /**
  * Renders the feed page.
@@ -23,12 +25,16 @@ export default function Feed(): JSX.Element{
     }
 
     return(
-        <div style={{backgroundColor: "#f0f0f0"}}>
-            <Typography>
-                <h2>Feed</h2>
-            </Typography>
-            <SendMessage author={"W. F. Wumbo"} sendMessage={sendMessage} />
-            <MessageFeed onLoad={getMessages} initMessages={sampleMessages} />
+        <div className={styles.feed}>
+            <Row type="flex" justify="center" align="middle">
+                <Col span={16}>
+                <Typography>
+                    <h2>Feed</h2>
+                </Typography>
+                <SendMessage author={"W. F. Wumbo"} sendMessage={sendMessage} />
+                <MessageFeed onLoad={getMessages} initMessages={sampleMessages} />
+                </Col>
+            </Row>
         </div>
     )
 }
