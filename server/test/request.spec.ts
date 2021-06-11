@@ -40,6 +40,14 @@ describe('Role Request Tests', () => {
       })
       .expect(HttpStatus.CREATED);
 
+    await agent
+      .post('/auth/login')
+      .send({
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
+
     return agent
       .post('/request/role')
       .send({
