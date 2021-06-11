@@ -5,6 +5,7 @@
 export * from "./requests/EditBioRequest";
 export * from "./requests/EditJobRequest";
 export * from "./requests/EditNameRequest";
+export * from "./requests/EditProfileRequest";
 export * from "./requests/LoginRequest";
 export * from "./requests/ProfilePaginationRequest";
 export * from "./requests/RegisterRequest";
