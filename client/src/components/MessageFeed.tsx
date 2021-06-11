@@ -19,19 +19,26 @@ export interface MessageFeedProps{
 export default function MessageFeed(props: MessageFeedProps): JSX.Element {
 
     const [loading, setLoading] = useState(false);
-    const [messageList, setMessageList] = useState<MessagePropsWithID[]>(props.initMessages);
+    const [messageList, setMessageList] = useState<MessagePropsWithID[]>([]);
 
-    useEffect(() => {
+    useEffect(async () => {
         window.addEventListener('scroll', handleScroll);
+        await getMessage();
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleScroll = async (e: Event) => {
-        if (document.documentElement.scrollTop + window.innerHeight !== document.documentElement.scrollHeight) return;
+    const getMessage = async () => {
         setLoading(true);
         const messagePropsList: MessagePropsWithID[] = await props.onLoad();
-        setMessageList(messageList.concat(messagePropsList));
+        const newMessageList = messageList.concat(messagePropsList);
+        setMessageList(newMessageList);
+        console.log(newMessageList);
         setLoading(false);
+    }
+
+    const handleScroll = async (e: Event) => {
+        if (document.documentElement.scrollTop + window.innerHeight !== document.documentElement.scrollHeight) return;
+        await getMessage();
     }
 
     return (

@@ -12,10 +12,18 @@ import styles from "../styles/Message.module.css";
  */
 export default function Feed(): JSX.Element{
 
+    // declare variables for pagination
+    let i: number = 0;
+    let c: number = 5;
+
     const getMessages = async () => {
-        const res = await axios.get('/api/message/pagination', {start: 0, end: 5});
-        console.log(res.data);
-        return res.data;
+        console.log({start: c * i, end: c * (i + 1)});
+        const res = await axios.post('/api/message/pagination', {start: c * i, end: c * (i + 1)});
+        const newMessages = res.data;
+        if (newMessages.length !== 0){
+            i++;
+        }
+        return newMessages;
     }
 
     const sendMessage = async (content: string) => {
@@ -32,7 +40,7 @@ export default function Feed(): JSX.Element{
                     <h2>Feed</h2>
                 </Typography>
                 <SendMessage author={"W. F. Wumbo"} sendMessage={sendMessage} />
-                <MessageFeed onLoad={getMessages} initMessages={sampleMessages} />
+                <MessageFeed onLoad={getMessages} />
                 </Col>
             </Row>
         </div>
