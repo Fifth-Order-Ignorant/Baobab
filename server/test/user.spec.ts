@@ -47,7 +47,7 @@ describe('End to end profile editing tests', () => {
     return agent.get('/user/profile').send({}).expect(HttpStatus.OK);
   });
 
-  it(`lets you change your profile`, async () => {
+  it(`lets you change your name`, async () => {
     const agent = request.agent(app.getHttpServer());
 
     await agent.post('/auth/login').send({
@@ -56,17 +56,48 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/user/edit')
+      .post('/user/editname')
       .send({
         firstName: 'ethan2',
         lastName: 'lam2',
-        jobTitle: 'marketing vp',
-        bio: 'hehe!',
       })
       .expect(HttpStatus.CREATED);
   });
 
-  it(`changes your profile correctly`, async (done) => {
+  it(`changes your name correctly`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    const response = await agent.get('/user/profile').send({});
+
+    expect(response.body[0]).toBe('ethan2');
+    expect(response.body[1]).toBe('lam2');
+    expect(response.body[2]).toBe('');
+    expect(response.body[3]).toBe('');
+    done();
+  });
+
+  it(`lets you change your job`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .post('/user/editjob')
+      .send({
+        jobTitle: 'marketing vp',
+      })
+      .expect(HttpStatus.CREATED);
+  });
+
+  it(`changes your job correctly`, async (done) => {
     const agent = request.agent(app.getHttpServer());
 
     await agent.post('/auth/login').send({
@@ -79,7 +110,40 @@ describe('End to end profile editing tests', () => {
     expect(response.body[0]).toBe('ethan2');
     expect(response.body[1]).toBe('lam2');
     expect(response.body[2]).toBe('marketing vp');
-    expect(response.body[3]).toBe('hehe!');
+    expect(response.body[3]).toBe('');
+    done();
+  });
+
+  it(`lets you change your bio`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .post('/user/editbio')
+      .send({
+        bio: 'haha!',
+      })
+      .expect(HttpStatus.CREATED);
+  });
+
+  it(`changes your bio correctly`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    const response = await agent.get('/user/profile').send({});
+
+    expect(response.body[0]).toBe('ethan2');
+    expect(response.body[1]).toBe('lam2');
+    expect(response.body[2]).toBe('marketing vp');
+    expect(response.body[3]).toBe('haha!');
     done();
   });
 

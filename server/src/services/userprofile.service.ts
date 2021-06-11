@@ -40,18 +40,34 @@ export class UserProfileService {
     return true;
   }
 
-  editProfile(
+  editJob(
+    id: number,
+    jobTitle: string,
+  ): void {
+    this._userProfileRepository.editJob(
+      id,
+      jobTitle,
+    );
+  }
+
+  editName(
     id: number,
     firstName: string,
     lastName: string,
-    jobTitle: string,
-    bio: string,
   ): void {
-    this._userProfileRepository.editProfile(
+    this._userProfileRepository.editName(
       id,
       firstName,
       lastName,
-      jobTitle,
+    );
+  }
+
+  editBio(
+    id: number,
+    bio: string,
+  ): void {
+    this._userProfileRepository.editBio(
+      id,
       bio,
     );
   }
