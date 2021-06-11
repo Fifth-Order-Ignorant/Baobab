@@ -10,10 +10,15 @@ import styles from '../styles/Message.module.css';
  * Renders the feed page.
  */
 export default function Feed(): JSX.Element {
+
   // declare variables for pagination
   let i = 0;
   const c = 5;
 
+  /**
+   * Returns a list of message list props to feed into the MessageList component
+   * @returns Message list props.
+   */
   const getMessages = async () => {
     // TODO: Make start = c * i to make it more efficient
     const res = await axios.post('/api/message/pagination', {
@@ -27,6 +32,10 @@ export default function Feed(): JSX.Element {
     return newMessages;
   };
 
+  /**
+   * Sends a message from the signed in user.
+   * @param content The contents of the message as a string.
+   */
   const sendMessage = async (content: string): Promise<void> => {
     const mr: MessageRequest = { content: content, parentID: -1 };
     await axios.post('/api/message/create', mr);

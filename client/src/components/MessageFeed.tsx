@@ -28,6 +28,9 @@ export default function MessageFeed(props: MessageFeedProps): JSX.Element {
         })
     }, []);
 
+    /**
+     * Gets the current message feed using the passed in onLoad function.
+     */
     const getMessage = async () => {
         setLoading(true);
         const messagePropsList: MessagePropsWithID[] = await props.onLoad();
@@ -36,6 +39,11 @@ export default function MessageFeed(props: MessageFeedProps): JSX.Element {
         setLoading(false);
     }
 
+    /**
+     * Checks if the user has reached the end of the page, and fetches messages
+     * if it does (simulates infinite scrolling).
+     * @param e Scrolling event.
+     */
     const handleScroll = async (e: Event) => {
         if (document.documentElement.scrollTop + window.innerHeight !== document.documentElement.scrollHeight) return;
         await getMessage();

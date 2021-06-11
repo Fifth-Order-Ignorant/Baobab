@@ -19,10 +19,17 @@ export interface SendMessageProps {
 export function SendMessage(props: SendMessageProps): JSX.Element {
     const [message, setMessage] = useState("");
 
+    /**
+     * Updates message based on the message input.
+     * @param event Textarea event which has the text contents inside.
+     */
     const onMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(event.target.value);
     };
 
+    /**
+     * Calls the passed in sendMessage function.
+     */
     const sendMessage = async () => {
         await props.sendMessage(message);
     }
