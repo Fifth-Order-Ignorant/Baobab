@@ -1,5 +1,6 @@
 import { Typography } from "antd";
-import Card from "./Card";
+import ChangeBio from "./ChangeBio";
+import ChangeName from "./ChangeName";
 import styles from "../../styles/Profile.module.css";
 
 /**
@@ -19,13 +20,12 @@ export interface AboutProps {
  *      - aboutMe: A paragraph describing the user as a React component/string.
  */
 export function About(props: AboutProps): JSX.Element {
+
     return (
         <div>
             <div className={styles.name}>
                 <Typography.Text>
-                    <h3>
-                        {props.name}
-                    </h3>
+                    <ChangeName name={props.name}/>
                 </Typography.Text>
             </div>
             <span className={styles.name}>
@@ -33,7 +33,7 @@ export function About(props: AboutProps): JSX.Element {
                     {props.role}
                 </Typography.Text>
             </span>
-            <Card>{<div>{props.aboutMe}</div>}</Card>
+            <ChangeBio bio={props.aboutMe}/>
         </div>
     );
 }

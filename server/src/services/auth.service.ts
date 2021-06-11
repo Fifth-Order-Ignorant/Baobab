@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UserDAO } from '../dao/users';
+import { UserProfileDAO } from '../dao/userprofiles';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -17,14 +17,14 @@ export class AuthService {
   private _staleSessions: NodeCache;
 
   constructor(
-    @Inject('UserDAO') private _userRepository: UserDAO,
+    @Inject('UserProfileDAO') private _userRepository: UserProfileDAO,
     private _jwtService: JwtService,
   ) {
     this._staleSessions = new NodeCache();
   }
 
   verifyLogin(email: string, password: string): User {
-    const user = this._userRepository.getByEmail(email);
+    const user = this._userRepository.getUserByEmail(email);
     if (user && bcrypt.compareSync(password, user.password)) {
       return user;
     }
@@ -32,7 +32,7 @@ export class AuthService {
     return null;
   }
 
-  genJwt(userId: number): { jwt: string; integrityString: string } {
+  genJwt(userID: number): { jwt: string; integrityString: string } {
     const integrityString = crypto.randomBytes(50).toString('hex');
     const integrityHash = crypto
       .createHash('sha256')
@@ -41,8 +41,8 @@ export class AuthService {
 
     return {
       jwt: this._jwtService.sign({
-        id: userId,
-        fullName: this._userRepository.getById(userId).fullName,
+        id: userID,
+        fullName: this._userRepository.getUserByID(userID).fullName,
         integrityHash: integrityHash,
       }),
       integrityString: integrityString,
@@ -83,9 +83,9 @@ export class AuthService {
   }
 
   // todo: when a user changes their password, their previous sessions should be marked stale and not renewable
-  markSessionsStale(userId: number, renewable: boolean) {
+  markSessionsStale(userID: number, renewable: boolean) {
     this._staleSessions.set<StaleSession>(
-      userId,
+      userID,
       {
         time: Date.now() / 1000,
         renewable: renewable,
