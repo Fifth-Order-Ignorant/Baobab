@@ -33,10 +33,6 @@ export class UserProfileService {
     return null;
   }
 
-  public getPaginatedProfiles(
-    start: number,
-    end: number,
-  ): Record<string, string>[] {
   isValidProfile(id: number): boolean {
     if (!this._userProfileRepository.getProfileByID(id)) {
       return false;

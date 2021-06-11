@@ -18,7 +18,6 @@ import { JwtStrategy } from '../controllers/jwt.strategy';
         signOptions: { expiresIn: '60m' },
       }),
     }),
-    forwardRef(() => UserProfileModule),
     UserProfileModule,
   ],
   controllers: [AuthController],

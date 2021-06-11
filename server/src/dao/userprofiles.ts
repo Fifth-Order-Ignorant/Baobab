@@ -118,12 +118,10 @@ export class UserProfileInMemory implements UserProfileDAO {
     let i: number = start;
     while (i < end && i < n) {
       const profile: Profile = this.profiles[i];
-      const user: User = this.users[i];
       const newProfile: Record<string, string> = Object({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        jobTitle: profile.jobTitle,
-        bio: profile.bio,
+        name: profile.name,
+        role: profile.role,
+        aboutMe: profile.bio,
       });
       newProfiles.push(newProfile);
       i++;

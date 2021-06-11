@@ -52,12 +52,4 @@ export class User {
   get password(): string {
     return this._password;
   }
-
-  get firstName(): string {
-    return this._firstName;
-  }
-
-  get lastName(): string {
-    return this._lastName;
-  }
 }
