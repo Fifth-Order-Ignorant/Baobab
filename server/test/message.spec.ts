@@ -8,7 +8,7 @@ import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 
-describe('AppController (e2e)', () => {
+describe('Message Creation Tests', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -26,41 +26,55 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it(`lets you create a message`, () => {
-    request(app.getHttpServer()).post('/user/register').send({
+  it(`lets you create a message with no parent`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/user/register').send({
       firstName: 'ethan',
       lastName: 'lam',
       email: 'ethan@mail.com',
       password: 'mcs',
     });
-    request(app.getHttpServer()).post('/auth/login').send({
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
-    request(app.getHttpServer())
+
+    return agent
       .post('/message/create')
       .send({
-        content: 'hello',
-        parentID: undefined,
+        content: 'hello1',
+        parentID: -1,
       })
       .expect(HttpStatus.CREATED);
   });
-  it(`doesn't let you create a message with a bad parent`, () => {
-    request(app.getHttpServer()).post('/user/register').send({
-      firstName: 'ethan',
-      lastName: 'lam',
+
+  it(`lets you create a message with a parent`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
       email: 'ethan@mail.com',
       password: 'mcs',
     });
-    request(app.getHttpServer()).post('/auth/login').send({
-      email: 'ethan@mail.com',
-      password: 'mcs',
-    });
-    request(app.getHttpServer())
+
+    return agent
       .post('/message/create')
       .send({
-        content: 'hello',
-        parentID: 1,
+        content: 'hello2',
+        parentID: 0,
+      })
+      .expect(HttpStatus.CREATED);
+  });
+
+  it(`doesn't let you create a message with a bad parent`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .post('/message/create')
+      .send({
+        content: 'hello3',
+        parentID: 3,
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
