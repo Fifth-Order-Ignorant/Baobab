@@ -10,7 +10,7 @@
     "barrelsby": "^2.2.0"
   },
   "scripts": {
-    "build": "barrelsby -d ./src --delete && tsc"
+    "build": "barrelsby -d ./src --delete"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts"

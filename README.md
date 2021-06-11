@@ -24,7 +24,9 @@ participants of the challenge.
 - MongoDB Community Server 4.4.6
 
 After setting up the above requirements, clone the repository and run
-`npm install` to download the libraries this project relies on followed by 
+`npm install --legacy-peer-deps` (argument needed due to 
+[Storybook issue](https://github.com/storybookjs/storybook/issues/12983)) to 
+download the libraries this project relies on followed by 
 `npm run build --workspace=common` to build code shared between the frontend and 
 backend of the project.
 
