@@ -3,7 +3,6 @@ import { MessageList } from "../src/components/MessageList";
 import sampleMessages from "../src/constants/SampleMessageList";
 import { Avatar, Row, Col, Typography } from "antd";
 import styles from "../styles/Profile.module.css";
-import sampleProfile from "../src/constants/SampleProfile";
 
 /**
  * Renders the profile page.
