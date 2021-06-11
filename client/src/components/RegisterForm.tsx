@@ -21,6 +21,10 @@ function RegisterForm({ onSuccess }: { onSuccess: () => void }): JSX.Element {
   const onSubmit = async (data: RegisterRequest) => {
     try {
       await axios.post('/api/user/register', data);
+      await axios.post('/api/auth/login', {
+        email: data.email,
+        password: data.password,
+      });
       onSuccess();
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
