@@ -23,7 +23,7 @@ function ChangeJobForm(): JSX.Element {
       const onSubmit = async (data: EditJobRequest) => {
         setInfo(data.jobTitle);
         try {
-          await axios.post('/api/user/editjob', data);
+          await axios.post('/api/profile/editjob', data);
           changeState();
         } catch (error) {
           const { errors } = error.response.data as ErrorResponse;
@@ -37,7 +37,7 @@ function ChangeJobForm(): JSX.Element {
       };
 
       const GetInfo = () => {
-        axios.get('/api/user/profile')
+        axios.get('/api/profile/myprofile')
         .then((response) => {
           const returned = response.data as unknown as [
             string,

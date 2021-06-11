@@ -32,7 +32,7 @@ function ChangeNameForm(): JSX.Element {
     setFirstName(data.firstName);
     setLastName(data.lastName);
     try {
-      await axios.post('/api/user/editname', data);
+      await axios.post('/api/profile/editname', data);
       changeState();
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
@@ -47,7 +47,7 @@ function ChangeNameForm(): JSX.Element {
 
   const GetFirstName = () => {
     axios
-      .get('/api/user/profile')
+      .get('/api/profile/myprofile')
       .then((response) => {
         const returned = response.data as unknown as [
           string,
@@ -70,7 +70,7 @@ function ChangeNameForm(): JSX.Element {
 
   const GetLastName = () => {
     axios
-      .get('/api/user/profile')
+      .get('/api/profile/myprofile')
       .then((response) => {
         const returned = response.data as unknown as [
           string,

@@ -25,8 +25,9 @@ function ChangeBioForm(): JSX.Element {
       });
     
       const onSubmit = async (data: EditBioRequest) => {
+        setInfo(data.bio);
         try {
-            await axios.post('/api/user/editbio', data);
+            await axios.post('/api/profile/editbio', data);
             changeState();
         } catch (error) {
           const { errors } = error.response.data as ErrorResponse;
@@ -40,15 +41,17 @@ function ChangeBioForm(): JSX.Element {
       };
 
       const GetInfo = () => {
-        axios.get('/api/user/profile')
+        axios.get('/api/profile/myprofile')
         .then((response) => {
           console.log(response);
-            var returned = response as unknown as [string, string, string, string];
-            console.log(returned);
-            setInfo(returned[3]);
+            var returned = response.data as unknown as [string, string, string, string];
+            var string = returned[3];
+            if (string == "") {
+              string = "no bio available"
+            }
+            setInfo(string);
         })
         .catch( error => {
-          console.log(error);
             const { errors } = error.response.data as ErrorResponse;
     
           for (const error of errors) {
@@ -58,7 +61,6 @@ function ChangeBioForm(): JSX.Element {
           }
         }
         )
-        return info;
       };
 
     const changeState = () => {
@@ -71,17 +73,21 @@ function ChangeBioForm(): JSX.Element {
         }
     }
 
+    useEffect(() => {
+      GetInfo();
+    }, []);
+
     return(
         <Form onFinish={handleSubmit(onSubmit)}>
             <Form.Item>
                 <p onClick={()=>changeState()}>
                 {
-                    state === 'default' && <Card>{<div>{GetInfo()}</div>}</Card>
+                    state === 'default' && <Card>{<div>{info}</div>}</Card>
                 }
                 </p>
                 {
                     state === 'edit' && <Form.Item name="bio" validateStatus={errors.bio ? 'error' : ''} help={errors.bio?.message}>
-                        <Input.TextArea size="large" defaultValue={ GetInfo() } {...register('bio')}/>
+                        <Input.TextArea size="large" defaultValue={ info } {...register('bio')}/>
                         </Form.Item>
                 }
                 {

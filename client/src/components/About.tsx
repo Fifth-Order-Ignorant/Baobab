@@ -26,6 +26,7 @@ export function About(): JSX.Element {
             <span className={styles.name}>
                 <ChangeJobForm/>
             </span>
+            <ChangeBioForm/>
         </div>
     );
 }
