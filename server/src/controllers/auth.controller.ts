@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './jwt.guard';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { ValidationError } from 'yup';
+import { ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +23,10 @@ export class AuthController {
     private _configService: ConfigService,
   ) {}
 
+
   @Post('login')
+  @ApiResponse({ status: 201, description: 'The user logged in successfully.'})
+  @ApiUnauthorizedResponse({description: 'Invalid login.'})
   login(
     @Body() reqBody: LoginRequest,
     @Res({ passthrough: true }) res: Response,
@@ -58,6 +62,7 @@ export class AuthController {
     return req.user.id;
   }
 
+  @ApiResponse({ status: 200, description: 'The request has succeeded.'})
   @Get('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('SESSION_JWT');
