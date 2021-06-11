@@ -40,23 +40,20 @@ describe('End to end profile editing tests', () => {
       .expect(HttpStatus.CREATED);
 
     await agent.post('/auth/login').send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      });
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
 
-    return agent
-      .get('/user/profile')
-      .send({})
-      .expect(HttpStatus.OK);
+    return agent.get('/user/profile').send({}).expect(HttpStatus.OK);
   });
 
   it(`lets you change your profile`, async () => {
     const agent = request.agent(app.getHttpServer());
 
     await agent.post('/auth/login').send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      });
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
 
     return agent
       .post('/user/edit')
@@ -69,14 +66,14 @@ describe('End to end profile editing tests', () => {
       .expect(HttpStatus.CREATED);
   });
 
-  it(`changes your profile correctly`, async done => {
+  it(`changes your profile correctly`, async (done) => {
     const agent = request.agent(app.getHttpServer());
 
     await agent.post('/auth/login').send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      });
-    
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
     const response = await agent.get('/user/profile').send({});
 
     expect(response.body[0]).toBe('ethan2');
