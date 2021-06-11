@@ -95,7 +95,7 @@ function ChangeNameForm(): JSX.Element {
     if (state == 'default') {
       setState('edit');
     } else if (state == 'edit') {
-      setState('default');
+      setState('done');
     }
   };
 
@@ -110,6 +110,9 @@ function ChangeNameForm(): JSX.Element {
         <p onClick={() => changeState()}>
           {state === 'default' && <h3>{firstName + ' ' + lastName}</h3>}
         </p>
+        {
+          state === 'done' && <h3>{firstName + ' ' + lastName + " (reload to edit again)"}</h3>
+        }
         {state === 'edit' && (
           <Form.Item
             name="firstName"

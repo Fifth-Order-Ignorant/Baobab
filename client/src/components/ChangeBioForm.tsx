@@ -29,6 +29,7 @@ function ChangeBioForm(): JSX.Element {
         try {
             await axios.post('/api/profile/editbio', data);
             changeState();
+            GetInfo();
         } catch (error) {
           const { errors } = error.response.data as ErrorResponse;
     
@@ -43,7 +44,6 @@ function ChangeBioForm(): JSX.Element {
       const GetInfo = () => {
         axios.get('/api/profile/myprofile')
         .then((response) => {
-          console.log(response);
             var returned = response.data as unknown as [string, string, string, string];
             var string = returned[3];
             if (string == "") {
@@ -69,7 +69,7 @@ function ChangeBioForm(): JSX.Element {
             setState('edit');
         }
         else if (state == 'edit') {
-            setState('default');
+            setState('done');
         }
     }
 
@@ -86,8 +86,11 @@ function ChangeBioForm(): JSX.Element {
                 }
                 </p>
                 {
+                    state === 'done' && <Card>{<div>{info + " (reload to edit again.)"}</div>}</Card>
+                }
+                {
                     state === 'edit' && <Form.Item name="bio" validateStatus={errors.bio ? 'error' : ''} help={errors.bio?.message}>
-                        <Input.TextArea size="large" defaultValue={ info } {...register('bio')}/>
+                        <Input size="large" defaultValue={ info } {...register('bio')}/>
                         </Form.Item>
                 }
                 {

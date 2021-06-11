@@ -22,6 +22,7 @@ function ChangeJobForm(): JSX.Element {
     
       const onSubmit = async (data: EditJobRequest) => {
         setInfo(data.jobTitle);
+        console.log(data.jobTitle);
         try {
           await axios.post('/api/profile/editjob', data);
           changeState();
@@ -73,7 +74,7 @@ function ChangeJobForm(): JSX.Element {
             setState('edit');
         }
         else if (state == 'edit') {
-            setState('default');
+            setState('done');
         }
     }
 
@@ -86,8 +87,13 @@ function ChangeJobForm(): JSX.Element {
             <Form.Item>
                 <p onClick={()=>changeState()}>
                 {
-                    state === 'default' && <h3 color="grey">{info}</h3>
+                  
+                    state === 'default' && <h3>{info}</h3>
                 }
+                {
+                  
+                  state === 'done' && <h3>{info + " (reload to edit again)"}</h3>
+              }
                 </p>
                 {
                     state === 'edit' && <Form.Item
