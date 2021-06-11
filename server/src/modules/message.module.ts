@@ -3,10 +3,10 @@ import { MessageController } from '../controllers/message.controller';
 import { MessageService } from '../services/message.service';
 import { MessageInMemory } from '../dao/messages';
 import { AuthModule } from './auth.module';
-import { UserModule } from './user.module';
+import { UserProfileModule } from './userprofile.module';
 
 @Module({
-  imports: [AuthModule, UserModule],
+  imports: [AuthModule, UserProfileModule],
   controllers: [MessageController],
   providers: [
     { provide: 'MessageDAO', useClass: MessageInMemory },

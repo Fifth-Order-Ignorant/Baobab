@@ -13,10 +13,14 @@ export interface UserProfileDAO {
   getUserByID(id: number): User;
   getUserByEmail(email: string): User;
   getProfileByID(id: number): Profile;
+  getPaginatedProfiles(start: number, end: number): Record<string, string>[];
+  editName(id: number, firstName: string, lastName: string): void;
+  editJob(id: number, jobTitle: string): void;
+  editBio(id: number, bio: string): void;
 }
 
 @Injectable()
-export class UserProfilesInMemory implements UserProfileDAO {
+export class UserProfileInMemory implements UserProfileDAO {
   users: User[];
   profiles: Profile[];
   highestID: number;
@@ -85,5 +89,43 @@ export class UserProfilesInMemory implements UserProfileDAO {
       }
     });
     return profile;
+  }
+
+  public editName(id: number, firstName: string, lastName: string): void {
+    const profile = this.getProfileByID(id);
+    const user = this.getUserByID(id);
+    user.firstName = firstName;
+    user.lastName = lastName;
+    profile.name = user.fullName;
+  }
+
+  public editJob(id: number, jobTitle: string): void {
+    const profile = this.getProfileByID(id);
+    profile.jobTitle = jobTitle;
+  }
+
+  public editBio(id: number, bio: string): void {
+    const profile = this.getProfileByID(id);
+    profile.bio = bio;
+  }
+
+  public getPaginatedProfiles(
+    start: number,
+    end: number,
+  ): Record<string, string>[] {
+    const newProfiles: Record<string, string>[] = [];
+    const n: number = this.profiles.length;
+    let i: number = start;
+    while (i < end && i < n) {
+      const profile: Profile = this.profiles[i];
+      const newProfile: Record<string, string> = Object({
+        name: profile.name,
+        role: profile.role,
+        aboutMe: profile.bio,
+      });
+      newProfiles.push(newProfile);
+      i++;
+    }
+    return newProfiles;
   }
 }

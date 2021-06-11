@@ -29,6 +29,22 @@ export class User {
     return this._firstName + ' ' + this._lastName;
   }
 
+  get firstName(): string {
+    return this._firstName;
+  }
+
+  set firstName(name: string) {
+    this._firstName = name;
+  }
+
+  get lastName(): string {
+    return this._lastName;
+  }
+
+  set lastName(name: string) {
+    this._lastName = name;
+  }
+
   get email(): string {
     return this._email;
   }
