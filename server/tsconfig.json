@@ -11,10 +11,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-  },
-  "references": [
-    {
-      "path": "../common"
+    "paths": {
+      "baobab-common": ["src/dtos"]
     }
-  ]
+  },
 }
