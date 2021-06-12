@@ -6,10 +6,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-export interface Biography {
-    bio: string;
-}
-
+/**
+ * Renders the textbox for editing the bio, and displays it.
+ */
 function ChangeBioForm(): JSX.Element {
 
     const [state, setState] = useState('default');

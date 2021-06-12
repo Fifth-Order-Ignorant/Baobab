@@ -5,15 +5,9 @@ import ChangeJobForm from "./ChangeJobForm";
 import styles from "../../styles/Profile.module.css";
 
 /**
- * Interface for About's props.
+ * Renders the about component, which includes first and last name, job title
+ * and bio. 
  */
-export interface AboutProps {
-    firstName: string;
-    lastName: string;
-    role: string;
-    aboutMe: string;
-}
-
 export function About(): JSX.Element {
 
     return (

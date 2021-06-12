@@ -9,11 +9,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-export interface Name {
-  firstName: string;
-  lastName: string;
-}
-
+/**
+ * Renders the textbox for editing the first and last name, and displays them.
+ */
 function ChangeNameForm(): JSX.Element {
   const [state, setState] = useState('default');
   const [firstName, setFirstName] = useState('');
