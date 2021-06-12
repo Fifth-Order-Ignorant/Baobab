@@ -1,0 +1,6 @@
+export enum Role {
+  DEFAULT,
+  ENTREPRENEUR,
+  INVESTOR_REP,
+  SERVICE_PROVIDER_REP,
+}
