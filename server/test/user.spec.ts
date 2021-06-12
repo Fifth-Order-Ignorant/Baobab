@@ -8,6 +8,7 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
+import { Role } from '../src/entities/role.entity';
 
 describe('End to end profile editing tests', () => {
   let app: INestApplication;
@@ -190,5 +191,41 @@ describe('User tests', () => {
     );
     const profile = users.getProfileByID(userID);
     expect(profile.name == 'Michael Sheinman Orenstrakh');
+  });
+});
+
+describe('Profile Pagination Basic Functionality', () => {
+  it('should return the paginated data in the right format', () => {
+    const users = new UserProfileInMemory();
+    const userID = users.addUserProfile(
+      'Michael',
+      'Sheinman Orenstrakh',
+      'michael092001@gmail.com',
+      '12345',
+    );
+    const profile1 = users.getProfileByID(userID);
+    profile1.changeRole(Role.INVESTOR_REP);
+    profile1.bio = 'I love chihuahuas.';
+
+    const userID2 = users.addUserProfile(
+      'Michael',
+      'Sheinman (Clone)',
+      'michael092001@gmail.com',
+      '12345',
+    );
+
+    const profiles = users.getPaginatedProfiles(0, 2);
+    expect(profiles == [
+      Object({
+        name: 'Michael Sheinman Orenstrakh',
+        role: Role.INVESTOR_REP,
+        aboutMe: 'I love chihuahuas.',
+      }),
+      Object({
+        name: 'Michael Sheinman (Clone)',
+        role: Role.DEFAULT,
+        aboutMe: '',
+      })
+    ]);
   });
 });
