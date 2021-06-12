@@ -14,11 +14,13 @@ import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from './jwt.guard';
 import { ApiResponse } from '@nestjs/swagger';
+import { AuthService } from 'src/services/auth.service';
 
 @Controller('profile')
 export class UserProfileEditController {
   constructor(
     private _userProfileService: UserProfileService,
+    private _authService: AuthService,
     private _configService: ConfigService,
   ) {}
 
@@ -56,6 +58,7 @@ export class UserProfileEditController {
         reqBody.firstName,
         reqBody.lastName,
       );
+      this._authService.markSessionsStale(id, true);
     } else {
       throw new BadRequestException({
         errors: [],
