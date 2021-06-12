@@ -10,23 +10,27 @@ import {
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import {
-  EditNameRequest,
-  EditJobRequest,
-  EditBioRequest,
-} from 'baobab-common';
+import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from './jwt.guard';
+import { ApiResponse } from '@nestjs/swagger';
+import { AuthService } from 'src/services/auth.service';
 
 @Controller('profile')
 export class UserProfileEditController {
   constructor(
     private _userProfileService: UserProfileService,
+    private _authService: AuthService,
     private _configService: ConfigService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('myprofile')
+  @ApiResponse({
+    status: 200,
+    description: 'The profile is correctly fetched.',
+  })
+  @ApiResponse({ status: 400, description: 'The request is invalid.' })
   getProfile(@Req() req) {
     const id = req.user.id;
     if (this._userProfileService.isValidProfile(id)) {
@@ -40,6 +44,8 @@ export class UserProfileEditController {
 
   @UseGuards(JwtAuthGuard)
   @Post('editname')
+  @ApiResponse({ status: 201, description: 'Name is updated.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
   editName(
     @Body() reqBody: EditNameRequest,
     @Res({ passthrough: true }) res: Response,
@@ -52,6 +58,7 @@ export class UserProfileEditController {
         reqBody.firstName,
         reqBody.lastName,
       );
+      this._authService.markSessionsStale(id, true);
     } else {
       throw new BadRequestException({
         errors: [],
@@ -60,6 +67,8 @@ export class UserProfileEditController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 201, description: 'Job is updated.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Post('editjob')
   editJob(
     @Body() reqBody: EditJobRequest,
@@ -77,6 +86,8 @@ export class UserProfileEditController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 201, description: 'Bio is updated.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Post('editbio')
   editBio(
     @Body() reqBody: EditBioRequest,

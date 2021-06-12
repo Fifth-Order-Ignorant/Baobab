@@ -7,5 +7,5 @@ export class RoleRequest {
 
 export const RoleRequestSchema: SchemaOf<RoleRequest> = object({
   role: string().required(),
-  description: string().required()
-})
+  description: string().required(),
+});

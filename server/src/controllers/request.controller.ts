@@ -12,6 +12,7 @@ import { RequestService } from '../services/request.service';
 import { Response } from 'express';
 import { RoleRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('request')
 export class RequestController {
@@ -19,6 +20,8 @@ export class RequestController {
 
   @UseGuards(JwtAuthGuard)
   @Post('role')
+  @ApiResponse({ status: 201, description: 'The role is returned.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
   requestRole(
     @Body() reqBody: RoleRequest,
     @Res({ passthrough: true }) res: Response,

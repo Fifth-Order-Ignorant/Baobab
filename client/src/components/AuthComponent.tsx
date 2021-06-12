@@ -5,6 +5,9 @@ import LoginForm from './LoginForm';
 import { AuthContext } from '../providers/AuthProvider';
 import axios from 'axios';
 
+/**
+ * Component for displaying authentication buttons or current user.
+ */
 function AuthComponent(): JSX.Element {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
