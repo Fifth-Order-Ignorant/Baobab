@@ -7,14 +7,18 @@ import styles from "../../styles/Message.module.css";
  * Interface for the SendMessage props.
  */
 export interface SendMessageProps {
+    /**
+     * Message sender.
+     */
     author: string;
+    /**
+     * Function that allows the user to send a message.
+     */
     sendMessage: (content: string) => Promise<void>;
 }
 
 /**
  * Renders a component that allows the user to send a message to the feed.
- * @param props Props that include the following:
- *      - author: The author's first and last name.
  */
 export function SendMessage(props: SendMessageProps): JSX.Element {
     const [message, setMessage] = useState("");

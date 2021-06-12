@@ -7,17 +7,23 @@ import moment from 'moment';
  * Required props for rendering a message.
  */
 export interface MessageProps {
+  /**
+   *  Author's name (first and last).
+  */
   author: string;
+  /**
+   *  How long a message was sent.
+  */
   timestamp: string;
+  /**
+   *  Message content.
+  */
   content: string;
 }
 
 /**
  * Renders the message component.
  * The following parameters are passed as props:
- * @param author Author's name (first and last).
- * @param postTime How long a message was sent.
- * @param content Message content.
  */
 export function Message(
   props: MessageProps

@@ -10,8 +10,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from "/styles/RoleRequest.module.css";
 
+/**
+ * Renders a textbox from input
+ */
 const { TextArea } = Input;
 
+/**
+ * Renders the entire form including dropdown and textarea to request role changes.
+ */
 function RoleRequestForm(): JSX.Element {
 
   const [state, setState] = useState('form');
