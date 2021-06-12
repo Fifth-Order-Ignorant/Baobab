@@ -4,7 +4,6 @@ import {
   Body,
   Controller,
   Post,
-  Get,
   Res,
   UseGuards,
   Req,

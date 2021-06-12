@@ -207,25 +207,21 @@ describe('Profile Pagination Basic Functionality', () => {
     profile1.changeRole(Role.INVESTOR_REP);
     profile1.bio = 'I love chihuahuas.';
 
-    const userID2 = users.addUserProfile(
-      'Michael',
-      'Sheinman (Clone)',
-      'michael092001@gmail.com',
-      '12345',
-    );
-
     const profiles = users.getPaginatedProfiles(0, 2);
-    expect(profiles == [
-      Object({
-        name: 'Michael Sheinman Orenstrakh',
-        role: Role.INVESTOR_REP,
-        aboutMe: 'I love chihuahuas.',
-      }),
-      Object({
-        name: 'Michael Sheinman (Clone)',
-        role: Role.DEFAULT,
-        aboutMe: '',
-      })
-    ]);
+    expect(
+      profiles ==
+        [
+          Object({
+            name: 'Michael Sheinman Orenstrakh',
+            role: Role.INVESTOR_REP,
+            aboutMe: 'I love chihuahuas.',
+          }),
+          Object({
+            name: 'Michael Sheinman (Clone)',
+            role: Role.DEFAULT,
+            aboutMe: '',
+          }),
+        ],
+    );
   });
 });
