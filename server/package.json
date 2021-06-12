@@ -28,7 +28,6 @@
     "@nestjs/platform-express": "^7.6.15",
     "@types/bcrypt": "^5.0.0",
     "@types/passport-jwt": "^3.0.5",
-    "baobab-common": "^1.0.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
