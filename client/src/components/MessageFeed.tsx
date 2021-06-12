@@ -7,14 +7,18 @@ import styles from "../../styles/Message.module.css";
  * Interface for MessageFeed.
  */
 export interface MessageFeedProps {
+    /**
+     *  Function that returns messages.
+     */
     onLoad: () => Promise<MessagePropsWithID[]>;
+    /**
+     *  Initial set of messages.
+     */
     initMessages: MessagePropsWithID[];
 }
 
 /**
  * Renders the infinite scrolling message feed.
- * @param MessageFeedProps Props that contain the following:
- *      - onLoad: async function that is called while loading
  */
 export default function MessageFeed(props: MessageFeedProps): JSX.Element {
 

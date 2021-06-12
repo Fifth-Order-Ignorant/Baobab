@@ -5,10 +5,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-export interface Job {
-    job: string;
-}
-
+/**
+ * Renders the textbox for editing the job, and displays it.
+ */
 function ChangeJobForm(): JSX.Element {
 
     const {
