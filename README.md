@@ -46,7 +46,12 @@ backend of the project.
 
 To run the backend locally, use `npm run start --workspace=server`.
 
+To access the backend documentation, visit `localhost:3001/docs`.
+
 To run the frontend locally, use `npm run dev --workspace=client`.
+
+To access the frontend documentation, use 
+`npm run storybook --workspace=client`.
 
 ## Deployment
 
