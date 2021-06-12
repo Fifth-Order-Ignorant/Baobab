@@ -4,12 +4,12 @@ import {
   PipeTransform,
 } from '@nestjs/common';
 import { AnySchema } from 'yup';
+import * as schemas from 'baobab-common';
 
 export class YupValidationPipe implements PipeTransform {
   async transform(value: any, metadata: ArgumentMetadata) {
-    const schema = (await import('baobab-common'))[
-      metadata.metatype.name + 'Schema'
-    ] as AnySchema;
+    // eslint-disable-next-line import/namespace
+    const schema = schemas[metadata.metatype.name + 'Schema'] as AnySchema;
 
     if (schema) {
       try {
