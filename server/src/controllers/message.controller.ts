@@ -22,8 +22,8 @@ export class MessageController {
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
-  @ApiResponse({ status: 201, description: 'The message is created.'})
-  @ApiResponse({ status: 400, description: 'Invalid request.'})
+  @ApiResponse({ status: 201, description: 'The message is created.' })
+  @ApiResponse({ status: 400, description: 'Invalid request.' })
   createMessage(
     @Body() reqBody: MessageRequest,
     @Res({ passthrough: true }) res: Response,

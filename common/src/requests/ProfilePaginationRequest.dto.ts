@@ -5,7 +5,8 @@ export class ProfilePaginationRequest {
   end!: number;
 }
 
-export const ProfilePaginationRequestSchema: SchemaOf<ProfilePaginationRequest> = object({
-  start: number().required(),
-  end: number().required()
-})
+export const ProfilePaginationRequestSchema: SchemaOf<ProfilePaginationRequest> =
+  object({
+    start: number().required(),
+    end: number().required(),
+  });

@@ -1,6 +1,6 @@
 export type SessionPayload = {
-    id: number,
-    fullName: string,
-    integrityHash: string,
-    exp: number;
-}
+  id: number;
+  fullName: string;
+  integrityHash: string;
+  exp: number;
+};

@@ -6,4 +6,4 @@ export class EditJobRequest {
 
 export const EditJobRequestSchema: SchemaOf<EditJobRequest> = object({
   jobTitle: string().required(),
-})
+});
