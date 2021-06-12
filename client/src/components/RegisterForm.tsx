@@ -8,7 +8,17 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-function RegisterForm({ onSuccess }: { onSuccess: () => void }): JSX.Element {
+type RegisterFormProps = {
+  /**
+   * Function to run on successful submission of form.
+   */
+  onSuccess: () => void;
+};
+
+/**
+ * Form used for registering a new account.
+ */
+function RegisterForm({ onSuccess }: RegisterFormProps): JSX.Element {
   const {
     register,
     handleSubmit,

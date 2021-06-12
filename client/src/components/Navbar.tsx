@@ -1,9 +1,12 @@
-import { Button, Col, Menu, Modal, Row, Space, Typography } from 'antd';
+import { Col, Menu, Row, Typography } from 'antd';
 import AuthComponent from './AuthComponent';
 
+/**
+ * Navigation bar component.
+ */
 function Navbar(): JSX.Element {
   return (
-    <Row justify="space-between">
+    <Row justify="space-between" align="middle">
       <Col>
         <Typography.Text strong>Baobab</Typography.Text>
       </Col>

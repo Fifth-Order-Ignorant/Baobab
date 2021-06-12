@@ -4,7 +4,17 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-function LoginForm({ onSuccess }: { onSuccess: () => void }): JSX.Element {
+type LoginFormProps = {
+  /**
+   * Function to run on successful submission of form.
+   */
+  onSuccess: () => void;
+};
+
+/**
+ * Form used for logging into an existing account.
+ */
+function LoginForm({ onSuccess }: LoginFormProps): JSX.Element {
   const {
     register,
     handleSubmit,

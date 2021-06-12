@@ -7,5 +7,5 @@ export class MessageRequest {
 
 export const MessageRequestSchema: SchemaOf<MessageRequest> = object({
   content: string().required(),
-  parentID: number().required()
-})
+  parentID: number().required(),
+});

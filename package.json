@@ -4,8 +4,5 @@
     "common",
     "server",
     "client"
-  ],
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+  ]
 }
