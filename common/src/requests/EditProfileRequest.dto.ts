@@ -11,5 +11,5 @@ export const EditProfileRequestSchema: SchemaOf<EditProfileRequest> = object({
   firstName: string().required(),
   lastName: string().required(),
   jobTitle: string().required(),
-  bio: string().required()
-})
+  bio: string().required(),
+});
