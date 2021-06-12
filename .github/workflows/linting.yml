@@ -19,5 +19,5 @@ jobs:
         with:
           node-version: '16.2.0'
       - run: npm install --legacy-peer-deps
-      - run: npm run build --if-present --workspaces
+      - run: npm run build --workspace=common
       - run: npm run lint --if-present --workspaces
