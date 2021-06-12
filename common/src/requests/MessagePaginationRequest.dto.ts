@@ -5,7 +5,8 @@ export class MessagePaginationRequest {
   end!: number;
 }
 
-export const MessagePaginationRequestSchema: SchemaOf<MessagePaginationRequest> = object({
-  start: number().required(),
-  end: number().required()
-})
+export const MessagePaginationRequestSchema: SchemaOf<MessagePaginationRequest> =
+  object({
+    start: number().required(),
+    end: number().required(),
+  });
