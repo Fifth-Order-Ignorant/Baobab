@@ -124,7 +124,7 @@ describe('Message Basic Functionality', () => {
 });
 
 describe('Message Pagination Basic Functionality', () => {
-  it('should create a message with valid id', () => {
+  it('should return the paginated data in the right format', () => {
     const messages = new MessageInMemory();
     const nowTime = new Date();
     const message1 = messages.createMessage(1, 'hello', nowTime, undefined);
