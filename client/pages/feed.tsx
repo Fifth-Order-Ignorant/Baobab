@@ -10,7 +10,6 @@ import styles from '../styles/Message.module.css';
  * Renders the feed page.
  */
 export default function Feed(): JSX.Element {
-
   // declare variables for pagination
   let i = 0;
   const c = 5;
