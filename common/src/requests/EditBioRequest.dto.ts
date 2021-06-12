@@ -5,5 +5,5 @@ export class EditBioRequest {
 }
 
 export const EditBioRequestSchema: SchemaOf<EditBioRequest> = object({
-  bio: string().required()
-})
+  bio: string().required(),
+});
