@@ -17,7 +17,7 @@ import {
 } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from './jwt.guard';
-import { AuthService } from 'src/services/auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Controller('profile')
 export class UserProfileEditController {
