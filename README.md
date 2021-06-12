@@ -23,6 +23,20 @@ participants of the challenge.
 - Node.js 16.2.0 (npm 7.13.0)
 - MongoDB Community Server 4.4.6
 
+### Git (Windows)
+
+Due to a limitation with the 
+[NestJS CLI Plugin](https://docs.nestjs.com/openapi/cli-plugin), we were forced 
+to use Git symlinks to link common types to the backend package. Git symlinks 
+work fine without any setup macOS and Linux but may require the setup below on 
+Windows.
+
+1. Run `git config --global core.symlinks true`.
+
+2. Enable developer mode (Settings App &#8594; Update & Security &#8594; 
+For developers &#8594; Developer Mode) or run Git as administrator when working 
+with the repository.
+
 After setting up the above requirements, clone the repository and run
 `npm install --legacy-peer-deps` (argument needed due to 
 [Storybook issue](https://github.com/storybookjs/storybook/issues/12983)) to 
@@ -32,7 +46,12 @@ backend of the project.
 
 To run the backend locally, use `npm run start --workspace=server`.
 
+To access the backend documentation, visit `localhost:3001/docs`.
+
 To run the frontend locally, use `npm run dev --workspace=client`.
+
+To access the frontend documentation, use 
+`npm run storybook --workspace=client`.
 
 ## Deployment
 
