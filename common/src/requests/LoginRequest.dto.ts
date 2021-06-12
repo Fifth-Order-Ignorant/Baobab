@@ -13,5 +13,5 @@ export class LoginRequest {
 
 export const LoginRequestSchema: SchemaOf<LoginRequest> = object({
   email: string().required().email(),
-  password: string().required()
-})
+  password: string().required(),
+});

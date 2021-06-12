@@ -20,8 +20,8 @@ export class RequestController {
 
   @UseGuards(JwtAuthGuard)
   @Post('role')
-  @ApiResponse({ status: 201, description: 'The role is returned.'})
-  @ApiResponse({ status: 400, description: 'Bad request.'})
+  @ApiResponse({ status: 201, description: 'The role is returned.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
   requestRole(
     @Body() reqBody: RoleRequest,
     @Res({ passthrough: true }) res: Response,

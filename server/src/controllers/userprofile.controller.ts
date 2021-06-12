@@ -1,17 +1,6 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
-import { Response } from 'express';
-import {
-  RegisterRequest,
-  ProfilePaginationRequest,
-} from 'baobab-common';
+import { RegisterRequest, ProfilePaginationRequest } from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponse } from '@nestjs/swagger';
@@ -24,9 +13,8 @@ export class UserProfileController {
   ) {}
 
   @Post('register')
-  @ApiResponse({ status: 201, description: 'The user registered.'})
-  @ApiResponse({ status: 400, description: 'The email is taken.'})
-
+  @ApiResponse({ status: 201, description: 'The user registered.' })
+  @ApiResponse({ status: 400, description: 'The email is taken.' })
   register(
     @Body() reqBody: RegisterRequest,
     // @Res({ passthrough: true }) res: Response,

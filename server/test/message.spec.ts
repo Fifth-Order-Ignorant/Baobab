@@ -129,21 +129,21 @@ describe('Message Pagination Basic Functionality', () => {
     const nowTime = new Date();
     const message1 = messages.createMessage(1, 'hello', nowTime, undefined);
     const parentMessage = messages.getByID(message1);
-    const message2 = messages.createMessage(1, 'hello2', nowTime, parentMessage,);
+    messages.createMessage(1, 'hello2', nowTime, parentMessage);
     const messagePagination = messages.getMessages(0, 2);
     const expected: Record<string, string | number>[] = [
       Object({
         author: 1,
         timestamp: nowTime.toISOString(),
         content: 'hello',
-        messageID: 0
+        messageID: 0,
       }),
       Object({
         author: 1,
         timestamp: nowTime.toISOString(),
         content: 'hello2',
-        messageID: 1
-      })
+        messageID: 1,
+      }),
     ];
     expect(messagePagination == expected);
   });

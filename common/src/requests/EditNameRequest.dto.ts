@@ -8,4 +8,4 @@ export class EditNameRequest {
 export const EditNameRequestSchema: SchemaOf<EditNameRequest> = object({
   firstName: string().required(),
   lastName: string().required(),
-})
+});
