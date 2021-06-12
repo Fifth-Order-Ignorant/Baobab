@@ -31,15 +31,11 @@ export class MessageService {
   ): Record<string, string | number>[] {
     const messages: Record<string, string | number>[] =
       this._messageRepository.getMessages(start, end);
-    messages.map((element) =>
-      Object({
-        author: this._userRepository.getProfileByID(element.author as number)
-          .name,
-        timestamp: element.timestamp,
-        content: element.content,
-        messageID: element.messageID,
-      }),
-    );
+    messages.forEach((element) => {
+      element.author = this._userRepository.getProfileByID(
+        element.author as number,
+      ).name;
+    });
     return messages;
   }
 }

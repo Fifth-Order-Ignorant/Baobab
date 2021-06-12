@@ -54,7 +54,7 @@ export class MessageController {
     }
   }
 
-  @Get('pagination')
+  @Post('pagination')
   pagination(
     @Body() reqBody: MessagePaginationRequest,
   ): Record<string, string | number>[] {
