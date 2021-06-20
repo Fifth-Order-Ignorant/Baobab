@@ -24,7 +24,7 @@ export default function Profile(): JSX.Element {
             <Typography>
               <h2>Recent Activity:</h2>
             </Typography>
-            <PostList messagePropsList={samplePosts} />
+            <PostList postPropsList={samplePosts} />
           </Col>
         </Row>
       </div>
