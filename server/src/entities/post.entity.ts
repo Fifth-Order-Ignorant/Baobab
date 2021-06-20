@@ -45,4 +45,8 @@ export class Post {
   get timestamp(): Date {
     return this._timestamp;
   }
+
+  public addChild(child: Post): void {
+    this._childs.push(child);
+  }
 }

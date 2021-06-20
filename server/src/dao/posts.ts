@@ -34,6 +34,9 @@ export class PostInMemory implements PostDAO {
   ): number {
     const post = new Post(this.highestID, userID, content, timestamp, parent);
     this.posts.push(post);
+    if (parent) {
+      parent.addChild(post);
+    }
     this.highestID++;
 
     return this.highestID - 1;
