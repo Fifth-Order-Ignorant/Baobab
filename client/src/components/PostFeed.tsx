@@ -1,29 +1,29 @@
 import { Spin } from 'antd';
-import { MessageList, MessagePropsWithID } from "./MessageList";
+import { PostList, PostListPropsWithId } from "./PostList";
 import { useEffect, useState } from "react";
-import styles from "../../styles/Message.module.css";
+import styles from "../../styles/Post.module.css";
 
 /**
- * Interface for MessageFeed.
+ * Interface for PostFeed.
  */
-export interface MessageFeedProps {
+export interface PostFeedProps {
     /**
-     *  Function that returns messages.
+     *  Function that returns posts.
      */
-    onLoad: () => Promise<MessagePropsWithID[]>;
+    onLoad: () => Promise<PostListPropsWithId[]>;
     /**
-     *  Initial set of messages.
+     *  Initial set of posts.
      */
-    initMessages: MessagePropsWithID[];
+    initMessages: PostListPropsWithId[];
 }
 
 /**
- * Renders the infinite scrolling message feed.
+ * Renders the infinite scrolling post feed.
  */
-export default function MessageFeed(props: MessageFeedProps): JSX.Element {
+export default function PostFeed(props: PostFeedProps): JSX.Element {
 
     const [loading, setLoading] = useState(false);
-    const [messageList, setMessageList] = useState<MessagePropsWithID[]>([]);
+    const [messageList, setMessageList] = useState<PostListPropsWithId[]>([]);
 
     useEffect(() => {
         getMessage().then(() => {
@@ -33,18 +33,18 @@ export default function MessageFeed(props: MessageFeedProps): JSX.Element {
     }, []);
 
     /**
-     * Gets the current message feed using the passed in onLoad function.
+     * Gets the current post feed using the passed in onLoad function.
      */
     const getMessage = async () => {
         setLoading(true);
-        const messagePropsList: MessagePropsWithID[] = await props.onLoad();
-        const newMessageList: MessagePropsWithID[] = messageList.concat(messagePropsList);
+        const messagePropsList: PostListPropsWithId[] = await props.onLoad();
+        const newMessageList: PostListPropsWithId[] = messageList.concat(messagePropsList);
         setMessageList(newMessageList);
         setLoading(false);
     }
 
     /**
-     * Checks if the user has reached the end of the page, and fetches messages
+     * Checks if the user has reached the end of the page, and fetches posts
      * if it does (simulates infinite scrolling).
      * @param e Scrolling event.
      */
@@ -55,7 +55,7 @@ export default function MessageFeed(props: MessageFeedProps): JSX.Element {
 
     return (
         <div>
-            <MessageList messagePropsList={messageList} />
+            <PostList messagePropsList={messageList} />
             <div className={styles.messageLoading}>
                 {loading && <Spin size={'large'} />}
             </div>

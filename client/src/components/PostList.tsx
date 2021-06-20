@@ -1,30 +1,30 @@
-import { Message, MessageProps } from "./Message";
+import { Post, PostProps } from "./Post";
 import { Col, Row } from "antd";
 
-export interface MessageListProps {
+export interface PostListProps {
     /**
      *  List of messages
      */
-    messagePropsList: MessagePropsWithID[];
+    messagePropsList: PostListPropsWithId[];
 }
 
-export interface MessagePropsWithID extends MessageProps {
+export interface PostListPropsWithId extends PostProps {
     /**
-     *  The messageID.
+     *  The messageId.
      */
-    messageID: number;
+    messageId: number;
 }
 
 /**
- * Renders a list of messages
+ * Renders a list of posts
  */
-export function MessageList(props: MessageListProps): JSX.Element {
+export function PostList(props: PostListProps): JSX.Element {
     return (
         <div>
             <Row gutter={[0, 24]}>
                 {props.messagePropsList.map((messageProps) => (
-                    <Col key={messageProps.messageID} span={24}>
-                        <Message
+                    <Col key={messageProps.messageId} span={24}>
+                        <Post
                             author={messageProps.author}
                             timestamp={messageProps.timestamp}
                             content={messageProps.content}

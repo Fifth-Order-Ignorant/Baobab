@@ -15,7 +15,7 @@ function Navbar(): JSX.Element {
           <Menu.Item key="social">Social</Menu.Item>
           <Menu.Item key="education">Education</Menu.Item>
           <Menu.Item key="discussionBoard">Discussion Board</Menu.Item>
-          <Menu.Item key="messages">Messages</Menu.Item>
+          <Menu.Item key="posts">Posts</Menu.Item>
           <Menu.Item key="profiles">Profiles</Menu.Item>
         </Menu>
       </Col>

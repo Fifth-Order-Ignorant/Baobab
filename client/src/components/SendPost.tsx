@@ -1,41 +1,41 @@
 import Card from './Card';
 import { useState, ChangeEvent } from "react";
 import { Avatar, Form, Input, Comment, Button, Col, Row } from 'antd';
-import styles from "../../styles/Message.module.css";
+import styles from "../../styles/Post.module.css";
 
 /**
- * Interface for the SendMessage props.
+ * Interface for the SendPost props.
  */
-export interface SendMessageProps {
+export interface SendPostProps {
     /**
-     * Message sender.
+     * Post sender.
      */
     author: string;
     /**
-     * Function that allows the user to send a message.
+     * Function that allows the user to send a post.
      */
-    sendMessage: (content: string) => Promise<void>;
+     sendPost: (content: string) => Promise<void>;
 }
 
 /**
- * Renders a component that allows the user to send a message to the feed.
+ * Renders a component that allows the user to send a post to the feed.
  */
-export function SendMessage(props: SendMessageProps): JSX.Element {
-    const [message, setMessage] = useState("");
+export function SendPost(props: SendPostProps): JSX.Element {
+    const [post, setPost] = useState("");
 
     /**
-     * Updates message based on the message input.
+     * Updates post based on the message input.
      * @param event Textarea event which has the text contents inside.
      */
     const onMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        setMessage(event.target.value);
+        setPost(event.target.value);
     };
 
     /**
-     * Calls the passed in sendMessage function.
+     * Calls the passed in sendPost function.
      */
-    const sendMessage = async () => {
-        await props.sendMessage(message);
+    const sendPost = async () => {
+        await props.sendPost(post);
     }
 
     return (
@@ -48,11 +48,11 @@ export function SendMessage(props: SendMessageProps): JSX.Element {
                         avatar={<Avatar />}
                         content={
                             <Form.Item>
-                                <Input.TextArea rows={4} onChange={onMessageChange} value={message} />
+                                <Input.TextArea rows={4} onChange={onMessageChange} value={post} />
                             </Form.Item>
                         }
                         actions={[
-                        <Button type="primary" onClick={sendMessage}>
+                        <Button type="primary" onClick={sendPost}>
                             Send
                         </Button>
                         ]}
