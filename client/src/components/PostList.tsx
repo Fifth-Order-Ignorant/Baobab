@@ -16,7 +16,7 @@ export interface PostListPropsWithId extends PostProps {
 }
 
 /**
- * Renders a list of posts
+ * Renders a list of posts.
  */
 export function PostList(props: PostListProps): JSX.Element {
     return (
