@@ -1,6 +1,6 @@
 import { About } from '../src/components/About';
-import { MessageList } from '../src/components/MessageList';
-import sampleMessages from '../src/constants/SampleMessageList';
+import { PostList } from '../src/components/PostList';
+import samplePosts from '../src/constants/SamplePostList';
 import { Avatar, Row, Col, Typography } from 'antd';
 import styles from '../styles/Profile.module.css';
 
@@ -24,7 +24,7 @@ export default function Profile(): JSX.Element {
             <Typography>
               <h2>Recent Activity:</h2>
             </Typography>
-            <MessageList messagePropsList={sampleMessages} />
+            <PostList postPropsList={samplePosts} />
           </Col>
         </Row>
       </div>
