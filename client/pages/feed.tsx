@@ -1,10 +1,10 @@
-import MessageFeed from '../src/components/MessageFeed';
-import { SendMessage, SendMessageProps } from '../src/components/SendMessage';
+import PostFeed from '../src/components/PostFeed';
+import { SendPost } from '../src/components/SendPost';
 import { Typography, Row, Col } from 'antd';
 import { MessageRequest } from 'baobab-common';
 import axios from 'axios';
 
-import styles from '../styles/Message.module.css';
+import styles from '../styles/Post.module.css';
 
 /**
  * Renders the feed page.
@@ -15,29 +15,29 @@ export default function Feed(): JSX.Element {
   const c = 5;
 
   /**
-   * Returns a list of message list props to feed into the MessageList component
-   * @returns Message list props.
+   * Returns a list of post list props to feed into the PostList component
+   * @returns Post list props.
    */
-  const getMessages = async () => {
+  const getPosts = async () => {
     // TODO: Make start = c * i to make it more efficient
     const res = await axios.post('/api/message/pagination', {
       start: 0,
       end: c * (i + 1),
     });
-    const newMessages = res.data;
-    if (newMessages.length !== 0) {
+    const newPosts = res.data;
+    if (newPosts.length !== 0) {
       i++;
     }
-    return newMessages;
+    return newPosts;
   };
 
   /**
-   * Sends a message from the signed in user.
-   * @param content The contents of the message as a string.
+   * Sends a post from the signed in user.
+   * @param content The contents of the post as a string.
    */
-  const sendMessage = async (content: string): Promise<void> => {
-    const mr: MessageRequest = { content: content, parentID: -1 };
-    await axios.post('/api/message/create', mr);
+  const sendPost = async (content: string): Promise<void> => {
+    const pr: MessageRequest = { content: content, parentID: -1 };
+    await axios.post('/api/message/create', pr);
   };
 
   return (
@@ -47,8 +47,8 @@ export default function Feed(): JSX.Element {
           <Typography>
             <h2>Feed</h2>
           </Typography>
-          <SendMessage author={'You!'} sendMessage={sendMessage} />
-          <MessageFeed onLoad={getMessages} initMessages={[]} />
+          <SendPost author={'You!'} sendPost={sendPost} />
+          <PostFeed onLoad={getPosts} initPosts={[]} />
         </Col>
       </Row>
     </div>
