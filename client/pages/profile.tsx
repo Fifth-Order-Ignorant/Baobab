@@ -1,6 +1,6 @@
 import { About } from '../src/components/About';
 import { PostList } from '../src/components/PostList';
-import samplePosts from '../../src/constants/SamplePostList
+import samplePosts from '../src/constants/SamplePostList';
 import { Avatar, Row, Col, Typography } from 'antd';
 import styles from '../styles/Profile.module.css';
 
