@@ -1,4 +1,4 @@
-import { MessageInMemory } from '../src/dao/messages';
+import { PostInMemory } from '../src/dao/posts';
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/modules/app.module';
@@ -8,7 +8,7 @@ import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 
-describe('Message Creation Tests', () => {
+describe('Post Creation Tests', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -26,7 +26,7 @@ describe('Message Creation Tests', () => {
     await app.init();
   });
 
-  it(`lets you create a message with no parent`, async () => {
+  it(`lets you create a post with no parent`, async () => {
     const agent = request.agent(app.getHttpServer());
 
     await agent.post('/user/register').send({
@@ -42,7 +42,7 @@ describe('Message Creation Tests', () => {
     });
 
     return agent
-      .post('/message/create')
+      .post('/post/create')
       .send({
         content: 'hello1',
         parentID: -1,
@@ -50,7 +50,7 @@ describe('Message Creation Tests', () => {
       .expect(HttpStatus.CREATED);
   });
 
-  it(`lets you create a message with a parent`, async () => {
+  it(`lets you create a post with a parent`, async () => {
     const agent = request.agent(app.getHttpServer());
 
     await agent.post('/auth/login').send({
@@ -59,7 +59,7 @@ describe('Message Creation Tests', () => {
     });
 
     return agent
-      .post('/message/create')
+      .post('/post/create')
       .send({
         content: 'hello2',
         parentID: 0,
@@ -67,7 +67,7 @@ describe('Message Creation Tests', () => {
       .expect(HttpStatus.CREATED);
   });
 
-  it(`doesn't let you create a message with a bad parent`, async () => {
+  it(`doesn't let you create a post with a bad parent`, async () => {
     const agent = request.agent(app.getHttpServer());
 
     await agent.post('/auth/login').send({
@@ -88,63 +88,58 @@ describe('Message Creation Tests', () => {
   });
 });
 
-describe('Message Basic Functionality', () => {
-  it('should create a message with valid id', () => {
-    const messages = new MessageInMemory();
+describe('Post Basic Functionality', () => {
+  it('should create a post with valid id', () => {
+    const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const messageID = messages.createMessage(1, 'hello', nowTime, undefined);
-    expect(messages.getByID(messageID).id == messageID);
+    const postId = posts.createPost(1, 'hello', nowTime, undefined);
+    expect(posts.getByID(postId).id == postId);
   });
 
-  it('should return a message given an id', () => {
-    const messages = new MessageInMemory();
+  it('should return a post given an id', () => {
+    const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const messageID = messages.createMessage(1, 'hello', nowTime, undefined);
-    const message = messages.getByID(messageID);
-    expect(message.parent == undefined);
+    const postId = posts.createPost(1, 'hello', nowTime, undefined);
+    const post = posts.getByID(postId);
+    expect(post.parent == undefined);
   });
 
-  it('lets you create a message with a parent', () => {
-    const messages = new MessageInMemory();
+  it('lets you create a post with a parent', () => {
+    const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const message1 = messages.createMessage(1, 'hello', nowTime, undefined);
-    const parentMessage = messages.getByID(message1);
-    const message2 = messages.createMessage(
-      1,
-      'hello2',
-      nowTime,
-      parentMessage,
-    );
-    const message = messages.getByID(message2);
-    expect(message.parent == parentMessage);
+    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = posts.getByID(post1);
+    const post2 = posts.createPost(1, 'hello2', nowTime, parentPost);
+    const post = posts.getByID(post2);
+    expect(post.parent == parentPost);
   });
 });
 
-describe('Message Pagination Basic Functionality', () => {
+describe('Post Pagination Basic Functionality', () => {
   it('should return the paginated data in the right format', () => {
-    const messages = new MessageInMemory();
+    const posts = new PostInMemory();
     const nowTime = new Date();
-    const message1 = messages.createMessage(1, 'hello', nowTime, undefined);
-    const parentMessage = messages.getByID(message1);
-    messages.createMessage(1, 'hello2', nowTime, parentMessage);
-    const messagePagination = messages.getMessages(0, 2);
+    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = posts.getByID(post1);
+    posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = posts.getPosts(0, 2);
     const expected: Record<string, string | number>[] = [
       Object({
         author: 1,
         timestamp: nowTime.toISOString(),
         content: 'hello',
-        messageID: 0,
+        postId: 0,
       }),
       Object({
         author: 1,
         timestamp: nowTime.toISOString(),
         content: 'hello2',
-        messageID: 1,
+        postId: 1,
       }),
     ];
-    expect(messagePagination == expected);
+    expect(postPagination == expected);
   });
 });
