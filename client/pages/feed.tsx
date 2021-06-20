@@ -48,7 +48,7 @@ export default function Feed(): JSX.Element {
             <h2>Feed</h2>
           </Typography>
           <SendPost author={'You!'} sendPost={sendPost} />
-          <PostFeed onLoad={getPosts} initMessages={[]} />
+          <PostFeed onLoad={getPosts} initPosts={[]} />
         </Col>
       </Row>
     </div>

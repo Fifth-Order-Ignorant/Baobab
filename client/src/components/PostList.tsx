@@ -5,14 +5,14 @@ export interface PostListProps {
     /**
      *  List of messages
      */
-    messagePropsList: PostListPropsWithId[];
+    postPropsList: PostListPropsWithId[];
 }
 
 export interface PostListPropsWithId extends PostProps {
     /**
      *  The messageId.
      */
-    messageId: number;
+    postId: number;
 }
 
 /**
@@ -22,12 +22,12 @@ export function PostList(props: PostListProps): JSX.Element {
     return (
         <div>
             <Row gutter={[0, 24]}>
-                {props.messagePropsList.map((messageProps) => (
-                    <Col key={messageProps.messageId} span={24}>
+                {props.postPropsList.map((postProps) => (
+                    <Col key={postProps.postId} span={24}>
                         <Post
-                            author={messageProps.author}
-                            timestamp={messageProps.timestamp}
-                            content={messageProps.content}
+                            author={postProps.author}
+                            timestamp={postProps.timestamp}
+                            content={postProps.content}
                         />
                     </Col>
                 ))}

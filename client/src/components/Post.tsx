@@ -36,7 +36,7 @@ export function Post(props: PostProps): JSX.Element {
   return (
     <Card>
       <Comment
-        className={styles.messageComment}
+        className={styles.postComment}
         actions={actions}
         author={props.author}
         content={props.content}

@@ -14,7 +14,7 @@ export interface PostFeedProps {
     /**
      *  Initial set of posts.
      */
-    initMessages: PostListPropsWithId[];
+    initPosts: PostListPropsWithId[];
 }
 
 /**
@@ -23,10 +23,10 @@ export interface PostFeedProps {
 export default function PostFeed(props: PostFeedProps): JSX.Element {
 
     const [loading, setLoading] = useState(false);
-    const [messageList, setMessageList] = useState<PostListPropsWithId[]>([]);
+    const [postList, setPostList] = useState<PostListPropsWithId[]>([]);
 
     useEffect(() => {
-        getMessage().then(() => {
+        getPost().then(() => {
             window.addEventListener('scroll', handleScroll);
             return () => window.removeEventListener('scroll', handleScroll);
         })
@@ -35,11 +35,11 @@ export default function PostFeed(props: PostFeedProps): JSX.Element {
     /**
      * Gets the current post feed using the passed in onLoad function.
      */
-    const getMessage = async () => {
+    const getPost = async () => {
         setLoading(true);
-        const messagePropsList: PostListPropsWithId[] = await props.onLoad();
-        const newMessageList: PostListPropsWithId[] = messageList.concat(messagePropsList);
-        setMessageList(newMessageList);
+        const postPropsList: PostListPropsWithId[] = await props.onLoad();
+        const newPostList: PostListPropsWithId[] = postList.concat(postPropsList);
+        setPostList(newPostList);
         setLoading(false);
     }
 
@@ -50,12 +50,12 @@ export default function PostFeed(props: PostFeedProps): JSX.Element {
      */
     const handleScroll = async (e: Event) => {
         if (document.documentElement.scrollTop + window.innerHeight !== document.documentElement.scrollHeight) return;
-        await getMessage();
+        await getPost();
     }
 
     return (
         <div>
-            <PostList messagePropsList={messageList} />
+            <PostList postPropsList={postList} />
             <div className={styles.messageLoading}>
                 {loading && <Spin size={'large'} />}
             </div>

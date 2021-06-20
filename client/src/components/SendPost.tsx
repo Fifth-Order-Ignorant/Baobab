@@ -27,7 +27,7 @@ export function SendPost(props: SendPostProps): JSX.Element {
      * Updates post based on the message input.
      * @param event Textarea event which has the text contents inside.
      */
-    const onMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const onPostChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setPost(event.target.value);
     };
 
@@ -43,12 +43,12 @@ export function SendPost(props: SendPostProps): JSX.Element {
             <Col span={24}>
                 <Card>
                     <Comment
-                        className={styles.messageComment}
+                        className={styles.postComment}
                         author={props.author}
                         avatar={<Avatar />}
                         content={
                             <Form.Item>
-                                <Input.TextArea rows={4} onChange={onMessageChange} value={post} />
+                                <Input.TextArea rows={4} onChange={onPostChange} value={post} />
                             </Form.Item>
                         }
                         actions={[
