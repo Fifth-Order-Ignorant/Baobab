@@ -15,7 +15,7 @@ export default function Feed(): JSX.Element {
   const c = 5;
 
   /**
-   * Returns a list of post list props to feed into the MessageList component
+   * Returns a list of post list props to feed into the PostList component
    * @returns Post list props.
    */
   const getPosts = async () => {
@@ -24,11 +24,11 @@ export default function Feed(): JSX.Element {
       start: 0,
       end: c * (i + 1),
     });
-    const newMessages = res.data;
-    if (newMessages.length !== 0) {
+    const newPosts = res.data;
+    if (newPosts.length !== 0) {
       i++;
     }
-    return newMessages;
+    return newPosts;
   };
 
   /**
@@ -36,8 +36,8 @@ export default function Feed(): JSX.Element {
    * @param content The contents of the post as a string.
    */
   const sendPost = async (content: string): Promise<void> => {
-    const mr: MessageRequest = { content: content, parentID: -1 };
-    await axios.post('/api/message/create', mr);
+    const pr: MessageRequest = { content: content, parentID: -1 };
+    await axios.post('/api/message/create', pr);
   };
 
   return (
