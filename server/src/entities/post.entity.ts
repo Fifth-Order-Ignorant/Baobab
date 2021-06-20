@@ -1,18 +1,18 @@
-export class Message {
+export class Post {
   private _id: number;
   private _userID: number;
   private _content: string;
   private _timestamp: Date;
-  private _childs: Message[];
+  private _childs: Post[];
   // If no parent, _parent is undefined.
-  private _parent: Message;
+  private _parent: Post;
 
   public constructor(
     id: number,
     userID: number,
     content: string,
     timestamp: Date,
-    parent: Message,
+    parent: Post,
   ) {
     this._id = id;
     this._userID = userID;
@@ -34,11 +34,11 @@ export class Message {
     return this._content;
   }
 
-  get childs(): Message[] {
+  get childs(): Post[] {
     return this._childs;
   }
 
-  get parent(): Message {
+  get parent(): Post {
     return this._parent;
   }
 

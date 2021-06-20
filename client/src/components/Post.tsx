@@ -1,47 +1,42 @@
 import { Comment, Tooltip, Avatar } from 'antd';
 import Card from './Card';
-import styles from "../../styles/Message.module.css";
+import styles from '../../styles/Post.module.css';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 
 /**
- * Required props for rendering a message.
+ * Required props for rendering a post.
  */
-export interface MessageProps {
+export interface PostProps {
   /**
    *  Author's name (first and last).
-  */
+   */
   author: string;
   /**
-   *  How long a message was sent.
-  */
+   *  The time the post was sent
+   */
   timestamp: string;
   /**
-   *  Message content.
-  */
+   *  Post content.
+   */
   content: string;
 }
 
 /**
- * Renders the message component.
- * The following parameters are passed as props:
+ * Renders the post component.
  */
-export function Message(
-  props: MessageProps
-): JSX.Element {
-
+export function Post(props: PostProps): JSX.Element {
   // setup time
   const currentDate: Date = new Date(props.timestamp);
   const postTime: string = moment(currentDate).fromNow();
 
   // get actions
-  const actions = [
-    <span>Reply to</span>
-  ]
+  const actions = [<span>Reply to</span>];
 
   return (
     <Card>
       <Comment
-        className={styles.messageComment}
+        className={styles.postComment}
         actions={actions}
         author={props.author}
         content={props.content}

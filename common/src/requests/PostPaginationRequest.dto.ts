@@ -1,11 +1,11 @@
 import { object, SchemaOf, number } from 'yup';
 
-export class MessagePaginationRequest {
+export class PostPaginationRequest {
   start!: number;
   end!: number;
 }
 
-export const MessagePaginationRequestSchema: SchemaOf<MessagePaginationRequest> =
+export const PostPaginationRequestSchema: SchemaOf<PostPaginationRequest> =
   object({
     start: number().required(),
     end: number().required(),

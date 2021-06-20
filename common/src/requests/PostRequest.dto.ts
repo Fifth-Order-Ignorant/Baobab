@@ -1,11 +1,11 @@
 import { object, SchemaOf, string, number } from 'yup';
 
-export class MessageRequest {
+export class PostRequest {
   content!: string;
   parentID!: number;
 }
 
-export const MessageRequestSchema: SchemaOf<MessageRequest> = object({
+export const PostRequestSchema: SchemaOf<PostRequest> = object({
   content: string().required(),
   parentID: number().required(),
 });

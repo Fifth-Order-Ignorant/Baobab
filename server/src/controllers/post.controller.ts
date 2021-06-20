@@ -9,44 +9,44 @@ import {
   Req,
   BadRequestException,
 } from '@nestjs/common';
-import { MessageService } from '../services/message.service';
+import { PostService } from '../services/post.service';
 import { Response } from 'express';
-import { MessageRequest, MessagePaginationRequest } from 'baobab-common';
+import { PostRequest, PostPaginationRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
-import { Message } from '../entities/message.entity';
+import { Post as PostEntity } from '../entities/post.entity';
 
-@Controller('message')
-export class MessageController {
-  constructor(private _messageService: MessageService) {}
+@Controller('post')
+export class PostController {
+  constructor(private _postService: PostService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
-  @ApiResponse({ status: 201, description: 'The message is created.' })
+  @ApiResponse({ status: 201, description: 'The post is created.' })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
-  createMessage(
-    @Body() reqBody: MessageRequest,
+  createPost(
+    @Body() reqBody: PostRequest,
     @Res({ passthrough: true }) res: Response,
     @Req() req,
   ) {
     const today = new Date();
-    let parent: Message;
+    let parent: PostEntity;
     if (reqBody.parentID == -1) {
       parent = undefined;
     } else {
-      parent = this._messageService.getParentMessage(reqBody.parentID);
+      parent = this._postService.getParentPost(reqBody.parentID);
       if (!parent) {
         throw new BadRequestException({
           errors: [],
         });
       }
     }
-    const message = this._messageService.createMessage(
+    const post = this._postService.createPost(
       req.user.id,
       reqBody.content,
       today,
       parent,
     );
-    if (!message) {
+    if (!post) {
       throw new InternalServerErrorException({
         errors: [],
       });
@@ -55,12 +55,12 @@ export class MessageController {
 
   @Post('pagination')
   pagination(
-    @Body() reqBody: MessagePaginationRequest,
+    @Body() reqBody: PostPaginationRequest,
   ): Record<string, string | number>[] {
-    const paginatedMessages = this._messageService.getPaginatedMessages(
+    const paginatedPosts = this._postService.getPaginatedPosts(
       reqBody.start,
       reqBody.end,
     );
-    return paginatedMessages;
+    return paginatedPosts;
   }
 }
