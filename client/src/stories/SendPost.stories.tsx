@@ -2,7 +2,7 @@ import { SendPost } from '../components/SendPost';
 import { Meta } from '@storybook/react';
 
 export default {
-  title: 'SendMessage',
+  title: 'SendPost',
   component: SendPost,
 } as Meta;
 

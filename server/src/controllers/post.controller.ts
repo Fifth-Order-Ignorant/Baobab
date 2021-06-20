@@ -11,11 +11,11 @@ import {
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { Response } from 'express';
-import { MessageRequest, MessagePaginationRequest } from 'baobab-common';
+import { PostRequest, PostPaginationRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import { Post as PostEntity } from '../entities/post.entity';
 
-@Controller('message')
+@Controller('post')
 export class PostController {
   constructor(private _postService: PostService) {}
 
@@ -24,7 +24,7 @@ export class PostController {
   @ApiResponse({ status: 201, description: 'The post is created.' })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
   createPost(
-    @Body() reqBody: MessageRequest,
+    @Body() reqBody: PostRequest,
     @Res({ passthrough: true }) res: Response,
     @Req() req,
   ) {
@@ -55,7 +55,7 @@ export class PostController {
 
   @Post('pagination')
   pagination(
-    @Body() reqBody: MessagePaginationRequest,
+    @Body() reqBody: PostPaginationRequest,
   ): Record<string, string | number>[] {
     const paginatedPosts = this._postService.getPaginatedPosts(
       reqBody.start,

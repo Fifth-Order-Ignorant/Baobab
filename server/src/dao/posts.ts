@@ -32,13 +32,7 @@ export class PostInMemory implements PostDAO {
     timestamp: Date,
     parent: Post,
   ): number {
-    const post = new Post(
-      this.highestID,
-      userID,
-      content,
-      timestamp,
-      parent,
-    );
+    const post = new Post(this.highestID, userID, content, timestamp, parent);
     this.posts.push(post);
     this.highestID++;
 
@@ -77,7 +71,7 @@ export class PostInMemory implements PostDAO {
         author: post.userID,
         timestamp: post.timestamp.toISOString(),
         content: post.content,
-        messageID: post.id,
+        postId: post.id,
       });
       lst.push(newPost);
       i++;

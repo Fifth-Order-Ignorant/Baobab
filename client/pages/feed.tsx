@@ -1,7 +1,7 @@
 import PostFeed from '../src/components/PostFeed';
 import { SendPost } from '../src/components/SendPost';
 import { Typography, Row, Col } from 'antd';
-import { MessageRequest } from 'baobab-common';
+import { PostRequest } from 'baobab-common';
 import axios from 'axios';
 
 import styles from '../styles/Post.module.css';
@@ -20,7 +20,7 @@ export default function Feed(): JSX.Element {
    */
   const getPosts = async () => {
     // TODO: Make start = c * i to make it more efficient
-    const res = await axios.post('/api/message/pagination', {
+    const res = await axios.post('/api/post/pagination', {
       start: 0,
       end: c * (i + 1),
     });
@@ -36,8 +36,8 @@ export default function Feed(): JSX.Element {
    * @param content The contents of the post as a string.
    */
   const sendPost = async (content: string): Promise<void> => {
-    const pr: MessageRequest = { content: content, parentID: -1 };
-    await axios.post('/api/message/create', pr);
+    const pr: PostRequest = { content: content, parentID: -1 };
+    await axios.post('/api/post/create', pr);
   };
 
   return (

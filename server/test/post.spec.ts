@@ -42,7 +42,7 @@ describe('Post Creation Tests', () => {
     });
 
     return agent
-      .post('/message/create')
+      .post('/post/create')
       .send({
         content: 'hello1',
         parentID: -1,
@@ -59,7 +59,7 @@ describe('Post Creation Tests', () => {
     });
 
     return agent
-      .post('/message/create')
+      .post('/post/create')
       .send({
         content: 'hello2',
         parentID: 0,
@@ -112,12 +112,7 @@ describe('Post Basic Functionality', () => {
     const nowTime = new Date();
     const post1 = posts.createPost(1, 'hello', nowTime, undefined);
     const parentPost = posts.getByID(post1);
-    const post2 = posts.createPost(
-      1,
-      'hello2',
-      nowTime,
-      parentPost,
-    );
+    const post2 = posts.createPost(1, 'hello2', nowTime, parentPost);
     const post = posts.getByID(post2);
     expect(post.parent == parentPost);
   });
@@ -136,13 +131,13 @@ describe('Post Pagination Basic Functionality', () => {
         author: 1,
         timestamp: nowTime.toISOString(),
         content: 'hello',
-        messageID: 0,
+        postId: 0,
       }),
       Object({
         author: 1,
         timestamp: nowTime.toISOString(),
         content: 'hello2',
-        messageID: 1,
+        postId: 1,
       }),
     ];
     expect(postPagination == expected);
