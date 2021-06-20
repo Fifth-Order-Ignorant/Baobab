@@ -76,7 +76,7 @@ describe('Post Creation Tests', () => {
     });
 
     return agent
-      .post('/message/create')
+      .post('/post/create')
       .send({
         content: 'hello3',
         parentID: 3,
