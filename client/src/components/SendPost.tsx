@@ -24,7 +24,7 @@ export function SendPost(props: SendPostProps): JSX.Element {
     const [post, setPost] = useState("");
 
     /**
-     * Updates post based on the message input.
+     * Updates post based on the post input.
      * @param event Textarea event which has the text contents inside.
      */
     const onPostChange = (event: ChangeEvent<HTMLTextAreaElement>) => {

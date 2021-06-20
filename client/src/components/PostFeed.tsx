@@ -56,7 +56,7 @@ export default function PostFeed(props: PostFeedProps): JSX.Element {
     return (
         <div>
             <PostList postPropsList={postList} />
-            <div className={styles.messageLoading}>
+            <div className={styles.postLoading}>
                 {loading && <Spin size={'large'} />}
             </div>
         </div>

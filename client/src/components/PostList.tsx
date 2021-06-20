@@ -3,14 +3,14 @@ import { Col, Row } from "antd";
 
 export interface PostListProps {
     /**
-     *  List of messages
+     *  List of posts
      */
     postPropsList: PostListPropsWithId[];
 }
 
 export interface PostListPropsWithId extends PostProps {
     /**
-     *  The messageId.
+     *  The postId.
      */
     postId: number;
 }
