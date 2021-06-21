@@ -2,55 +2,41 @@ import { SessionPayload } from 'baobab-common';
 import React, { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
-type AuthState = {
-  jwt: string;
-  payload: SessionPayload | null;
-};
+type AuthState = SessionPayload | null;
 
-const initialState: AuthState = {
-  jwt: '',
-  payload: null,
-};
-
-export const AuthContext = createContext(initialState);
+export const AuthContext = createContext<AuthState>(null);
 
 function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const [authState, setAuthState] = useState(initialState);
+  const [token, setToken] = useState(Cookies.get('SESSION_JWT'));
+
+  const [authState, setAuthState] = useState<AuthState>(null);
 
   useEffect(() => {
-    const token = Cookies.get('SESSION_JWT');
-
-    const payload =
-      token == undefined ? null : (jwt.decode(token) as SessionPayload);
-
-    setAuthState({
-      jwt: token == undefined ? '' : token,
-      payload: payload,
-    });
-
-    axios.defaults.withCredentials = true;
     axios.interceptors.response.use((value) => {
-      const token = Cookies.get('SESSION_JWT');
+      const newToken = Cookies.get('SESSION_JWT');
 
-      if (token !== authState.jwt) {
-        const payload =
-          token == undefined ? null : (jwt.decode(token) as SessionPayload);
-
-        setAuthState({
-          jwt: token == undefined ? '' : token,
-          payload: payload,
-        });
+      if (token !== newToken) {
+        setToken(newToken);
       }
 
       return value;
     });
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      const payload = jwt.decode(token) as SessionPayload;
+      setAuthState(payload);
+    } else {
+      setAuthState(null);
+    }
+  }, [token]);
 
   return (
     <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>
