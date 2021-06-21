@@ -156,6 +156,69 @@ describe('End to end profile editing tests', () => {
   });
 });
 
+describe('End to end profile viewing tests', () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleRef.createNestApplication();
+    const { httpAdapter } = app.get(HttpAdapterHost);
+    app.useGlobalFilters(new CustomExceptionsFilter(httpAdapter));
+
+    app.useGlobalPipes(new YupValidationPipe());
+    app.use(cookieParser());
+    await app.init();
+  });
+
+  it(`lets you get a profile without being logged in`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent
+      .post('/user/register')
+      .send({
+        firstName: 'ethan',
+        lastName: 'lam',
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
+
+    return agent
+      .post('/user/view')
+      .send({ userId: 0 })
+      .expect(HttpStatus.CREATED);
+  });
+
+  it(`gives profile data correctly`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent
+      .post('/user/register')
+      .send({
+        firstName: 'mar',
+        lastName: 'yam',
+        email: 'mar@mail.com',
+        password: '123',
+      })
+      .expect(HttpStatus.CREATED);
+
+    const response = await agent.post('/user/view').send({ userId: 1 });
+
+    expect(response.body[0]).toBe('mar');
+    expect(response.body[1]).toBe('yam');
+    expect(response.body[2]).toBe('');
+    expect(response.body[3]).toBe('');
+    done();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+});
+
 describe('User tests', () => {
   it('should create a user', () => {
     const users = new UserProfileInMemory();
