@@ -5,21 +5,20 @@ import {
   Controller,
   Post,
   Res,
-  UseGuards,
   Req,
   BadRequestException,
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { Response } from 'express';
 import { PostRequest, PostPaginationRequest } from 'baobab-common';
-import { JwtAuthGuard } from './jwt.guard';
 import { Post as PostEntity } from '../entities/post.entity';
+import { JwtAuth } from './jwt.decorator';
 
 @Controller('post')
 export class PostController {
   constructor(private _postService: PostService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Post('create')
   @ApiResponse({ status: 201, description: 'The post is created.' })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
