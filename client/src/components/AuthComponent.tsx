@@ -15,7 +15,7 @@ function AuthComponent(): JSX.Element {
 
   const authState = useContext(AuthContext);
 
-  if (authState.jwt === '') {
+  if (!authState) {
     return (
       <>
         <Space>
@@ -54,7 +54,7 @@ function AuthComponent(): JSX.Element {
   } else {
     return (
       <Space>
-        <Typography.Text>{authState.payload?.fullName}</Typography.Text>
+        <Typography.Text>{authState.fullName}</Typography.Text>
         <Button onClick={async () => await axios.get('/api/auth/logout')}>
           Logout
         </Button>
