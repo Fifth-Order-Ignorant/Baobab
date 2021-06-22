@@ -1,5 +1,6 @@
 import { Spin } from 'antd';
-import { PostList, PostListPropsWithId } from "./PostList";
+import { PostProps } from './Post';
+import { PostList } from "./PostList";
 import { useEffect, useState } from "react";
 import styles from "../../styles/Post.module.css";
 
@@ -10,11 +11,11 @@ export interface PostFeedProps {
     /**
      *  Function that returns posts.
      */
-    onLoad: () => Promise<PostListPropsWithId[]>;
+    onLoad: () => Promise<PostProps[]>;
     /**
-     *  Initial set of posts.
+     * Function that sends posts.
      */
-    initPosts: PostListPropsWithId[];
+     sendPost: (content: string, postId: number) => Promise<void>;
 }
 
 /**
@@ -23,7 +24,7 @@ export interface PostFeedProps {
 export default function PostFeed(props: PostFeedProps): JSX.Element {
 
     const [loading, setLoading] = useState(false);
-    const [postList, setPostList] = useState<PostListPropsWithId[]>([]);
+    const [postList, setPostList] = useState<PostProps[]>([]);
 
     useEffect(() => {
         getPost().then(() => {
@@ -37,8 +38,8 @@ export default function PostFeed(props: PostFeedProps): JSX.Element {
      */
     const getPost = async () => {
         setLoading(true);
-        const postPropsList: PostListPropsWithId[] = await props.onLoad();
-        const newPostList: PostListPropsWithId[] = postList.concat(postPropsList);
+        const postPropsList: PostProps[] = await props.onLoad();
+        const newPostList: PostProps[] = postList.concat(postPropsList);
         setPostList(newPostList);
         setLoading(false);
     }
@@ -55,7 +56,7 @@ export default function PostFeed(props: PostFeedProps): JSX.Element {
 
     return (
         <div>
-            <PostList postPropsList={postList} />
+            <PostList postPropsList={postList} sendPost={props.sendPost} />
             <div className={styles.postLoading}>
                 {loading && <Spin size={'large'} />}
             </div>
