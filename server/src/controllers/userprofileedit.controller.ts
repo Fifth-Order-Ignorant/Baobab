@@ -3,7 +3,6 @@ import {
   Body,
   Controller,
   Get,
-  UseGuards,
   Post,
   Res,
   Req,
@@ -12,9 +11,9 @@ import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
 import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
-import { JwtAuthGuard } from './jwt.guard';
 import { ApiResponse } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
+import { JwtAuth } from './jwt.decorator';
 
 @Controller('profile')
 export class UserProfileEditController {
@@ -24,7 +23,7 @@ export class UserProfileEditController {
     private _configService: ConfigService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Get('myprofile')
   @ApiResponse({
     status: 200,
@@ -42,7 +41,7 @@ export class UserProfileEditController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Post('editname')
   @ApiResponse({ status: 201, description: 'Name is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
@@ -66,7 +65,7 @@ export class UserProfileEditController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @ApiResponse({ status: 201, description: 'Job is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Post('editjob')
@@ -85,7 +84,7 @@ export class UserProfileEditController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @ApiResponse({ status: 201, description: 'Bio is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Post('editbio')
