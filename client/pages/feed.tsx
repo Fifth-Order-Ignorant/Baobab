@@ -35,7 +35,10 @@ export default function Feed(): JSX.Element {
    * Sends a post from the signed in user.
    * @param content The contents of the post as a string.
    */
-  const sendPost = async (content: string, parentPostId: number): Promise<void> => {
+  const sendPost = async (
+    content: string,
+    parentPostId: number,
+  ): Promise<void> => {
     const pr: PostRequest = { content: content, parentID: parentPostId };
     await axios.post('/api/post/create', pr);
   };
@@ -47,7 +50,12 @@ export default function Feed(): JSX.Element {
           <Typography>
             <h2>Feed</h2>
           </Typography>
-          <SendPost author={'You!'} sendPost={async (content: string) => {await sendPost(content, -1)}} />
+          <SendPost
+            author={'You!'}
+            sendPost={async (content: string) => {
+              await sendPost(content, -1);
+            }}
+          />
           <PostFeed onLoad={getPosts} sendPost={sendPost} />
         </Col>
       </Row>
