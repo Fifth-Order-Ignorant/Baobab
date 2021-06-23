@@ -5,14 +5,11 @@ export interface PostListProps {
     /**
      *  List of posts
      */
-    postPropsList: PostListPropsWithId[];
-}
-
-export interface PostListPropsWithId extends PostProps {
+    postPropsList: PostProps[];
     /**
-     *  The postId.
+     * Function that sends posts.
      */
-    postId: number;
+     sendPost: (content: string, postId: number) => Promise<void>;
 }
 
 /**
@@ -28,6 +25,8 @@ export function PostList(props: PostListProps): JSX.Element {
                             author={postProps.author}
                             timestamp={postProps.timestamp}
                             content={postProps.content}
+                            postId={postProps.postId}
+                            sendPost={props.sendPost}
                         />
                     </Col>
                 ))}
