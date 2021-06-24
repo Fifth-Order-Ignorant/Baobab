@@ -143,13 +143,7 @@ describe('Post Pagination Basic Functionality', () => {
         timestamp: nowTime.toISOString(),
         content: 'hello',
         postId: 0,
-      }),
-      Object({
-        author: 1,
-        timestamp: nowTime.toISOString(),
-        content: 'hello2',
-        postId: 1,
-      }),
+      })
     ];
     expect(postPagination == expected);
   });
