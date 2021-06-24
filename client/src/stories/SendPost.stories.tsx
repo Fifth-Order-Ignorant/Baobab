@@ -7,4 +7,4 @@ export default {
 } as Meta;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const Basic = (): JSX.Element => <SendPost author={'John Deer'} sendPost={async() => {}} />;
+export const Basic = (): JSX.Element => <SendPost author={'John Deer'} sendPost={async(content: string) => {}} />;
