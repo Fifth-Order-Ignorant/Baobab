@@ -68,15 +68,20 @@ export class PostInMemory implements PostDAO {
     let i: number = start;
     const lst: Record<string, string | number>[] = [];
     const n: number = posts.length;
-    while (i < end && i < n) {
+    let count: number = 0;
+    while (i < n && count < end-start) {
       const post: Post = posts[i];
-      const newPost: Record<string, string | number> = Object({
-        author: post.userID,
-        timestamp: post.timestamp.toISOString(),
-        content: post.content,
-        postId: post.id,
-      });
-      lst.push(newPost);
+      if (typeof post.parent === 'undefined'){
+        const newPost: Record<string, string | number> = Object({
+          author: post.userID,
+          timestamp: post.timestamp.toISOString(),
+          content: post.content,
+          postId: post.id,
+        });
+        lst.push(newPost);
+        count++;
+      } else {
+      }
       i++;
     }
     return lst;
