@@ -1,7 +1,7 @@
 import { PostList } from '../src/components/PostList';
 import samplePosts from '../src/constants/SamplePostList';
-import { Tabs } from 'antd';
-import { Avatar, Row, Col, Typography } from 'antd';
+import { Tabs, Avatar, Row, Col, Typography } from 'antd';
+
 import styles from '../styles/Profile.module.css';
 import ProfileLayout from '../src/components/ProfileLayout';
 
