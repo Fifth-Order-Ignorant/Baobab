@@ -136,7 +136,7 @@ describe('Post Pagination Basic Functionality', () => {
     const post1 = posts.createPost(1, 'hello', nowTime, undefined);
     const parentPost = posts.getByID(post1);
     posts.createPost(1, 'hello2', nowTime, parentPost);
-    const postPagination = posts.getPosts(0, 2);
+    const postPagination = posts.getParentPosts(0, 2);
     const expected: Record<string, string | number>[] = [
       Object({
         author: 1,
@@ -147,4 +147,23 @@ describe('Post Pagination Basic Functionality', () => {
     ];
     expect(postPagination == expected);
   });
+
+  it('should return the paginated data in the right format', () => {
+    const posts = new PostInMemory();
+    const nowTime = new Date();
+    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = posts.getByID(post1);
+    posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = posts.getReplies(0, 0, 2);
+    const expected: Record<string, string | number>[] = [
+      Object({
+        author: 1,
+        timestamp: nowTime.toISOString(),
+        content: 'hello2',
+        postId: 1,
+      })
+    ];
+    expect(postPagination == expected);
+  });
+
 });
