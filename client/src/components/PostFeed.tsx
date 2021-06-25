@@ -2,12 +2,19 @@ import { PostProps } from './Post';
 import { PostList } from './PostList';
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import axios from 'axios';
+
+type PostFeedProps = {
+  /**
+   * Function used to fetch posts in batches.
+   * @param page Batch number.
+   */
+  fetchPosts: (page: number) => Promise<PostProps[]>;
+};
 
 /**
  * Renders the infinite scrolling post feed.
  */
-export default function PostFeed(): JSX.Element {
+export default function PostFeed(props: PostFeedProps): JSX.Element {
   const [loading, setLoading] = useState(false);
   const [postList, setPostList] = useState<PostProps[]>([]);
 
@@ -16,17 +23,12 @@ export default function PostFeed(): JSX.Element {
   const loadMore = async (page: number) => {
     setLoading(true);
 
-    const newPosts = await axios.get('/api/post/pagination', {
-      params: {
-        start: (page - 1) * 5,
-        end: page * 5,
-      },
-    });
+    const newPosts = await props.fetchPosts(page);
 
-    if (newPosts.data.length === 0) {
+    if (newPosts.length === 0) {
       setHasMore(false);
     } else {
-      setPostList(postList.concat(newPosts.data));
+      setPostList(postList.concat(newPosts));
     }
 
     setLoading(false);
