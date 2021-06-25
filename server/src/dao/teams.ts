@@ -2,12 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Team } from '../entities/team.entity';
 
 export interface TeamDAO {
-  createTeam(
-    userID: number,
-    timestamp: Date,
-    name: string,
-  ): number;
-  getByID(id: number): Team;
+  createTeam(userID: number, timestamp: Date, name: string): number;
+  getById(id: number): Team;
+  teamExists(teamName: string): boolean;
   getTeams(start: number, end: number): Record<string, string | number>[];
 }
 
@@ -21,18 +18,25 @@ export class TeamInMemory implements TeamDAO {
     this.highestID = 0;
   }
 
-  public createTeam(
-    userID: number,
-    timestamp: Date,
-    teamName: string
-  ): number {
+  public createTeam(userID: number, timestamp: Date, teamName: string): number {
     const team = new Team(this.highestID, userID, teamName, timestamp);
     this.teams.push(team);
     this.highestID++;
     return this.highestID - 1;
   }
 
-  public getByID(id: number): Team {
+  public teamExists(teamName: string): boolean {
+    let found: boolean;
+    found = false;
+    this.teams.forEach((element) => {
+      if (element.name === teamName) {
+        found = true;
+      }
+    });
+    return found;
+  }
+
+  public getById(id: number): Team {
     let team: Team;
     this.teams.forEach((element) => {
       if (element.id === id) {
@@ -41,7 +45,6 @@ export class TeamInMemory implements TeamDAO {
     });
     return team;
   }
-
 
   public getTeams(
     start: number,
