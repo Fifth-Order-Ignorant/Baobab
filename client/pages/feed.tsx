@@ -20,10 +20,14 @@ export default function Feed(): JSX.Element {
    */
   const getPosts = async () => {
     // TODO: Make start = c * i to make it more efficient
-    const res = await axios.post('/api/post/pagination', {
-      start: 0,
-      end: c * (i + 1),
+
+    const res = await axios.get('/api/post/pagination', {
+      params: {
+        start: 0,
+        end: c * (i + 1),
+      },
     });
+
     const newPosts = res.data;
     if (newPosts.length !== 0) {
       i++;
