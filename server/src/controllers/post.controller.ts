@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { Response } from 'express';
-import { PostRequest, PostPaginationRequest } from 'baobab-common';
+import { PostRequest, PostPaginationRequest, RepliesPaginationRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import { Post as PostEntity } from '../entities/post.entity';
 
@@ -62,5 +62,17 @@ export class PostController {
       reqBody.end,
     );
     return paginatedPosts;
+  }
+
+  @Post('replies')
+  replies(
+    @Body() reqBody: RepliesPaginationRequest,
+  ): Record<string, string | number>[] {
+    const paginatedReplies = this._postService.getReplies(
+      reqBody.id,
+      reqBody.start,
+      reqBody.end,
+    );
+    return paginatedReplies;
   }
 }
