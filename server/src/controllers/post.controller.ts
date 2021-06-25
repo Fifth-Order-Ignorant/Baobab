@@ -7,6 +7,8 @@ import {
   Res,
   Req,
   BadRequestException,
+  Query,
+  Get,
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { Response } from 'express';
@@ -52,13 +54,13 @@ export class PostController {
     }
   }
 
-  @Post('pagination')
+  @Get('pagination')
   pagination(
-    @Body() reqBody: PostPaginationRequest,
+    @Query() query: PostPaginationRequest,
   ): Record<string, string | number>[] {
     const paginatedPosts = this._postService.getPaginatedPosts(
-      reqBody.start,
-      reqBody.end,
+      query.start,
+      query.end,
     );
     return paginatedPosts;
   }
