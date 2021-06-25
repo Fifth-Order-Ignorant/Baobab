@@ -1,9 +1,9 @@
 import { PostList } from '../src/components/PostList';
 import samplePosts from '../src/constants/SamplePostList';
 import { Tabs, Avatar, Row, Col, Typography } from 'antd';
+import { About } from '../src/components/About';
 
 import styles from '../styles/Profile.module.css';
-import ProfileLayout from '../src/components/ProfileLayout';
 
 /**
  * Renders the profile page.
@@ -21,19 +21,19 @@ export default function Profile(): JSX.Element {
           <Col className={styles.tabContents} span={13}>
             <Tabs defaultActiveKey="profile" type="card">
               <Tabs.TabPane tab="Profile" key="profile">
-                <ProfileLayout>
-                  <div />
-                </ProfileLayout>
+                <Row>
+                  <Col>
+                    <About />
+                  </Col>
+                </Row>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Activity" key="activity">
-                <ProfileLayout>
-                  <div>
-                    <Typography>
-                      <h2>Recent Activity:</h2>
-                    </Typography>
-                    <PostList postPropsList={samplePosts} />
-                  </div>
-                </ProfileLayout>
+                <div>
+                  <Typography>
+                    <h2>Recent Activity:</h2>
+                  </Typography>
+                  <PostList postPropsList={samplePosts} />
+                </div>
               </Tabs.TabPane>
             </Tabs>
           </Col>
