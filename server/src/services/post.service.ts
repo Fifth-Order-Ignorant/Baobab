@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PostDAO } from '../dao/posts';
 import { Post } from '../entities/post.entity';
 import { UserProfileDAO } from '../dao/userprofiles';
+import { UnsubscriptionError } from 'rxjs';
 
 @Injectable()
 export class PostService {
@@ -30,7 +31,22 @@ export class PostService {
     end: number,
   ): Record<string, string | number>[] {
     const posts: Record<string, string | number>[] =
-      this._postRepository.getPosts(start, end);
+      this._postRepository.getParentPosts(start, end);
+    posts.forEach((element) => {
+      element.author = this._userRepository.getProfileByID(
+        element.author as number,
+      ).name;
+    });
+    return posts;
+  }
+
+  getReplies(
+    postId: number,
+    start: number,
+    end: number,
+  ): Record<string, string | number>[] {
+    const posts: Record<string, string | number>[] =
+      this._postRepository.getReplies(postId, start, end);
     posts.forEach((element) => {
       element.author = this._userRepository.getProfileByID(
         element.author as number,
