@@ -1,30 +1,25 @@
-import { Comment, Tooltip, Avatar } from 'antd';
+import { Comment, Tooltip, Avatar, Button } from 'antd';
 import Card from './Card';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../styles/Post.module.css';
 import moment from 'moment';
 import { ReplyPost } from './SendPost';
+import { PostList } from './PostList';
+import { PostResponse, REPLY_LIMIT } from 'baobab-common';
 
 /**
  * Required props for rendering a post.
  */
-export interface PostProps {
+export interface PostProps extends PostResponse {
   /**
-   *  Author's name (first and last).
+   * Function for loading more replies.
+   * @param page Reply batch number.
    */
-  author: string;
+  loadMoreReplies: (page: number) => Promise<PostResponse[]>;
   /**
-   *  The time the post was sent
+   * Reply depth of post.
    */
-  timestamp: string;
-  /**
-   *  Post content.
-   */
-  content: string;
-  /**
-   *  The current post id.
-   */
-  postId: number;
+  depth: number;
 }
 
 /**
@@ -39,23 +34,78 @@ export function Post(props: PostProps): JSX.Element {
   const postTime: string = moment(currentDate).fromNow();
 
   // get actions
-  const actions = [
-    <span
-      key="reply"
-      onClick={() => {
-        setReplyOpen(true);
-      }}
-    >
-      Reply to
-    </span>,
-  ];
+  const [actions, setActions] = useState(
+    props.depth < REPLY_LIMIT
+      ? new Map<string, JSX.Element>([
+          [
+            'reply',
+            <span
+              key="reply"
+              onClick={() => {
+                setReplyOpen(true);
+              }}
+            >
+              Reply to
+            </span>,
+          ],
+        ])
+      : new Map<string, JSX.Element>(),
+  );
+
+  const [batch, setBatch] = useState(0);
+
+  const [replies, setReplies] = useState<PostResponse[]>([]);
+
+  const loadMore = async () => {
+    setLoading(true);
+
+    const newReplies = await props.loadMoreReplies(batch);
+    setBatch(batch + 1);
+
+    if (newReplies.length === 0) {
+      setHasMoreReplies(false);
+    } else {
+      setReplies(replies.concat(newReplies));
+    }
+
+    setLoading(false);
+  };
+
+  // fetch first batch of replies so we know if there are any replies
+  // (and whether to display the "show replies" button or not)
+  useEffect(() => {
+    (async () => {
+      await loadMore();
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!actions.has('showReplies') && replies.length > 0) {
+      actions.set(
+        'showReplies',
+        <span
+          key="showReplies"
+          onClick={() => setShowReplies((prevState) => !prevState)}
+        >
+          Show Replies
+        </span>,
+      );
+      setActions(new Map(actions));
+    }
+  }, [replies.length]);
+
+  const [loading, setLoading] = useState(false);
+
+  const [hasMoreReplies, setHasMoreReplies] = useState(true);
+
+  const [showReplies, setShowReplies] = useState(false);
 
   return (
     <Card>
       <div>
         <Comment
           className={styles.postComment}
-          actions={actions}
+          actions={Array.from(actions.values())}
           author={props.author}
           content={props.content}
           avatar={<Avatar />}
@@ -69,6 +119,26 @@ export function Post(props: PostProps): JSX.Element {
           <div className={styles.replyMenu}>
             <ReplyPost parent={props.postId} author={'You!'} />
           </div>
+        )}
+        {showReplies && (
+          <>
+            <PostList
+              postPropsList={replies}
+              isLoading={loading}
+              depth={props.depth + 1}
+            />
+            <Button
+              onClick={loadMore}
+              loading={loading}
+              disabled={!hasMoreReplies}
+            >
+              {hasMoreReplies ? (
+                <span>Load More Replies</span>
+              ) : (
+                <span>No More Replies</span>
+              )}
+            </Button>
+          </>
         )}
       </div>
     </Card>
