@@ -2,9 +2,8 @@ import { Comment, Tooltip, Avatar } from 'antd';
 import Card from './Card';
 import React, { useState } from 'react';
 import styles from '../../styles/Post.module.css';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
-import { SendPost } from './SendPost';
+import { ReplyPost } from './SendPost';
 
 /**
  * Required props for rendering a post.
@@ -28,18 +27,10 @@ export interface PostProps {
   postId: number;
 }
 
-export interface PostPropsWithSend extends PostProps {
-  /**
-   * Function that sends posts.
-   */
-  sendPost: (content: string, postId: number) => Promise<void>;
-}
-
 /**
  * Renders the post component.
  */
-export function Post(props: PostPropsWithSend): JSX.Element {
-
+export function Post(props: PostProps): JSX.Element {
   // create a state for saving messages and open message states
   const [replyOpen, setReplyOpen] = useState(false);
 
@@ -48,7 +39,16 @@ export function Post(props: PostPropsWithSend): JSX.Element {
   const postTime: string = moment(currentDate).fromNow();
 
   // get actions
-  const actions = [<span onClick={() => { setReplyOpen(true) }}>Reply to</span>];
+  const actions = [
+    <span
+      key="reply"
+      onClick={() => {
+        setReplyOpen(true);
+      }}
+    >
+      Reply to
+    </span>,
+  ];
 
   return (
     <Card>
@@ -65,14 +65,11 @@ export function Post(props: PostPropsWithSend): JSX.Element {
             </Tooltip>
           }
         />
-        {replyOpen &&
+        {replyOpen && (
           <div className={styles.replyMenu}>
-            <SendPost
-              author={"You!"}
-              sendPost={async (content: string) => { await props.sendPost(content, props.postId) }}
-            />
+            <ReplyPost parent={props.postId} author={'You!'} />
           </div>
-        }
+        )}
       </div>
     </Card>
   );
