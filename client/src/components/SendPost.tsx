@@ -36,6 +36,7 @@ export function SendPost(props: SendPostProps): JSX.Element {
      */
     const sendPost = async () => {
         await props.sendPost(post);
+        setPost("");
     }
 
     return (
