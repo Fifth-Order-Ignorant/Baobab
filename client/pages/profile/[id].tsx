@@ -11,8 +11,7 @@ import { useRouter } from 'next/router';
 export default function Profile(): JSX.Element {
   const id = () => {
       const router = useRouter();
-      console.log(router.query.id);
-      return router.query.id;
+      return parseInt(router.query.id as unknown as string);
   }
 
   return (
@@ -23,7 +22,7 @@ export default function Profile(): JSX.Element {
             <Avatar size="large" className={styles.avatar} />
           </Col>
           <Col className={styles.about}>
-            <About/>
+            <About id={id()}/>
           </Col>
         </Row>
         <Row justify="center">
