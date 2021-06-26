@@ -24,5 +24,6 @@ export const Basic = (): JSX.Element => (
       },
     ]}
     isLoading={false}
+    depth={0}
   />
 );
