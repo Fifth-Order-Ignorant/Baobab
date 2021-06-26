@@ -5,21 +5,22 @@ import {
   Controller,
   Post,
   Res,
-  UseGuards,
   Req,
   BadRequestException,
+  Query,
+  Get,
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { Response } from 'express';
 import { PostRequest, PostPaginationRequest, RepliesPaginationRequest } from 'baobab-common';
-import { JwtAuthGuard } from './jwt.guard';
 import { Post as PostEntity } from '../entities/post.entity';
+import { JwtAuth } from './jwt.decorator';
 
 @Controller('post')
 export class PostController {
   constructor(private _postService: PostService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Post('create')
   @ApiResponse({ status: 201, description: 'The post is created.' })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
@@ -53,13 +54,13 @@ export class PostController {
     }
   }
 
-  @Post('pagination')
+  @Get('pagination')
   pagination(
-    @Body() reqBody: PostPaginationRequest,
+    @Query() query: PostPaginationRequest,
   ): Record<string, string | number>[] {
     const paginatedPosts = this._postService.getPaginatedPosts(
-      reqBody.start,
-      reqBody.end,
+      query.start,
+      query.end,
     );
     return paginatedPosts;
   }
