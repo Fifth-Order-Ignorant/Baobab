@@ -1,13 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Assignment } from '../entities/assignment.entity';
 
 export interface AssignmentDAO {
-  createAssignment(
-    name: string,
-    description: string,
-    maxMark: number,
-  ): number;
-  getByID(id: number): Assignment;
+  createAssignment(name: string, description: string, maxMark: number): number;
+  getById(id: number): Assignment;
 }
 
 @Injectable()
@@ -27,19 +23,24 @@ export class AssignmentInMemory implements AssignmentDAO {
     description: string,
     maxMark: number,
   ): number {
-    const assignment = new Assignment(this.highestID, name, description, maxMark);
+    const assignment = new Assignment(
+      this.highestID,
+      name,
+      description,
+      maxMark,
+    );
     this.assignments.push(assignment);
     this.highestID++;
     return this.highestID - 1;
   }
 
-  public getByID(id: number): Assignment {
+  public getById(id: number): Assignment {
     let assignment: Assignment;
     this.assignments.forEach((element) => {
       if (element.id === id) {
-          assignment = element;
+        assignment = element;
       }
-   });
-   return assignment;
+    });
+    return assignment;
   }
 }

@@ -4,12 +4,12 @@ export class Assignment {
   private _description: string;
   private _maxMark: number;
 
-  public constructor(  
+  public constructor(
     id: number,
     name: string,
     description: string,
     maxMark: number,
-) {
+  ) {
     this._id = id;
     this._name = name;
     this._description = description;
@@ -31,5 +31,4 @@ export class Assignment {
   get maxMark(): number {
     return this._maxMark;
   }
-
 }
