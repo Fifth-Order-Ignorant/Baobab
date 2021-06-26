@@ -21,6 +21,6 @@ export class YupValidationPipe implements PipeTransform {
       }
     }
 
-    return value;
+    return schema.cast(value);
   }
 }
