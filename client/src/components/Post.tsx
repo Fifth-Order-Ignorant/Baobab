@@ -36,20 +36,17 @@ export function Post(props: PostProps): JSX.Element {
   // get actions
   const [actions, setActions] = useState(
     props.depth < REPLY_LIMIT
-      ? new Map<string, JSX.Element>([
-          [
-            'reply',
-            <span
-              key="reply"
-              onClick={() => {
-                setReplyOpen(true);
-              }}
-            >
-              Reply to
-            </span>,
-          ],
-        ])
-      : new Map<string, JSX.Element>(),
+      ? [
+          <span
+            key="reply"
+            onClick={() => {
+              setReplyOpen(true);
+            }}
+          >
+            Reply to
+          </span>,
+        ]
+      : [],
   );
 
   const [batch, setBatch] = useState(0);
@@ -75,24 +72,25 @@ export function Post(props: PostProps): JSX.Element {
   // (and whether to display the "show replies" button or not)
   useEffect(() => {
     (async () => {
-      await loadMore();
+      const initReplies = await props.loadMoreReplies(batch);
+      setBatch(batch + 1);
+
+      if (initReplies.length > 0) {
+        setActions(
+          actions.concat(
+            <span
+              key="showReplies"
+              onClick={() => setShowReplies((prevState) => !prevState)}
+            >
+              Show Replies
+            </span>,
+          ),
+        );
+
+        setReplies(initReplies);
+      }
     })();
   }, []);
-
-  useEffect(() => {
-    if (!actions.has('showReplies') && replies.length > 0) {
-      actions.set(
-        'showReplies',
-        <span
-          key="showReplies"
-          onClick={() => setShowReplies((prevState) => !prevState)}
-        >
-          Show Replies
-        </span>,
-      );
-      setActions(new Map(actions));
-    }
-  }, [replies.length]);
 
   const [loading, setLoading] = useState(false);
 
