@@ -103,7 +103,7 @@ export function Post(props: PostProps): JSX.Element {
       <div>
         <Comment
           className={styles.postComment}
-          actions={Array.from(actions.values())}
+          actions={actions}
           author={props.author}
           content={props.content}
           avatar={<Avatar />}
