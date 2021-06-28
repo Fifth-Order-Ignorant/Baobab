@@ -3,14 +3,11 @@ import {
   Controller,
   Get,
   Post,
-  Req,
   Res,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { LoginRequest } from 'baobab-common';
-import { JwtAuthGuard } from './jwt.guard';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { ValidationError } from 'yup';
@@ -53,12 +50,6 @@ export class AuthController {
       secure: this._configService.get<boolean>('production'),
       sameSite: 'lax',
     });
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('session')
-  session(@Req() req) {
-    return req.user.id;
   }
 
   @ApiResponse({ status: 200, description: 'The request has succeeded.' })
