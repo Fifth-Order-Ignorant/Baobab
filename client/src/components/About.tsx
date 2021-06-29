@@ -77,7 +77,6 @@ export function About(id: Id): JSX.Element {
 
       const canEdit=()=> {
         try {
-            console.log((authState as SessionPayload).id)
             return (id.id == (authState as SessionPayload).id);
         }
         catch (error) {
