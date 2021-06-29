@@ -70,12 +70,12 @@ export class PostInMemory implements PostDAO {
     end: number,
   ): Record<string, string | number>[] {
     const posts: Post[] = this.posts;
-    let i = 0;
+    let i: number = 0;
     const templst: Post[] = [];
     const n: number = posts.length;
-    while (i < n) {
+    while (i < n){
       const post: Post = posts[i];
-      if (typeof post.parent === 'undefined') {
+      if (typeof post.parent === 'undefined'){
         templst.push(post);
       }
       i++;
