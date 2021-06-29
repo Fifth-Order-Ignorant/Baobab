@@ -17,6 +17,7 @@ export class PostService {
     timestamp: Date,
     parent: Post,
   ): Post {
+    console.log("createpost");
     return this._postRepository.getByID(
       this._postRepository.createPost(userID, content, timestamp, parent),
     );
@@ -31,7 +32,7 @@ export class PostService {
       this._postRepository.getParentPosts(start, end);
     const newPosts: PostResponse[] = [];
     const n: number = posts.length;
-    let i = 0;
+    let i: number = 0;
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
       if (typeof post !== 'undefined') {
@@ -56,7 +57,7 @@ export class PostService {
   ): Record<string, string | number>[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getReplies(postId, start, end);
-    const newPosts: PostResponse[] = [];
+    let newPosts: PostResponse[] = [];
     const n: number = posts.length;
     let i = 0;
     while (i < n) {

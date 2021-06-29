@@ -33,6 +33,7 @@ export class PostController {
     @Res({ passthrough: true }) res: Response,
     @Req() req,
   ) {
+    console.log("createpost controller");
     const today = new Date();
     let parent: PostEntity;
     if (reqBody.parentID == -1) {
