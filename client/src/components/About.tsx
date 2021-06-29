@@ -6,6 +6,7 @@ import styles from "../../styles/Profile.module.css";
 import axios from "axios";
 import { AuthContext } from '../providers/AuthProvider';
 import { useContext, useEffect, useState } from 'react';
+import { SessionPayload } from 'baobab-common';
 
 type Id={
     id: number;
@@ -75,7 +76,13 @@ export function About(id: Id): JSX.Element {
       const authState = useContext(AuthContext);
 
       const canEdit=()=> {
-          return (id.id == authState.payload?.id);
+        try {
+            console.log((authState as SessionPayload).id)
+            return (id.id == (authState as SessionPayload).id);
+        }
+        catch (error) {
+            return(false);
+        }
       }
 
       useEffect(() => {
