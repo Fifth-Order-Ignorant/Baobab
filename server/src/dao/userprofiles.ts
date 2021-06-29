@@ -114,7 +114,7 @@ export class UserProfileInMemory implements UserProfileDAO {
     start: number,
     end: number,
   ): ProfileResponse[] {
-    const newProfiles: Record<string, string>[] = [];
+    const newProfiles: ProfileResponse[] = [];
     const n: number = this.profiles.length;
     let i: number = start;
     while (i < end && i < n) {

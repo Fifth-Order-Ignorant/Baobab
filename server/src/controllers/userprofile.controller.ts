@@ -1,9 +1,10 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Query, Get } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import {
   RegisterRequest,
   ProfilePaginationRequest,
   ProfileViewRequest,
+  ProfileResponse,
 } from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
@@ -57,13 +58,13 @@ export class UserProfileController {
     }
   }
 
-  @Post('pagination')
+  @Get('pagination')
   pagination(
-    @Body() reqBody: ProfilePaginationRequest,
-  ): Record<string, string>[] {
+    @Query() query: ProfilePaginationRequest,
+  ): ProfileResponse[] {
     const paginatedProfiles = this._userProfileService.getPaginatedProfiles(
-      reqBody.start,
-      reqBody.end,
+      query.start,
+      query.end,
     );
     return paginatedProfiles;
   }
