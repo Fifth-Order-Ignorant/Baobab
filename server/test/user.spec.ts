@@ -8,7 +8,7 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
-import { Role } from '../src/entities/role.entity';
+import { Role, roleToString } from '../src/entities/role.entity';
 
 describe('End to end profile editing tests', () => {
   let app: INestApplication;
@@ -266,23 +266,52 @@ describe('Profile Pagination Basic Functionality', () => {
       'michael092001@gmail.com',
       '12345',
     );
+
     const profile1 = users.getProfileByID(userID);
     profile1.changeRole(Role.INVESTOR_REP);
     profile1.bio = 'I love chihuahuas.';
-
+    profile1.jobTitle = 'OP Programmer';
+    const userID2 = users.addUserProfile(
+      'Michael',
+      'Sheinman (Clone)',
+      'michael092002@gmail.com',
+      '12345',
+    );
     const profiles = users.getPaginatedProfiles(0, 2);
-    expect(
-      profiles ==
+
+    expect(profiles).toContainEqual(Object({
+      id: userID,
+      bio: 'I love chihuahuas.',
+      firstName: 'Michael',
+      lastName: 'Sheinman Orenstrakh',
+      jobTitle: 'OP Programmer',
+      role: roleToString(Role.INVESTOR_REP),
+    }));
+    expect(profiles).toContainEqual(Object({
+      id: userID2,
+      bio: '',
+      firstName: 'Michael',
+      lastName: 'Sheinman (Clone)',
+      jobTitle: '',
+      role: roleToString(Role.DEFAULT),
+    }));
+    expect(profiles).toEqual(
         [
           Object({
-            name: 'Michael Sheinman Orenstrakh',
-            role: Role.INVESTOR_REP,
-            aboutMe: 'I love chihuahuas.',
+            id: userID,
+            bio: 'I love chihuahuas.',
+            firstName: 'Michael',
+            lastName: 'Sheinman Orenstrakh',
+            jobTitle: 'OP Programmer',
+            role: roleToString(Role.INVESTOR_REP),
           }),
           Object({
-            name: 'Michael Sheinman (Clone)',
-            role: Role.DEFAULT,
-            aboutMe: '',
+            id: userID2,
+            bio: '',
+            firstName: 'Michael',
+            lastName: 'Sheinman (Clone)',
+            jobTitle: '',
+            role: roleToString(Role.DEFAULT),
           }),
         ],
     );

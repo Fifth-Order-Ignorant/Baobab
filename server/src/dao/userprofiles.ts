@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { Profile } from '../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
+import { roleToString } from '../entities/role.entity';
 
 export interface UserProfileDAO {
   addUserProfile(
@@ -126,6 +127,7 @@ export class UserProfileInMemory implements UserProfileDAO {
         jobTitle: profile.jobTitle,
         bio: profile.bio,
         id: i,
+        role: roleToString(profile.role),
       });
       newProfiles.push(newProfile);
       i++;
