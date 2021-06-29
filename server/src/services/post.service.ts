@@ -35,9 +35,10 @@ export class PostService {
     let i: number = 0;
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
-      if (typeof post !== 'undefined'){
+      if (typeof post !== 'undefined') {
         const newPost: PostResponse = {
-          author: this._userRepository.getProfileByID(post.author as number).name,
+          author: this._userRepository.getProfileByID(post.author as number)
+            .name,
           timestamp: post.timestamp as string,
           content: post.content as string,
           postId: post.postId as number,
@@ -58,17 +59,13 @@ export class PostService {
       this._postRepository.getReplies(postId, start, end);
     let newPosts: PostResponse[] = [];
     const n: number = posts.length;
-    let i: number = 0;
-    posts.forEach((element) => {
-      element.author = this._userRepository.getProfileByID(
-        element.author as number,
-      ).name;
-    });
+    let i = 0;
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
-      if (typeof post !== 'undefined'){
+      if (typeof post !== 'undefined') {
         const newPost: PostResponse = {
-          author: this._userRepository.getProfileByID(post.author as number).name,
+          author: this._userRepository.getProfileByID(post.author as number)
+            .name,
           timestamp: post.timestamp as string,
           content: post.content as string,
           postId: post.postId as number,
