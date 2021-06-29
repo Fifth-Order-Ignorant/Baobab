@@ -20,6 +20,7 @@ interface SendPostProps extends CreatePostProps {
  */
 function SendPost(props: SendPostProps): JSX.Element {
   const [post, setPost] = useState('');
+  const [loading, setLoading] = useState(false);
 
   /**
    * Updates post based on the post input.
@@ -33,7 +34,10 @@ function SendPost(props: SendPostProps): JSX.Element {
    * Calls the passed in sendPost function.
    */
   const sendPost = async () => {
+    setLoading(true);
     await props.sendPost(post);
+    setLoading(false);
+    setPost('');
   };
 
   return (
@@ -50,7 +54,7 @@ function SendPost(props: SendPostProps): JSX.Element {
               </Form.Item>
             }
             actions={[
-              <Button key="send" type="primary" onClick={sendPost}>
+              <Button key="send" type="primary" onClick={sendPost} loading={loading}>
                 Send
               </Button>,
             ]}

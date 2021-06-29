@@ -17,6 +17,7 @@ export class PostService {
     timestamp: Date,
     parent: Post,
   ): Post {
+    console.log("createpost");
     return this._postRepository.getByID(
       this._postRepository.createPost(userID, content, timestamp, parent),
     );
@@ -26,26 +27,23 @@ export class PostService {
     return this._postRepository.getByID(parentID);
   }
 
-  getPaginatedPosts(
-    start: number,
-    end: number,
-  ): PostResponse[] {
+  getPaginatedPosts(start: number, end: number): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getParentPosts(start, end);
-    let newPosts: PostResponse[] = [];
+    const newPosts: PostResponse[] = [];
     const n: number = posts.length;
     let i: number = 0;
-    while (i < n){
+    while (i < n) {
       const post: Record<string, string | number> = posts[i];
-      const newPost: PostResponse = {
-        author: this._userRepository.getProfileByID(
-          post.author as number,
-        ).name,
-        timestamp: post.timestamp as string,
-        content: post.content as string,
-        postId: post.postId as number,
-      };
-      newPosts.push(newPost);
+      if (typeof post !== 'undefined'){
+        const newPost: PostResponse = {
+          author: this._userRepository.getProfileByID(post.author as number).name,
+          timestamp: post.timestamp as string,
+          content: post.content as string,
+          postId: post.postId as number,
+        };
+        newPosts.push(newPost);
+      }
       i++;
     }
     return newPosts;
@@ -66,17 +64,17 @@ export class PostService {
         element.author as number,
       ).name;
     });
-    while (i < n){
+    while (i < n) {
       const post: Record<string, string | number> = posts[i];
-      const newPost: PostResponse = {
-        author: this._userRepository.getProfileByID(
-          post.author as number,
-        ).name,
-        timestamp: post.timestamp as string,
-        content: post.content as string,
-        postId: post.postId as number,
-      };
-      newPosts.push(newPost);
+      if (typeof post !== 'undefined'){
+        const newPost: PostResponse = {
+          author: this._userRepository.getProfileByID(post.author as number).name,
+          timestamp: post.timestamp as string,
+          content: post.content as string,
+          postId: post.postId as number,
+        };
+        newPosts.push(newPost);
+      }
       i++;
     }
     return newPosts;

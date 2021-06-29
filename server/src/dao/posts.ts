@@ -12,7 +12,11 @@ export interface PostDAO {
   getByID(id: number): Post;
   getParent(id: number): Post;
   getParentPosts(start: number, end: number): Record<string, string | number>[];
-  getReplies(postid: number, start: number, end: number): Record<string, string | number>[];
+  getReplies(
+    postid: number,
+    start: number,
+    end: number,
+  ): Record<string, string | number>[];
 }
 
 @Injectable()
@@ -79,7 +83,7 @@ export class PostInMemory implements PostDAO {
     let count: number = start;
     const lst: Record<string, string | number>[] = [];
     const m: number = templst.length;
-    while (i < n && count < end-start) {
+    while (count < end && count < m) {
       const post: Post = templst[count];
       const newPost: Record<string, string | number> = Object({
         author: post.userID,
@@ -87,7 +91,7 @@ export class PostInMemory implements PostDAO {
         content: post.content,
         postId: post.id,
       });
-      lst.push(newPost)
+      lst.push(newPost);
       count++;
     }
     return lst;
@@ -99,12 +103,12 @@ export class PostInMemory implements PostDAO {
     end: number,
   ): Record<string, string | number>[] {
     const posts: Post[] = this.posts;
-    let i: number = 0;
+    let i = 0;
     const templst: Post[] = [];
     const n: number = posts.length;
-    while (i < n){
+    while (i < n) {
       const post: Post = posts[i];
-      if (typeof post.parent !== 'undefined' && post.parent.id == postId){
+      if (typeof post.parent !== 'undefined' && post.parent.id == postId) {
         templst.push(post);
       }
       i++;
