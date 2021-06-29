@@ -17,7 +17,6 @@ export class PostService {
     timestamp: Date,
     parent: Post,
   ): Post {
-    console.log("createpost");
     return this._postRepository.getByID(
       this._postRepository.createPost(userID, content, timestamp, parent),
     );
@@ -59,11 +58,6 @@ export class PostService {
     let newPosts: PostResponse[] = [];
     const n: number = posts.length;
     let i: number = 0;
-    posts.forEach((element) => {
-      element.author = this._userRepository.getProfileByID(
-        element.author as number,
-      ).name;
-    });
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
       if (typeof post !== 'undefined'){
