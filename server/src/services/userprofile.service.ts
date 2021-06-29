@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { UserProfileDAO } from '../dao/userprofiles';
 import { User } from '../entities/user.entity';
 import { Profile } from '../entities/profile.entity';
+import { ProfileResponse } from 'baobab-common';
 
 @Injectable()
 export class UserProfileService {
@@ -58,7 +59,7 @@ export class UserProfileService {
     return [user.firstName, user.lastName, profile.jobTitle, profile.bio];
   }
 
-  getPaginatedProfiles(start: number, end: number): Record<string, string>[] {
+  getPaginatedProfiles(start: number, end: number): ProfileResponse[] {
     return this._userProfileRepository.getPaginatedProfiles(start, end);
   }
 }

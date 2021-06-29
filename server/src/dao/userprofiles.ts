@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { Profile } from '../entities/profile.entity';
+import { ProfileResponse } from 'baobab-common';
 
 export interface UserProfileDAO {
   addUserProfile(
@@ -13,7 +14,7 @@ export interface UserProfileDAO {
   getUserByID(id: number): User;
   getUserByEmail(email: string): User;
   getProfileByID(id: number): Profile;
-  getPaginatedProfiles(start: number, end: number): Record<string, string>[];
+  getPaginatedProfiles(start: number, end: number): ProfileResponse[];
   editName(id: number, firstName: string, lastName: string): void;
   editJob(id: number, jobTitle: string): void;
   editBio(id: number, bio: string): void;
@@ -112,18 +113,19 @@ export class UserProfileInMemory implements UserProfileDAO {
   public getPaginatedProfiles(
     start: number,
     end: number,
-  ): Record<string, string>[] {
+  ): ProfileResponse[] {
     const newProfiles: Record<string, string>[] = [];
     const n: number = this.profiles.length;
     let i: number = start;
     while (i < end && i < n) {
       const profile: Profile = this.profiles[i];
       const user: User = this.users[i];
-      const newProfile: Record<string, string> = Object({
+      const newProfile: ProfileResponse = Object({
         firstName: user.firstName,
         lastName: user.lastName,
         jobTitle: profile.jobTitle,
         bio: profile.bio,
+        id: i,
       });
       newProfiles.push(newProfile);
       i++;
