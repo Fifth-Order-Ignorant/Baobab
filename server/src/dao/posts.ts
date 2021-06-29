@@ -11,7 +11,8 @@ export interface PostDAO {
   getChilds(id: number): Post[];
   getByID(id: number): Post;
   getParent(id: number): Post;
-  getPosts(start: number, end: number): Record<string, string | number>[];
+  getParentPosts(start: number, end: number): Record<string, string | number>[];
+  getReplies(postid: number, start: number, end: number): Record<string, string | number>[];
 }
 
 @Injectable()
@@ -60,7 +61,7 @@ export class PostInMemory implements PostDAO {
     return this.getByID(id).parent;
   }
 
-  public getPosts(
+  public getParentPosts(
     start: number,
     end: number,
   ): Record<string, string | number>[] {
@@ -68,8 +69,46 @@ export class PostInMemory implements PostDAO {
     let i: number = start;
     const lst: Record<string, string | number>[] = [];
     const n: number = posts.length;
-    while (i < end && i < n) {
+    let count: number = 0;
+    while (i < n && count < end-start) {
       const post: Post = posts[i];
+      if (typeof post.parent === 'undefined'){
+        const newPost: Record<string, string | number> = Object({
+          author: post.userID,
+          timestamp: post.timestamp.toISOString(),
+          content: post.content,
+          postId: post.id,
+        });
+        lst.push(newPost);
+        count++;
+      } else {
+      }
+      i++;
+    }
+    return lst;
+  }
+
+  public getReplies(
+    postId: number,
+    start: number,
+    end: number,
+  ): Record<string, string | number>[] {
+    const posts: Post[] = this.posts;
+    let i: number = 0;
+    const templst: Post[] = [];
+    const n: number = posts.length;
+    while (i < n){
+      const post: Post = posts[i];
+      if (typeof post.parent !== 'undefined' && post.parent.id == postId){
+        templst.push(post);
+      }
+      i++;
+    }
+    let count: number = start;
+    const lst: Record<string, string | number>[] = [];
+    const m: number = templst.length;
+    while (count < end && count < m) {
+      const post: Post = templst[count];
       const newPost: Record<string, string | number> = Object({
         author: post.userID,
         timestamp: post.timestamp.toISOString(),
@@ -77,7 +116,7 @@ export class PostInMemory implements PostDAO {
         postId: post.id,
       });
       lst.push(newPost);
-      i++;
+      count++;
     }
     return lst;
   }
