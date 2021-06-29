@@ -26,21 +26,16 @@ export class PostService {
     return this._postRepository.getByID(parentID);
   }
 
-  getPaginatedPosts(
-    start: number,
-    end: number,
-  ): PostResponse[] {
+  getPaginatedPosts(start: number, end: number): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getParentPosts(start, end);
-    let newPosts: PostResponse[] = [];
+    const newPosts: PostResponse[] = [];
     const n: number = posts.length;
-    let i: number = 0;
-    while (i < n){
+    let i = 0;
+    while (i < n) {
       const post: Record<string, string | number> = posts[i];
       const newPost: PostResponse = {
-        author: this._userRepository.getProfileByID(
-          post.author as number,
-        ).name,
+        author: this._userRepository.getProfileByID(post.author as number).name,
         timestamp: post.timestamp as string,
         content: post.content as string,
         postId: post.postId as number,
@@ -58,20 +53,18 @@ export class PostService {
   ): Record<string, string | number>[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getReplies(postId, start, end);
-    let newPosts: PostResponse[] = [];
+    const newPosts: PostResponse[] = [];
     const n: number = posts.length;
-    let i: number = 0;
+    let i = 0;
     posts.forEach((element) => {
       element.author = this._userRepository.getProfileByID(
         element.author as number,
       ).name;
     });
-    while (i < n){
+    while (i < n) {
       const post: Record<string, string | number> = posts[i];
       const newPost: PostResponse = {
-        author: this._userRepository.getProfileByID(
-          post.author as number,
-        ).name,
+        author: this._userRepository.getProfileByID(post.author as number).name,
         timestamp: post.timestamp as string,
         content: post.content as string,
         postId: post.postId as number,
