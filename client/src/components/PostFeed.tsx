@@ -1,14 +1,14 @@
-import { PostProps } from './Post';
 import { PostList } from './PostList';
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+import { PostResponse } from 'baobab-common';
 
 type PostFeedProps = {
   /**
    * Function used to fetch posts in batches.
    * @param page Batch number.
    */
-  fetchPosts: (page: number) => Promise<PostProps[]>;
+  fetchPosts: (page: number) => Promise<PostResponse[]>;
 };
 
 /**
@@ -16,7 +16,7 @@ type PostFeedProps = {
  */
 export default function PostFeed(props: PostFeedProps): JSX.Element {
   const [loading, setLoading] = useState(false);
-  const [postList, setPostList] = useState<PostProps[]>([]);
+  const [postList, setPostList] = useState<PostResponse[]>([]);
 
   const [hasMore, setHasMore] = useState(true);
 
@@ -40,7 +40,7 @@ export default function PostFeed(props: PostFeedProps): JSX.Element {
       loadMore={loadMore}
       hasMore={!loading && hasMore}
     >
-      <PostList postPropsList={postList} isLoading={loading} />
+      <PostList depth={0} postPropsList={postList} isLoading={loading} />
     </InfiniteScroll>
   );
 }
