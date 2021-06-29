@@ -31,12 +31,13 @@ export class PostService {
       this._postRepository.getParentPosts(start, end);
     const newPosts: PostResponse[] = [];
     const n: number = posts.length;
-    let i: number = 0;
+    let i = 0;
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
-      if (typeof post !== 'undefined'){
+      if (typeof post !== 'undefined') {
         const newPost: PostResponse = {
-          author: this._userRepository.getProfileByID(post.author as number).name,
+          author: this._userRepository.getProfileByID(post.author as number)
+            .name,
           timestamp: post.timestamp as string,
           content: post.content as string,
           postId: post.postId as number,
@@ -55,14 +56,15 @@ export class PostService {
   ): Record<string, string | number>[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getReplies(postId, start, end);
-    let newPosts: PostResponse[] = [];
+    const newPosts: PostResponse[] = [];
     const n: number = posts.length;
-    let i: number = 0;
+    let i = 0;
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
-      if (typeof post !== 'undefined'){
+      if (typeof post !== 'undefined') {
         const newPost: PostResponse = {
-          author: this._userRepository.getProfileByID(post.author as number).name,
+          author: this._userRepository.getProfileByID(post.author as number)
+            .name,
           timestamp: post.timestamp as string,
           content: post.content as string,
           postId: post.postId as number,
