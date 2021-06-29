@@ -1,7 +1,7 @@
-import { PostList } from '../src/components/PostList';
-import samplePosts from '../src/constants/SamplePostList';
+import PostFeed from '../src/components/PostFeed';
 import { Tabs, Avatar, Row, Col, Typography } from 'antd';
 import { About } from '../src/components/About';
+import axios from 'axios';
 
 import styles from '../styles/Profile.module.css';
 
@@ -9,6 +9,18 @@ import styles from '../styles/Profile.module.css';
  * Renders the profile page.
  */
 export default function Profile(): JSX.Element {
+
+  // TODO: Replace with fetchUserPosts endpoint
+  const fetchUserPosts = async (page: number) => {
+    const newPosts = await axios.get('/api/post/pagination', {
+      params: {
+        start: (page - 1) * 5,
+        end: page * 5,
+      },
+    });
+    return newPosts.data;
+  }
+
   return (
     <div>
       <div className={styles.body}>
@@ -32,7 +44,7 @@ export default function Profile(): JSX.Element {
                   <Typography>
                     <h2>Recent Activity:</h2>
                   </Typography>
-                  <PostList postPropsList={samplePosts} />
+                  <PostFeed fetchPosts={fetchUserPosts} />
                 </div>
               </Tabs.TabPane>
             </Tabs>
