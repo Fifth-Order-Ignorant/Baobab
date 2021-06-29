@@ -178,12 +178,6 @@ describe('Post Pagination Basic Functionality', () => {
       Object({
         author: 1,
         timestamp: nowTime.toISOString(),
-        content: 'hello',
-        postId: 0,
-      }),
-      Object({
-        author: 1,
-        timestamp: nowTime.toISOString(),
         content: 'hello2',
         postId: 1,
       }),

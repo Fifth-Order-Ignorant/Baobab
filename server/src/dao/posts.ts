@@ -146,7 +146,7 @@ export class PostInMemory implements PostDAO {
     const n: number = posts.length;
     while (i < n){
       const post: Post = posts[i];
-      if (post.userID == userId){
+      if (post.userID == userId && typeof post.parent !== 'undefined'){
         templst.push(post);
       }
       i++;
