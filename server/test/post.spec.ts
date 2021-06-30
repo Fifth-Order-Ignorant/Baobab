@@ -7,6 +7,7 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
+import { PostResponse } from 'baobab-common';
 
 describe('Post Creation Tests', () => {
   let app: INestApplication;
@@ -130,7 +131,7 @@ describe('Post Basic Functionality', () => {
 });
 
 describe('Post Pagination Basic Functionality', () => {
-  it('should return the paginated data in the right format', () => {
+  it('should return the parent posts paginated data in the right format', () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
     const post1 = posts.createPost(1, 'hello', nowTime, undefined);
@@ -143,12 +144,12 @@ describe('Post Pagination Basic Functionality', () => {
         timestamp: nowTime.toISOString(),
         content: 'hello',
         postId: 0,
-      })
+      }),
     ];
-    expect(postPagination == expected);
+    expect(postPagination).toEqual(expected);
   });
 
-  it('should return the paginated data in the right format', () => {
+  it('should return the replies paginated data in the right format', () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
     const post1 = posts.createPost(1, 'hello', nowTime, undefined);
@@ -161,9 +162,28 @@ describe('Post Pagination Basic Functionality', () => {
         timestamp: nowTime.toISOString(),
         content: 'hello2',
         postId: 1,
-      })
+      }),
     ];
-    expect(postPagination == expected);
+    expect(postPagination).toEqual(expected);
   });
+
+  it('should return the paginated data in the right format', () => {
+    const posts = new PostInMemory();
+    const nowTime = new Date();
+    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = posts.getByID(post1);
+    posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = posts.getRepliesOfUser(1, 0, 2);
+    const expected: Record<string, string | number>[] = [
+      Object({
+        author: 1,
+        timestamp: nowTime.toISOString(),
+        content: 'hello2',
+        postId: 1,
+      }),
+    ];
+    expect(postPagination).toEqual(expected);
+  });
+
 
 });

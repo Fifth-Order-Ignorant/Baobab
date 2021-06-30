@@ -12,7 +12,16 @@ export interface PostDAO {
   getByID(id: number): Post;
   getParent(id: number): Post;
   getParentPosts(start: number, end: number): Record<string, string | number>[];
-  getReplies(postid: number, start: number, end: number): Record<string, string | number>[];
+  getReplies(
+    postId: number,
+    start: number,
+    end: number,
+  ): Record<string, string | number>[];
+  getRepliesOfUser(
+    userId: number,
+    start: number,
+    end: number,
+  ): Record<string, string | number>[];
 }
 
 @Injectable()
@@ -66,24 +75,29 @@ export class PostInMemory implements PostDAO {
     end: number,
   ): Record<string, string | number>[] {
     const posts: Post[] = this.posts;
-    let i: number = start;
-    const lst: Record<string, string | number>[] = [];
+    let i: number = 0;
+    const templst: Post[] = [];
     const n: number = posts.length;
-    let count: number = 0;
-    while (i < n && count < end-start) {
+    while (i < n){
       const post: Post = posts[i];
       if (typeof post.parent === 'undefined'){
-        const newPost: Record<string, string | number> = Object({
-          author: post.userID,
-          timestamp: post.timestamp.toISOString(),
-          content: post.content,
-          postId: post.id,
-        });
-        lst.push(newPost);
-        count++;
-      } else {
+        templst.push(post);
       }
       i++;
+    }
+    let count: number = start;
+    const lst: Record<string, string | number>[] = [];
+    const m: number = templst.length;
+    while (count < end && count < m) {
+      const post: Post = templst[count];
+      const newPost: Record<string, string | number> = Object({
+        author: post.userID,
+        timestamp: post.timestamp.toISOString(),
+        content: post.content,
+        postId: post.id,
+      });
+      lst.push(newPost);
+      count++;
     }
     return lst;
   }
@@ -94,25 +108,65 @@ export class PostInMemory implements PostDAO {
     end: number,
   ): Record<string, string | number>[] {
     const posts: Post[] = this.posts;
-    let i: number = start;
-    const lst: Record<string, string | number>[] = [];
+    let i = 0;
+    const templst: Post[] = [];
     const n: number = posts.length;
-    let count: number = 0;
-    while (i < n && count < end-start) {
+    while (i < n) {
       const post: Post = posts[i];
-      if (typeof post.parent !== 'undefined' && post.parent.id == postId){
-        const newPost: Record<string, string | number> = Object({
-          author: post.userID,
-          timestamp: post.timestamp.toISOString(),
-          content: post.content,
-          postId: post.id,
-        });
-        lst.push(newPost);
-        count++;
-      } else {
+      if (typeof post.parent !== 'undefined' && post.parent.id == postId) {
+        templst.push(post);
       }
       i++;
     }
+    let count: number = start;
+    const lst: Record<string, string | number>[] = [];
+    const m: number = templst.length;
+    while (count < end && count < m) {
+      const post: Post = templst[count];
+      const newPost: Record<string, string | number> = Object({
+        author: post.userID,
+        timestamp: post.timestamp.toISOString(),
+        content: post.content,
+        postId: post.id,
+      });
+      lst.push(newPost);
+      count++;
+    }
     return lst;
   }
+
+  public getRepliesOfUser(
+    userId: number,
+    start: number,
+    end: number,
+  ): Record<string, string | number>[]{
+    const posts: Post[] = this.posts;
+    let i = 0;
+    const templst: Post[] = [];
+    const n: number = posts.length;
+    while (i < n){
+      const post: Post = posts[i];
+      if (post.userID == userId && typeof post.parent !== 'undefined'){
+        templst.push(post);
+      }
+      i++;
+    }
+
+    let count: number = start;
+    const lst: Record<string, string | number>[] = [];
+    const m: number = templst.length;
+    while (count < end && count < m){
+      const post: Post = templst[count];
+      const newPost: Record<string, string | number> = Object({
+        author: post.userID,
+        timestamp: post.timestamp.toISOString(),
+        content: post.content,
+        postId: post.id,
+      });
+      lst.push(newPost);
+      count++;
+    }
+    return lst;
+  }
+
 }

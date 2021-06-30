@@ -13,5 +13,9 @@ export const Basic = (): JSX.Element => (
     timestamp={'2021-04-23T18:25:43.511Z'}
     content={'Hello world!'}
     postId={-1}
+    loadMoreReplies={async () => {
+      return [];
+    }}
+    depth={0}
   />
 );

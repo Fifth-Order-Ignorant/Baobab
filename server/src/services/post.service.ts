@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PostDAO } from '../dao/posts';
 import { Post } from '../entities/post.entity';
 import { UserProfileDAO } from '../dao/userprofiles';
-import { UnsubscriptionError } from 'rxjs';
+import { PostResponse } from 'baobab-common';
 
 @Injectable()
 export class PostService {
@@ -26,32 +26,54 @@ export class PostService {
     return this._postRepository.getByID(parentID);
   }
 
-  getPaginatedPosts(
-    start: number,
-    end: number,
-  ): Record<string, string | number>[] {
+  getPaginatedPosts(start: number, end: number): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getParentPosts(start, end);
-    posts.forEach((element) => {
-      element.author = this._userRepository.getProfileByID(
-        element.author as number,
-      ).name;
-    });
-    return posts;
+    return this.changeIdToAuthor(posts);
   }
 
   getReplies(
     postId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[] {
+  ): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getReplies(postId, start, end);
-    posts.forEach((element) => {
-      element.author = this._userRepository.getProfileByID(
-        element.author as number,
-      ).name;
-    });
-    return posts;
+    return this.changeIdToAuthor(posts);
   }
+
+  getUserReplies(
+    userId: number,
+    start: number,
+    end: number,
+  ): PostResponse[] {
+    const posts: Record<string, string | number>[] =
+      this._postRepository.getRepliesOfUser(userId, start, end);
+    return this.changeIdToAuthor(posts);
+  }
+
+  changeIdToAuthor(
+    lst: Record<string, string|number>[]
+  ): PostResponse[] {
+    const posts: Record<string, string | number>[] =lst;
+    let newPosts: PostResponse[] = [];
+    const n: number = posts.length;
+    let i = 0;
+    while (i < n) {
+      const post: Record<string, string | number> = posts[i];
+      if (typeof post !== 'undefined') {
+        const newPost: PostResponse = {
+          author: this._userRepository.getProfileByID(post.author as number)
+            .name,
+          timestamp: post.timestamp as string,
+          content: post.content as string,
+          postId: post.postId as number,
+        };
+        newPosts.push(newPost);
+      }
+      i++;
+    }
+    return newPosts;
+  }
+
 }
