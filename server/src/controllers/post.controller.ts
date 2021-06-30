@@ -12,7 +12,11 @@ import {
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
 import { Response } from 'express';
-import { PostRequest, PostPaginationRequest, RepliesPaginationRequest } from 'baobab-common';
+import {
+  PostRequest,
+  PostPaginationRequest,
+  RepliesPaginationRequest,
+} from 'baobab-common';
 import { Post as PostEntity } from '../entities/post.entity';
 import { JwtAuth } from './jwt.decorator';
 
@@ -29,6 +33,7 @@ export class PostController {
     @Res({ passthrough: true }) res: Response,
     @Req() req,
   ) {
+    console.log("createpost controller");
     const today = new Date();
     let parent: PostEntity;
     if (reqBody.parentID == -1) {
@@ -65,9 +70,9 @@ export class PostController {
     return paginatedPosts;
   }
 
-  @Post('replies')
+  @Get('replies')
   replies(
-    @Body() reqBody: RepliesPaginationRequest,
+    @Query() reqBody: RepliesPaginationRequest,
   ): Record<string, string | number>[] {
     const paginatedReplies = this._postService.getReplies(
       reqBody.id,
