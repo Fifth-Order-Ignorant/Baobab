@@ -18,7 +18,6 @@ function AuthProvider({
   const [authState, setAuthState] = useState<AuthState>(null);
 
   const updateToken = () => {
-    // todo: replace this with another library since it can return old cookie values
     const newToken = Cookies.get('SESSION_JWT');
 
     if (token !== newToken) {
