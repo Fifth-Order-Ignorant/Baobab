@@ -4,7 +4,9 @@ import Link from 'next/link';
 import styles from '../styles/ProfileList.module.css';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
-
+/**
+ * Interface for the props that are required for each profile preview
+ */
 interface ProfilePreviewProps {
   firstName: string;
   lastName: string;
@@ -14,7 +16,10 @@ interface ProfilePreviewProps {
   // ^ not implemented yet
 }
 
-const Profiles = () => {
+/**
+ * Renders the "Profiles" page, where you can see a feed of all the profiles in the system
+ */
+const Profiles = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [profileList, setProfileList] = useState<ProfilePreviewProps[]>([]);
