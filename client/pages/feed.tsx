@@ -10,7 +10,7 @@ import axios from 'axios';
  */
 export default function Feed(): JSX.Element {
   const fetchPosts = async (page: number) => {
-    const newPosts = await axios.get('/api/user/pagination', {
+    const newPosts = await axios.get('/api/post/pagination', {
       params: {
         start: (page - 1) * 5,
         end: page * 5,
