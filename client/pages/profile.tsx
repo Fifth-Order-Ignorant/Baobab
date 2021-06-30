@@ -10,10 +10,11 @@ import styles from '../styles/Profile.module.css';
  */
 export default function Profile(): JSX.Element {
 
-  // TODO: Replace with fetchUserPosts endpoint
-  const fetchUserPosts = async (page: number) => {
-    const newPosts = await axios.get('/api/post/pagination', {
+  // TODO: Replace id with profile id.
+  const fetchUserReplies = async (page: number) => {
+    const newPosts = await axios.get('/api/post/userreplies', {
       params: {
+        id: 0,
         start: (page - 1) * 5,
         end: page * 5,
       },
@@ -44,7 +45,7 @@ export default function Profile(): JSX.Element {
                   <Typography>
                     <h2>Recent Activity:</h2>
                   </Typography>
-                  <PostFeed fetchPosts={fetchUserPosts} />
+                  <PostFeed fetchPosts={fetchUserReplies} />
                 </div>
               </Tabs.TabPane>
             </Tabs>
