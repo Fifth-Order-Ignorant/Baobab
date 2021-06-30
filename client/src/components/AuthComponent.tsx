@@ -4,6 +4,7 @@ import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import { AuthContext } from '../providers/AuthProvider';
 import axios from 'axios';
+import Link from 'next/link';
 
 /**
  * Component for displaying authentication buttons or current user.
@@ -54,7 +55,11 @@ function AuthComponent(): JSX.Element {
   } else {
     return (
       <Space>
-        <Typography.Text>{authState.fullName}</Typography.Text>
+        <Link href={'/profile/' + authState.id.toString()}>
+          <a>
+            <Typography.Text>{authState.fullName}</Typography.Text>
+          </a>
+        </Link>
         <Button onClick={async () => await axios.get('/api/auth/logout')}>
           Logout
         </Button>
