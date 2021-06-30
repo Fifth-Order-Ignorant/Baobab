@@ -17,16 +17,26 @@ function AuthProvider({
 
   const [authState, setAuthState] = useState<AuthState>(null);
 
+  const updateToken = () => {
+    // todo: replace this with another library since it can return old cookie values
+    const newToken = Cookies.get('SESSION_JWT');
+
+    if (token !== newToken) {
+      setToken(newToken);
+    }
+  };
+
   useEffect(() => {
-    axios.interceptors.response.use((value) => {
-      const newToken = Cookies.get('SESSION_JWT');
-
-      if (token !== newToken) {
-        setToken(newToken);
-      }
-
-      return value;
-    });
+    axios.interceptors.response.use(
+      (value) => {
+        updateToken();
+        return value;
+      },
+      (error) => {
+        updateToken();
+        return Promise.reject(error);
+      },
+    );
   }, []);
 
   useEffect(() => {
