@@ -9,10 +9,16 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
+type Name={
+  firstName: string,
+  lastName: string,
+  canEdit: boolean
+}
+
 /**
  * Renders the textbox for editing the first and last name, and displays them.
  */
-function ChangeNameForm(): JSX.Element {
+function ChangeNameForm(name: Name): JSX.Element {
   const [state, setState] = useState('default');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -47,13 +53,7 @@ function ChangeNameForm(): JSX.Element {
     axios
       .get('/api/profile/myprofile')
       .then((response) => {
-        const returned = response.data as unknown as [
-          string,
-          string,
-          string,
-          string,
-        ];
-        setFirstName(returned[0]);
+        setFirstName(response.data[0]);
       })
       .catch((error) => {
         const { errors } = error.response.data as ErrorResponse;
@@ -70,13 +70,7 @@ function ChangeNameForm(): JSX.Element {
     axios
       .get('/api/profile/myprofile')
       .then((response) => {
-        const returned = response.data as unknown as [
-          string,
-          string,
-          string,
-          string,
-        ];
-        setLastName(returned[1]);
+        setLastName(response.data[1]);
       })
       .catch((error) => {
         const { errors } = error.response.data as ErrorResponse;
@@ -90,23 +84,18 @@ function ChangeNameForm(): JSX.Element {
   };
 
   const changeState = () => {
-    if (state == 'default') {
+    if (state == 'default' && name.canEdit) {
       setState('edit');
     } else if (state == 'edit') {
       setState('done');
     }
   };
 
-  useEffect(() => {
-    GetFirstName();
-    GetLastName();
-  }, []);
-
   return (
     <Form onFinish={handleSubmit(onSubmit)}>
       <Form.Item>
         <p onClick={() => changeState()}>
-          {state === 'default' && <h3>{firstName + ' ' + lastName}</h3>}
+          {state === 'default' && <h3>{name.firstName + ' ' + name.lastName}</h3>}
         </p>
         {
           state === 'done' && <h3>{firstName + ' ' + lastName + " (reload to edit again)"}</h3>
@@ -120,7 +109,7 @@ function ChangeNameForm(): JSX.Element {
           >
             <Input
               size="large"
-              placeholder={firstName}
+              placeholder={name.firstName}
               {...register('firstName')}
             />
           </Form.Item>
@@ -134,7 +123,7 @@ function ChangeNameForm(): JSX.Element {
           >
             <Input
               size="large"
-              placeholder={lastName}
+              placeholder={name.lastName}
               {...register('lastName')}
             />
           </Form.Item>
