@@ -6,10 +6,15 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
+type Biography={
+  bio: string,
+  canEdit: boolean
+}
+
 /**
  * Renders the textbox for editing the bio, and displays it.
  */
-function ChangeBioForm(): JSX.Element {
+function ChangeBioForm(bio: Biography): JSX.Element {
 
     const [state, setState] = useState('default');
     const [info, setInfo] = useState('');
@@ -43,8 +48,7 @@ function ChangeBioForm(): JSX.Element {
       const GetInfo = () => {
         axios.get('/api/profile/myprofile')
         .then((response) => {
-            var returned = response.data as unknown as [string, string, string, string];
-            var string = returned[3];
+            var string = response.data[3];
             if (string == "") {
               string = "no bio available"
             }
@@ -63,8 +67,7 @@ function ChangeBioForm(): JSX.Element {
       };
 
     const changeState = () => {
-        console.log(state);
-        if (state == 'default') {
+        if (state == 'default' && bio.canEdit) {
             setState('edit');
         }
         else if (state == 'edit') {
@@ -72,16 +75,13 @@ function ChangeBioForm(): JSX.Element {
         }
     }
 
-    useEffect(() => {
-      GetInfo();
-    }, []);
 
     return(
         <Form onFinish={handleSubmit(onSubmit)}>
             <Form.Item>
                 <p onClick={()=>changeState()}>
                 {
-                    state === 'default' && <Card>{<div>{info}</div>}</Card>
+                    state === 'default' && <Card>{<div>{bio.bio}</div>}</Card>
                 }
                 </p>
                 {
@@ -89,7 +89,7 @@ function ChangeBioForm(): JSX.Element {
                 }
                 {
                     state === 'edit' && <Form.Item name="bio" validateStatus={errors.bio ? 'error' : ''} help={errors.bio?.message}>
-                        <Input size="large" defaultValue={ info } {...register('bio')}/>
+                        <Input size="large" defaultValue={ bio.bio } {...register('bio')}/>
                         </Form.Item>
                 }
                 {
