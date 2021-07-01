@@ -2,7 +2,6 @@ import PostFeed from '../src/components/PostFeed';
 import { Tabs, Avatar, Row, Col, Typography } from 'antd';
 import { About } from '../src/components/About';
 import axios from 'axios';
-
 import styles from '../styles/Profile.module.css';
 
 /**
@@ -10,7 +9,6 @@ import styles from '../styles/Profile.module.css';
  */
 export default function Profile(): JSX.Element {
 
-  // TODO: Replace id with profile id.
   const fetchUserReplies = async (page: number) => {
     const newPosts = await axios.get('/api/post/userreplies', {
       params: {
@@ -36,7 +34,7 @@ export default function Profile(): JSX.Element {
               <Tabs.TabPane tab="Profile" key="profile">
                 <Row>
                   <Col>
-                    <About />
+                    <About id={0} />
                   </Col>
                 </Row>
               </Tabs.TabPane>
