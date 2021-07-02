@@ -15,6 +15,7 @@ export * from "./requests/ProfileViewRequest.dto";
 export * from "./requests/RegisterRequest.dto";
 export * from "./requests/RepliesPaginationRequest.dto";
 export * from "./requests/RoleRequest.dto";
+export * from "./requests/UserPostsPaginationRequest.dto";
 export * from "./requests/UserRepliesPaginationRequest.dto";
 export * from "./responses/ErrorResponse";
 export * from "./responses/PostResponse";

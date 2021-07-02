@@ -17,6 +17,7 @@ import {
   PostPaginationRequest,
   RepliesPaginationRequest,
   UserRepliesPaginationRequest,
+  UserPostsPaginationRequest,
   PostResponse,
 } from 'baobab-common';
 import { Post as PostEntity } from '../entities/post.entity';
@@ -88,6 +89,18 @@ export class PostController {
     @Query() query: UserRepliesPaginationRequest,
   ): PostResponse[] {
     const paginatedReplies = this._postService.getUserReplies(
+      query.id,
+      query.start,
+      query.end,
+    );
+    return paginatedReplies;
+  }
+
+  @Get('userposts')
+  userPosts(
+    @Query() query: UserPostsPaginationRequest,
+  ): PostResponse[] {
+    const paginatedReplies = this._postService.getUserPosts(
       query.id,
       query.start,
       query.end,
