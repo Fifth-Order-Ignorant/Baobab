@@ -4,6 +4,6 @@ export class CreateTeamRequest {
   teamName!: string;
 }
 
-export const CreateTeamSchema: SchemaOf<CreateTeamRequest> = object({
+export const CreateTeamRequestSchema: SchemaOf<CreateTeamRequest> = object({
   teamName: string().required(),
 });
