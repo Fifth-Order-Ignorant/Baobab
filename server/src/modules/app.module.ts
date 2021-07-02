@@ -4,6 +4,7 @@ import { AuthModule } from './auth.module';
 import { UserProfileEditModule } from './userprofileedit.module';
 import { RequestModule } from './request.module';
 import { PostModule } from './post.module';
+import { TeamModule } from './team.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
 
@@ -18,6 +19,7 @@ import configuration from './configuration';
     UserProfileEditModule,
     RequestModule,
     PostModule,
+    TeamModule,
   ],
 })
 export class AppModule {}

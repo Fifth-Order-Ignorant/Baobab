@@ -1,6 +1,11 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Query, Get } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
-import { RegisterRequest, ProfilePaginationRequest } from 'baobab-common';
+import {
+  RegisterRequest,
+  ProfilePaginationRequest,
+  ProfileViewRequest,
+  ProfileResponse,
+} from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponse } from '@nestjs/swagger';
@@ -36,13 +41,30 @@ export class UserProfileController {
     // res.redirect(307, 'http://localhost:3001/auth/login');
   }
 
-  @Post('pagination')
+  @Post('view')
+  @ApiResponse({
+    status: 200,
+    description: 'The profile is correctly fetched.',
+  })
+  @ApiResponse({ status: 400, description: 'The request is invalid.' })
+  getProfile(@Body() reqBody: ProfileViewRequest) {
+    const id = reqBody.userId;
+    if (this._userProfileService.isValidProfile(id)) {
+      return this._userProfileService.getProfile(id);
+    } else {
+      throw new BadRequestException({
+        errors: [],
+      });
+    }
+  }
+
+  @Get('pagination')
   pagination(
-    @Body() reqBody: ProfilePaginationRequest,
-  ): Record<string, string>[] {
+    @Query() query: ProfilePaginationRequest,
+  ): ProfileResponse[] {
     const paginatedProfiles = this._userProfileService.getPaginatedProfiles(
-      reqBody.start,
-      reqBody.end,
+      query.start,
+      query.end,
     );
     return paginatedProfiles;
   }

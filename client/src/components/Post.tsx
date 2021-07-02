@@ -34,9 +34,6 @@ export function Post(props: PostProps): JSX.Element {
   const currentDate: Date = new Date(props.timestamp);
   const postTime: string = moment(currentDate).fromNow();
 
-  // get actions
-  const [actions, setActions] = useState<JSX.Element[]>([]);
-
   const [batch, setBatch] = useState(0);
 
   const [replies, setReplies] = useState<PostResponse[]>([]);
@@ -59,21 +56,6 @@ export function Post(props: PostProps): JSX.Element {
   const authState = useContext(AuthContext);
 
   useEffect(() => {
-    if (authState && props.depth < REPLY_LIMIT) {
-      setActions(
-        actions.concat(
-          <span
-            key="reply"
-            onClick={() => {
-              setReplyOpen(true);
-            }}
-          >
-            Reply to
-          </span>,
-        ),
-      );
-    }
-
     // fetch first batch of replies so we know if there are any replies
     // (and whether to display the "show replies" button or not)
     (async () => {
@@ -81,21 +63,16 @@ export function Post(props: PostProps): JSX.Element {
       setBatch(batch + 1);
 
       if (initReplies.length > 0) {
-        setActions(
-          actions.concat(
-            <span
-              key="showReplies"
-              onClick={() => setShowReplies((prevState) => !prevState)}
-            >
-              Show Replies
-            </span>,
-          ),
-        );
-
         setReplies(initReplies);
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (!authState) {
+      setReplyOpen(false);
+    }
+  }, [authState]);
 
   const [loading, setLoading] = useState(false);
 
@@ -108,7 +85,28 @@ export function Post(props: PostProps): JSX.Element {
       <div>
         <Comment
           className={styles.postComment}
-          actions={actions}
+          actions={[
+            <span
+              key="showReplies"
+              onClick={() => setShowReplies((prevState) => !prevState)}
+              style={replies.length > 0 ? {} : { display: 'none' }}
+            >
+              Show Replies
+            </span>,
+            <span
+              key="reply"
+              onClick={() => {
+                setReplyOpen(true);
+              }}
+              style={
+                authState && props.depth < REPLY_LIMIT
+                  ? {}
+                  : { display: 'none' }
+              }
+            >
+              Reply to
+            </span>,
+          ]}
           author={props.author}
           content={props.content}
           avatar={<Avatar />}
