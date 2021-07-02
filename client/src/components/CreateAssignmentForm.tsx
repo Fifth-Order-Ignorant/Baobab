@@ -3,7 +3,7 @@ import { Button, Form, Input, InputNumber, Typography } from "antd";
 import React, { useState } from "react";
 import {
     CreateAssignmentRequest,
-    CreateAssignmentSchema,
+    CreateAssignmentRequestSchema,
     ErrorResponse,
   } from 'baobab-common';
 import { useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ function CreateAssignmentForm(): JSX.Element {
         formState: { errors, isSubmitting },
         setError,
     } = useForm<CreateAssignmentRequest>({
-        resolver: yupResolver(CreateAssignmentSchema),
+        resolver: yupResolver(CreateAssignmentRequestSchema),
     })
 
     const onSubmit = async (data: CreateAssignmentRequest) => {
