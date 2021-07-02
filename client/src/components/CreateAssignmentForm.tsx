@@ -29,7 +29,6 @@ function CreateAssignmentForm(): JSX.Element {
     const onSubmit = async (data: CreateAssignmentRequest) => {
         data.maxMark = mark;
         data.description = document.getElementById("content")?.innerHTML;
-        console.log(data);
         try {
           setState('done');
           await axios.post('/api/assignment/create', data);
