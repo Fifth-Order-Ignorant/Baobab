@@ -16,8 +16,8 @@ export default function Profile(): JSX.Element {
     return parseInt(router.query.id as unknown as string);
   }
 
-  const fetchUserReplies = async (id: number, page: number) => {
-    const newPosts = await axios.get('/api/post/userreplies', {
+  const fetchUserPosts = async (id: number, page: number) => {
+    const newPosts = await axios.get('/api/post/userposts', {
       params: {
         id: id,
         start: (page - 1) * 5,
@@ -50,7 +50,7 @@ export default function Profile(): JSX.Element {
                   <Typography>
                     <h2>Recent Activity:</h2>
                   </Typography>
-                  <PostRepliesFeedById id={id()} fetchPosts={fetchUserReplies} />
+                  <PostRepliesFeedById id={id()} fetchPosts={fetchUserPosts} />
                 </div>
               </Tabs.TabPane>
             </Tabs>

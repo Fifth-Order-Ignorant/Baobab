@@ -185,5 +185,23 @@ describe('Post Pagination Basic Functionality', () => {
     expect(postPagination).toEqual(expected);
   });
 
+  it('should return the paginated data of one user posts in the right format', () => {
+    const posts = new PostInMemory();
+    const nowTime = new Date();
+    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = posts.getByID(post1);
+    posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = posts.getPostsOfUser(1, 0, 2);
+    const expected: Record<string, string | number>[] = [
+      Object({
+        author: 1,
+        timestamp: nowTime.toISOString(),
+        content: 'hello',
+        postId: 0,
+      }),
+    ];
+    expect(postPagination).toEqual(expected);
+  });
+
 
 });

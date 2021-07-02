@@ -52,6 +52,16 @@ export class PostService {
     return this.changeIdToAuthor(posts);
   }
 
+  getUserPosts(
+    userId: number,
+    start: number,
+    end: number,
+  ): PostResponse[] {
+    const posts: Record<string, string | number>[] =
+      this._postRepository.getPostsOfUser(userId, start, end);
+    return this.changeIdToAuthor(posts);
+  }
+
   changeIdToAuthor(
     lst: Record<string, string|number>[]
   ): PostResponse[] {
