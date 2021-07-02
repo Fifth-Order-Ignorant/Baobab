@@ -1,3 +1,4 @@
+
 .name {
     display: inline-block;
     margin-right: 10px;
@@ -10,12 +11,17 @@
 .avatar {
     width: 200px;
     height: 200px;
-    margin-top:-100px;
+    margin: -100px 40px 40px 40px;
+    
 }
 
 .body {
     background-color: #EBEBEB;
     margin-top: 200px;
+}
+
+.tabContents {
+    margin-top: -40px;
 }
 
 .about {
