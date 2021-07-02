@@ -17,7 +17,6 @@ export class PostService {
     timestamp: Date,
     parent: Post,
   ): Post {
-    console.log("createpost");
     return this._postRepository.getByID(
       this._postRepository.createPost(userID, content, timestamp, parent),
     );
