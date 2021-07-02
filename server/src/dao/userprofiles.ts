@@ -49,7 +49,7 @@ export class UserProfileInMemory implements UserProfileDAO {
       password,
     );
     this.users.push(newUser);
-    const newProfile = new Profile(this.highestID, firstName + ' ' + lastName);
+    const newProfile = new Profile(this.highestID, firstName, lastName);
     this.profiles.push(newProfile);
     this.highestID++;
     this.userProfileCount++;
@@ -96,9 +96,8 @@ export class UserProfileInMemory implements UserProfileDAO {
   public editName(id: number, firstName: string, lastName: string): void {
     const profile = this.getProfileByID(id);
     const user = this.getUserByID(id);
-    user.firstName = firstName;
-    user.lastName = lastName;
-    profile.name = user.fullName;
+    profile.firstName = firstName;
+    profile.lastName = lastName;
   }
 
   public editJob(id: number, jobTitle: string): void {
@@ -120,10 +119,9 @@ export class UserProfileInMemory implements UserProfileDAO {
     let i: number = start;
     while (i < end && i < n) {
       const profile: Profile = this.profiles[i];
-      const user: User = this.users[i];
       const newProfile: ProfileResponse = Object({
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
         jobTitle: profile.jobTitle,
         bio: profile.bio,
         id: i,
