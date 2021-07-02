@@ -3,6 +3,7 @@
  */
 
 export * from "./constants";
+export * from "./requests/AssignmentCreateRequest.dto";
 export * from "./requests/EditBioRequest.dto";
 export * from "./requests/EditJobRequest.dto";
 export * from "./requests/EditNameRequest.dto";
