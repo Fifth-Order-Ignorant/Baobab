@@ -42,7 +42,7 @@ export class AuthService {
     return {
       jwt: this._jwtService.sign({
         id: userID,
-        fullName: this._userRepository.getUserByID(userID).fullName,
+        fullName: this._userRepository.getProfileByID(userID).name,
         integrityHash: integrityHash,
       }),
       integrityString: integrityString,

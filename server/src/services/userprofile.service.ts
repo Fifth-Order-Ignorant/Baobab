@@ -54,9 +54,8 @@ export class UserProfileService {
   }
 
   getProfile(id: number): [string, string, string, string] {
-    const user = this._userProfileRepository.getUserByID(id);
     const profile = this._userProfileRepository.getProfileByID(id);
-    return [user.firstName, user.lastName, profile.jobTitle, profile.bio];
+    return [profile.firstName, profile.lastName, profile.jobTitle, profile.bio];
   }
 
   getPaginatedProfiles(start: number, end: number): ProfileResponse[] {
