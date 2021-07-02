@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import styles from "/styles/CreateTeam.module.css";
 import {
     CreateTeamRequest,
-    CreateTeamSchema,
+    CreateTeamRequestSchema,
     ErrorResponse,
   } from 'baobab-common';
 import { useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ function CreateTeamForm(): JSX.Element {
         formState: { errors, isSubmitting },
         setError,
       } = useForm<CreateTeamRequest>({
-        resolver: yupResolver(CreateTeamSchema),
+        resolver: yupResolver(CreateTeamRequestSchema),
       });
     
       const onSubmit = async (data: CreateTeamRequest) => {
