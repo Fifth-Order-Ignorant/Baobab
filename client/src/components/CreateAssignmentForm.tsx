@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Form, Input, InputNumber, Typography } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     CreateAssignmentRequest,
     CreateAssignmentRequestSchema,
@@ -11,6 +11,9 @@ import axios from "axios";
 import styles from "/styles/CreateAssignment.module.css";
 
 function CreateAssignmentForm(): JSX.Element {
+
+    const [mark, setMark] = useState(1);
+
 
     const [state, setState] = useState('default');
 
@@ -24,6 +27,7 @@ function CreateAssignmentForm(): JSX.Element {
     })
 
     const onSubmit = async (data: CreateAssignmentRequest) => {
+        data.maxMark = mark;
         data.description = document.getElementById("content")?.innerHTML;
         try {
           setState('done');
@@ -38,6 +42,9 @@ function CreateAssignmentForm(): JSX.Element {
           }
         }
       };
+      useEffect(() => {
+          setMark(document.getElementById("mark")?.getAttribute("aria-valuenow") as unknown as number);
+      }, [setMark, mark]);
 
     return (
         <div>
@@ -65,7 +72,7 @@ function CreateAssignmentForm(): JSX.Element {
                         validateStatus={errors.maxMark ? 'error': ''}
                         help={errors.maxMark?.message}
                         >
-                            <InputNumber defaultValue={1} min={1} {...register('maxMark')}/>
+                            <InputNumber id="mark" value={mark} min={1} {...register("maxMark")} onChange={setMark}/>
                         </Form.Item>
                     }
                     {
