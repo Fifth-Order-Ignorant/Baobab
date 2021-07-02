@@ -1,17 +1,21 @@
 import { Role } from './role.entity';
 export class Profile {
-  private _name: string;
+  private _firstName: string;
+  private _lastName: string;
   private _bio: string;
   private _externalLinks: string[];
   private _id: number;
   private _jobTitle: string;
   private _role: Role;
+  private _tags: string[];
 
-  public constructor(id: number, name: string) {
+  public constructor(id: number, firstName: string, lastName: string) {
     this._id = id;
-    this._name = name;
+    this._firstName = firstName;
+    this._lastName = lastName;
     this._bio = '';
     this._externalLinks = [];
+    this._tags = [];
     this._jobTitle = '';
     this._role = Role.DEFAULT;
   }
@@ -20,12 +24,24 @@ export class Profile {
     return this._id;
   }
 
-  get name(): string {
-    return this._name;
+  get firstName(): string {
+    return this._firstName;
   }
 
-  set name(newName: string) {
-    this._name = newName;
+  set firstName(newName: string) {
+    this._firstName = newName;
+  }
+
+  get lastName(): string {
+    return this._lastName;
+  }
+
+  set lastName(newName: string) {
+    this._lastName = newName;
+  }
+
+  get name(): string {
+    return this._firstName + ' ' + this._lastName;
   }
 
   get bio(): string {
