@@ -5,10 +5,14 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
+type Job={
+  job: string;
+  canEdit: boolean;
+}
 /**
  * Renders the textbox for editing the job, and displays it.
  */
-function ChangeJobForm(): JSX.Element {
+function ChangeJobForm(job: Job): JSX.Element {
 
     const {
         register,
@@ -21,7 +25,6 @@ function ChangeJobForm(): JSX.Element {
     
       const onSubmit = async (data: EditJobRequest) => {
         setInfo(data.jobTitle);
-        console.log(data.jobTitle);
         try {
           await axios.post('/api/profile/editjob', data);
           changeState();
@@ -39,13 +42,7 @@ function ChangeJobForm(): JSX.Element {
       const GetInfo = () => {
         axios.get('/api/profile/myprofile')
         .then((response) => {
-          const returned = response.data as unknown as [
-            string,
-            string,
-            string,
-            string,
-          ];
-          var string = returned[2];
+          var string = response.data[2];
           if (string == "") {
             string = "no job listed";
           }
@@ -61,7 +58,6 @@ function ChangeJobForm(): JSX.Element {
           }
         }
         )
-        return info;
       };
 
     const [state, setState] = useState('default');
@@ -69,7 +65,7 @@ function ChangeJobForm(): JSX.Element {
 
     const changeState = () => {
         console.log(state);
-        if (state == 'default') {
+        if (state == 'default' && job.canEdit) {
             setState('edit');
         }
         else if (state == 'edit') {
@@ -77,9 +73,6 @@ function ChangeJobForm(): JSX.Element {
         }
     }
 
-    useEffect(() => {
-      GetInfo();
-    }, []);
 
     return(
         <Form onFinish={handleSubmit(onSubmit)}>
@@ -87,7 +80,7 @@ function ChangeJobForm(): JSX.Element {
                 <p onClick={()=>changeState()}>
                 {
                   
-                    state === 'default' && <h3>{info}</h3>
+                    state === 'default' && <h3>{job.job}</h3>
                 }
                 {
                   
@@ -100,7 +93,7 @@ function ChangeJobForm(): JSX.Element {
                     validateStatus={errors.jobTitle ? 'error' : ''}
                     help={errors.jobTitle?.message}
                   >
-                    <Input defaultValue={info} {...register('jobTitle')}/>
+                    <Input defaultValue={job.job} {...register('jobTitle')}/>
                   </Form.Item>
                 }
                 {
