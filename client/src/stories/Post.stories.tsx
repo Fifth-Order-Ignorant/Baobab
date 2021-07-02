@@ -7,4 +7,15 @@ export default {
 } as Meta;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const Basic = (): JSX.Element => <Post author={'John Deer'} timestamp={'2021-04-23T18:25:43.511Z'} content={'Hello world!'} />;
+export const Basic = (): JSX.Element => (
+  <Post
+    author={'John Deer'}
+    timestamp={'2021-04-23T18:25:43.511Z'}
+    content={'Hello world!'}
+    postId={-1}
+    loadMoreReplies={async () => {
+      return [];
+    }}
+    depth={0}
+  />
+);

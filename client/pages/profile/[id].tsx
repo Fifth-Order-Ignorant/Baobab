@@ -1,14 +1,20 @@
-import { PostList } from '../src/components/PostList';
-import samplePosts from '../src/constants/SamplePostList';
-import { Tabs, Avatar, Row, Col, Typography } from 'antd';
-import { About } from '../src/components/About';
-
-import styles from '../styles/Profile.module.css';
+import { About } from '../../src/components/About';
+import { PostList } from '../../src/components/PostList';
+import sampleMessages from '../../src/constants/SamplePostList';
+import { Avatar, Row, Col, Typography, Tabs } from 'antd';
+import styles from '../../styles/Profile.module.css';
+import { useRouter } from 'next/router';
+import samplePosts from '../../src/constants/SamplePostList';
 
 /**
  * Renders the profile page.
  */
 export default function Profile(): JSX.Element {
+  const id = () => {
+      const router = useRouter();
+      return parseInt(router.query.id as unknown as string);
+  }
+
   return (
     <div>
       <div className={styles.body}>
@@ -23,7 +29,7 @@ export default function Profile(): JSX.Element {
               <Tabs.TabPane tab="Profile" key="profile">
                 <Row>
                   <Col>
-                    <About />
+                    <About id={ id()} />
                   </Col>
                 </Row>
               </Tabs.TabPane>
