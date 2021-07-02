@@ -10,11 +10,10 @@ import { PostResponse } from 'baobab-common';
  * Renders the profile page for that given user.
  */
 export default function Profile(): JSX.Element {
-
   const id = () => {
     const router = useRouter();
     return parseInt(router.query.id as unknown as string);
-  }
+  };
 
   const fetchUserPosts = async (id: number, page: number) => {
     const newPosts = await axios.get('/api/post/userposts', {
@@ -25,7 +24,7 @@ export default function Profile(): JSX.Element {
       },
     });
     return newPosts.data;
-  }
+  };
 
   return (
     <div>
@@ -66,8 +65,15 @@ export default function Profile(): JSX.Element {
  * Renders post replies based on the user id.
  * @param props Includes the id and fetchPosts function that takes in the id and page number.
  */
-function PostRepliesFeedById(props: { id: number, fetchPosts: (id: number, page: number) => Promise<PostResponse[]> }): JSX.Element {
+function PostRepliesFeedById(props: {
+  id: number;
+  fetchPosts: (id: number, page: number) => Promise<PostResponse[]>;
+}): JSX.Element {
   return (
-    <PostFeed fetchPosts={async (page: number) => { return await props.fetchPosts(props.id, page) }} />
-  )
+    <PostFeed
+      fetchPosts={async (page: number) => {
+        return await props.fetchPosts(props.id, page);
+      }}
+    />
+  );
 }

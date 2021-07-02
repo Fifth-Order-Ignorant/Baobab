@@ -1,4 +1,11 @@
-import { BadRequestException, Body, Controller, Post, Query, Get } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  Query,
+  Get,
+} from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import {
   RegisterRequest,
@@ -59,9 +66,7 @@ export class UserProfileController {
   }
 
   @Get('pagination')
-  pagination(
-    @Query() query: ProfilePaginationRequest,
-  ): ProfileResponse[] {
+  pagination(@Query() query: ProfilePaginationRequest): ProfileResponse[] {
     const paginatedProfiles = this._userProfileService.getPaginatedProfiles(
       query.start,
       query.end,

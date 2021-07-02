@@ -6,10 +6,9 @@ export class CreateAssignmentRequest {
   maxMark!: number;
 }
 
-export const CreateAssignmentRequestSchema: SchemaOf<CreateAssignmentRequest> = object(
-  {
+export const CreateAssignmentRequestSchema: SchemaOf<CreateAssignmentRequest> =
+  object({
     name: string().required(),
     description: string().required(),
     maxMark: number().required(),
-  },
-);
+  });

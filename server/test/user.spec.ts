@@ -279,41 +279,43 @@ describe('Profile Pagination Basic Functionality', () => {
     );
     const profiles = users.getPaginatedProfiles(0, 2);
 
-    expect(profiles).toContainEqual(Object({
-      id: userID,
-      bio: 'I love chihuahuas.',
-      firstName: 'Michael',
-      lastName: 'Sheinman Orenstrakh',
-      jobTitle: 'OP Programmer',
-      role: roleToString(Role.INVESTOR_REP),
-    }));
-    expect(profiles).toContainEqual(Object({
-      id: userID2,
-      bio: '',
-      firstName: 'Michael',
-      lastName: 'Sheinman (Clone)',
-      jobTitle: '',
-      role: roleToString(Role.DEFAULT),
-    }));
-    expect(profiles).toEqual(
-        [
-          Object({
-            id: userID,
-            bio: 'I love chihuahuas.',
-            firstName: 'Michael',
-            lastName: 'Sheinman Orenstrakh',
-            jobTitle: 'OP Programmer',
-            role: roleToString(Role.INVESTOR_REP),
-          }),
-          Object({
-            id: userID2,
-            bio: '',
-            firstName: 'Michael',
-            lastName: 'Sheinman (Clone)',
-            jobTitle: '',
-            role: roleToString(Role.DEFAULT),
-          }),
-        ],
+    expect(profiles).toContainEqual(
+      Object({
+        id: userID,
+        bio: 'I love chihuahuas.',
+        firstName: 'Michael',
+        lastName: 'Sheinman Orenstrakh',
+        jobTitle: 'OP Programmer',
+        role: roleToString(Role.INVESTOR_REP),
+      }),
     );
+    expect(profiles).toContainEqual(
+      Object({
+        id: userID2,
+        bio: '',
+        firstName: 'Michael',
+        lastName: 'Sheinman (Clone)',
+        jobTitle: '',
+        role: roleToString(Role.DEFAULT),
+      }),
+    );
+    expect(profiles).toEqual([
+      Object({
+        id: userID,
+        bio: 'I love chihuahuas.',
+        firstName: 'Michael',
+        lastName: 'Sheinman Orenstrakh',
+        jobTitle: 'OP Programmer',
+        role: roleToString(Role.INVESTOR_REP),
+      }),
+      Object({
+        id: userID2,
+        bio: '',
+        firstName: 'Michael',
+        lastName: 'Sheinman (Clone)',
+        jobTitle: '',
+        role: roleToString(Role.DEFAULT),
+      }),
+    ]);
   });
 });

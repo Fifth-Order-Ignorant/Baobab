@@ -22,7 +22,11 @@ export interface PostDAO {
     start: number,
     end: number,
   ): Record<string, string | number>[];
-  getPostsOfUser(userId: number, start: number, end: number): Record<string, string | number>[];
+  getPostsOfUser(
+    userId: number,
+    start: number,
+    end: number,
+  ): Record<string, string | number>[];
 }
 
 @Injectable()
@@ -76,12 +80,12 @@ export class PostInMemory implements PostDAO {
     end: number,
   ): Record<string, string | number>[] {
     const posts: Post[] = this.posts;
-    let i: number = 0;
+    let i = 0;
     const templst: Post[] = [];
     const n: number = posts.length;
-    while (i < n){
+    while (i < n) {
       const post: Post = posts[i];
-      if (typeof post.parent === 'undefined'){
+      if (typeof post.parent === 'undefined') {
         templst.push(post);
       }
       i++;
@@ -140,14 +144,14 @@ export class PostInMemory implements PostDAO {
     userId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[]{
+  ): Record<string, string | number>[] {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
     const n: number = posts.length;
-    while (i < n){
+    while (i < n) {
       const post: Post = posts[i];
-      if (post.userID == userId && typeof post.parent !== 'undefined'){
+      if (post.userID == userId && typeof post.parent !== 'undefined') {
         templst.push(post);
       }
       i++;
@@ -156,7 +160,7 @@ export class PostInMemory implements PostDAO {
     let count: number = start;
     const lst: Record<string, string | number>[] = [];
     const m: number = templst.length;
-    while (count < end && count < m){
+    while (count < end && count < m) {
       const post: Post = templst[count];
       const newPost: Record<string, string | number> = Object({
         author: post.userID,
@@ -174,14 +178,14 @@ export class PostInMemory implements PostDAO {
     userId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[]{
+  ): Record<string, string | number>[] {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
     const n: number = posts.length;
-    while (i < n){
+    while (i < n) {
       const post: Post = posts[i];
-      if (post.userID == userId && typeof post.parent === 'undefined'){
+      if (post.userID == userId && typeof post.parent === 'undefined') {
         templst.push(post);
       }
       i++;
@@ -190,7 +194,7 @@ export class PostInMemory implements PostDAO {
     let count: number = start;
     const lst: Record<string, string | number>[] = [];
     const m: number = templst.length;
-    while (count < end && count < m){
+    while (count < end && count < m) {
       const post: Post = templst[count];
       const newPost: Record<string, string | number> = Object({
         author: post.userID,
@@ -203,5 +207,4 @@ export class PostInMemory implements PostDAO {
     }
     return lst;
   }
-
 }

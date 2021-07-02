@@ -32,41 +32,27 @@ export class PostService {
     return this.changeIdToAuthor(posts);
   }
 
-  getReplies(
-    postId: number,
-    start: number,
-    end: number,
-  ): PostResponse[] {
+  getReplies(postId: number, start: number, end: number): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getReplies(postId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  getUserReplies(
-    userId: number,
-    start: number,
-    end: number,
-  ): PostResponse[] {
+  getUserReplies(userId: number, start: number, end: number): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getRepliesOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  getUserPosts(
-    userId: number,
-    start: number,
-    end: number,
-  ): PostResponse[] {
+  getUserPosts(userId: number, start: number, end: number): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getPostsOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  changeIdToAuthor(
-    lst: Record<string, string|number>[]
-  ): PostResponse[] {
-    const posts: Record<string, string | number>[] =lst;
-    let newPosts: PostResponse[] = [];
+  changeIdToAuthor(lst: Record<string, string | number>[]): PostResponse[] {
+    const posts: Record<string, string | number>[] = lst;
+    const newPosts: PostResponse[] = [];
     const n: number = posts.length;
     let i = 0;
     while (i < n) {
@@ -85,5 +71,4 @@ export class PostService {
     }
     return newPosts;
   }
-
 }
