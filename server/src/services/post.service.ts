@@ -29,33 +29,43 @@ export class PostService {
   getPaginatedPosts(start: number, end: number): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getParentPosts(start, end);
-    const newPosts: PostResponse[] = [];
-    const n: number = posts.length;
-    let i: number = 0;
-    while (i < n) {
-      const post: Record<string, string | number> = posts[i];
-      if (typeof post !== 'undefined') {
-        const newPost: PostResponse = {
-          author: this._userRepository.getProfileByID(post.author as number)
-            .name,
-          timestamp: post.timestamp as string,
-          content: post.content as string,
-          postId: post.postId as number,
-        };
-        newPosts.push(newPost);
-      }
-      i++;
-    }
-    return newPosts;
+    return this.changeIdToAuthor(posts);
   }
 
   getReplies(
     postId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[] {
+  ): PostResponse[] {
     const posts: Record<string, string | number>[] =
       this._postRepository.getReplies(postId, start, end);
+    return this.changeIdToAuthor(posts);
+  }
+
+  getUserReplies(
+    userId: number,
+    start: number,
+    end: number,
+  ): PostResponse[] {
+    const posts: Record<string, string | number>[] =
+      this._postRepository.getRepliesOfUser(userId, start, end);
+    return this.changeIdToAuthor(posts);
+  }
+
+  getUserPosts(
+    userId: number,
+    start: number,
+    end: number,
+  ): PostResponse[] {
+    const posts: Record<string, string | number>[] =
+      this._postRepository.getPostsOfUser(userId, start, end);
+    return this.changeIdToAuthor(posts);
+  }
+
+  changeIdToAuthor(
+    lst: Record<string, string|number>[]
+  ): PostResponse[] {
+    const posts: Record<string, string | number>[] =lst;
     let newPosts: PostResponse[] = [];
     const n: number = posts.length;
     let i = 0;
@@ -75,4 +85,5 @@ export class PostService {
     }
     return newPosts;
   }
+
 }

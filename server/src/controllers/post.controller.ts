@@ -16,6 +16,9 @@ import {
   PostRequest,
   PostPaginationRequest,
   RepliesPaginationRequest,
+  UserRepliesPaginationRequest,
+  UserPostsPaginationRequest,
+  PostResponse,
 } from 'baobab-common';
 import { Post as PostEntity } from '../entities/post.entity';
 import { JwtAuth } from './jwt.decorator';
@@ -61,7 +64,7 @@ export class PostController {
   @Get('pagination')
   pagination(
     @Query() query: PostPaginationRequest,
-  ): Record<string, string | number>[] {
+  ): PostResponse[] {
     const paginatedPosts = this._postService.getPaginatedPosts(
       query.start,
       query.end,
@@ -71,13 +74,38 @@ export class PostController {
 
   @Get('replies')
   replies(
-    @Query() reqBody: RepliesPaginationRequest,
-  ): Record<string, string | number>[] {
+    @Query() query: RepliesPaginationRequest,
+  ): PostResponse[] {
     const paginatedReplies = this._postService.getReplies(
-      reqBody.id,
-      reqBody.start,
-      reqBody.end,
+      query.id,
+      query.start,
+      query.end,
     );
     return paginatedReplies;
   }
+
+  @Get('userreplies')
+  userReplies(
+    @Query() query: UserRepliesPaginationRequest,
+  ): PostResponse[] {
+    const paginatedReplies = this._postService.getUserReplies(
+      query.id,
+      query.start,
+      query.end,
+    );
+    return paginatedReplies;
+  }
+
+  @Get('userposts')
+  userPosts(
+    @Query() query: UserPostsPaginationRequest,
+  ): PostResponse[] {
+    const paginatedReplies = this._postService.getUserPosts(
+      query.id,
+      query.start,
+      query.end,
+    );
+    return paginatedReplies;
+  }
+
 }

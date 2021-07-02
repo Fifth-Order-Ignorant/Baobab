@@ -1,11 +1,12 @@
 import { Comment, Tooltip, Avatar, Button } from 'antd';
 import Card from './Card';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from '../../styles/Post.module.css';
 import moment from 'moment';
 import { ReplyPost } from './SendPost';
 import { PostList } from './PostList';
 import { PostResponse, REPLY_LIMIT } from 'baobab-common';
+import { AuthContext } from '../providers/AuthProvider';
 
 /**
  * Required props for rendering a post.
@@ -34,20 +35,7 @@ export function Post(props: PostProps): JSX.Element {
   const postTime: string = moment(currentDate).fromNow();
 
   // get actions
-  const [actions, setActions] = useState(
-    props.depth < REPLY_LIMIT
-      ? [
-          <span
-            key="reply"
-            onClick={() => {
-              setReplyOpen(true);
-            }}
-          >
-            Reply to
-          </span>,
-        ]
-      : [],
-  );
+  const [actions, setActions] = useState<JSX.Element[]>([]);
 
   const [batch, setBatch] = useState(0);
 
@@ -68,9 +56,26 @@ export function Post(props: PostProps): JSX.Element {
     setLoading(false);
   };
 
-  // fetch first batch of replies so we know if there are any replies
-  // (and whether to display the "show replies" button or not)
+  const authState = useContext(AuthContext);
+
   useEffect(() => {
+    if (authState && props.depth < REPLY_LIMIT) {
+      setActions(
+        actions.concat(
+          <span
+            key="reply"
+            onClick={() => {
+              setReplyOpen(true);
+            }}
+          >
+            Reply to
+          </span>,
+        ),
+      );
+    }
+
+    // fetch first batch of replies so we know if there are any replies
+    // (and whether to display the "show replies" button or not)
     (async () => {
       const initReplies = await props.loadMoreReplies(batch);
       setBatch(batch + 1);
