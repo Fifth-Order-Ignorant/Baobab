@@ -50,7 +50,7 @@ export class UserProfileController {
 
   @Post('view')
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'The profile is correctly fetched.',
   })
   @ApiResponse({ status: 400, description: 'The request is invalid.' })
