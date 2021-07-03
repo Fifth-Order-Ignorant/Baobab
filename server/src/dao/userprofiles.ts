@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { Profile } from '../entities/profile.entity';
+import { ProfileResponse } from 'baobab-common';
+import { roleToString } from '../entities/role.entity';
 
 export interface UserProfileDAO {
   addUserProfile(
@@ -13,7 +15,7 @@ export interface UserProfileDAO {
   getUserByID(id: number): User;
   getUserByEmail(email: string): User;
   getProfileByID(id: number): Profile;
-  getPaginatedProfiles(start: number, end: number): Record<string, string>[];
+  getPaginatedProfiles(start: number, end: number): ProfileResponse[];
   editName(id: number, firstName: string, lastName: string): void;
   editJob(id: number, jobTitle: string): void;
   editBio(id: number, bio: string): void;
@@ -47,7 +49,7 @@ export class UserProfileInMemory implements UserProfileDAO {
       password,
     );
     this.users.push(newUser);
-    const newProfile = new Profile(this.highestID, firstName + ' ' + lastName);
+    const newProfile = new Profile(this.highestID, firstName, lastName);
     this.profiles.push(newProfile);
     this.highestID++;
     this.userProfileCount++;
@@ -93,10 +95,8 @@ export class UserProfileInMemory implements UserProfileDAO {
 
   public editName(id: number, firstName: string, lastName: string): void {
     const profile = this.getProfileByID(id);
-    const user = this.getUserByID(id);
-    user.firstName = firstName;
-    user.lastName = lastName;
-    profile.name = user.fullName;
+    profile.firstName = firstName;
+    profile.lastName = lastName;
   }
 
   public editJob(id: number, jobTitle: string): void {
@@ -109,21 +109,19 @@ export class UserProfileInMemory implements UserProfileDAO {
     profile.bio = bio;
   }
 
-  public getPaginatedProfiles(
-    start: number,
-    end: number,
-  ): Record<string, string>[] {
-    const newProfiles: Record<string, string>[] = [];
+  public getPaginatedProfiles(start: number, end: number): ProfileResponse[] {
+    const newProfiles: ProfileResponse[] = [];
     const n: number = this.profiles.length;
     let i: number = start;
     while (i < end && i < n) {
       const profile: Profile = this.profiles[i];
-      const user: User = this.users[i];
-      const newProfile: Record<string, string> = Object({
-        firstName: user.firstName,
-        lastName: user.lastName,
+      const newProfile: ProfileResponse = Object({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
         jobTitle: profile.jobTitle,
         bio: profile.bio,
+        id: i,
+        role: roleToString(profile.role),
       });
       newProfiles.push(newProfile);
       i++;

@@ -7,4 +7,6 @@ export default {
 } as Meta;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const Basic = (): JSX.Element => <ChangeNameForm />;
+export const Basic = (): JSX.Element => (
+  <ChangeNameForm firstName="John" lastName="Doe" canEdit={true} />
+);

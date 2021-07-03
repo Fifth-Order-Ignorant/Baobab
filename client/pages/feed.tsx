@@ -1,44 +1,27 @@
-import MessageFeed from '../src/components/MessageFeed';
-import { SendMessage, SendMessageProps } from '../src/components/SendMessage';
+import PostFeed from '../src/components/PostFeed';
+import { CreatePost } from '../src/components/SendPost';
 import { Typography, Row, Col } from 'antd';
-import { MessageRequest } from 'baobab-common';
-import axios from 'axios';
 
-import styles from '../styles/Message.module.css';
+import styles from '../styles/Post.module.css';
+import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../src/providers/AuthProvider';
 
 /**
  * Renders the feed page.
  */
 export default function Feed(): JSX.Element {
-  // declare variables for pagination
-  let i = 0;
-  const c = 5;
-
-  /**
-   * Returns a list of message list props to feed into the MessageList component
-   * @returns Message list props.
-   */
-  const getMessages = async () => {
-    // TODO: Make start = c * i to make it more efficient
-    const res = await axios.post('/api/message/pagination', {
-      start: 0,
-      end: c * (i + 1),
+  const fetchPosts = async (page: number) => {
+    const newPosts = await axios.get('/api/post/pagination', {
+      params: {
+        start: (page - 1) * 5,
+        end: page * 5,
+      },
     });
-    const newMessages = res.data;
-    if (newMessages.length !== 0) {
-      i++;
-    }
-    return newMessages;
+    return newPosts.data;
   };
 
-  /**
-   * Sends a message from the signed in user.
-   * @param content The contents of the message as a string.
-   */
-  const sendMessage = async (content: string): Promise<void> => {
-    const mr: MessageRequest = { content: content, parentID: -1 };
-    await axios.post('/api/message/create', mr);
-  };
+  const authState = useContext(AuthContext);
 
   return (
     <div className={styles.feed}>
@@ -47,8 +30,8 @@ export default function Feed(): JSX.Element {
           <Typography>
             <h2>Feed</h2>
           </Typography>
-          <SendMessage author={'You!'} sendMessage={sendMessage} />
-          <MessageFeed onLoad={getMessages} initMessages={[]} />
+          {authState && <CreatePost author={'You!'} />}
+          <PostFeed fetchPosts={fetchPosts} />
         </Col>
       </Row>
     </div>
