@@ -7,7 +7,6 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
-import { PostResponse } from 'baobab-common';
 
 describe('Post Creation Tests', () => {
   let app: INestApplication;
@@ -202,6 +201,4 @@ describe('Post Pagination Basic Functionality', () => {
     ];
     expect(postPagination).toEqual(expected);
   });
-
-
 });

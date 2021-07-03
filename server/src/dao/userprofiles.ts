@@ -95,7 +95,6 @@ export class UserProfileInMemory implements UserProfileDAO {
 
   public editName(id: number, firstName: string, lastName: string): void {
     const profile = this.getProfileByID(id);
-    const user = this.getUserByID(id);
     profile.firstName = firstName;
     profile.lastName = lastName;
   }
@@ -110,10 +109,7 @@ export class UserProfileInMemory implements UserProfileDAO {
     profile.bio = bio;
   }
 
-  public getPaginatedProfiles(
-    start: number,
-    end: number,
-  ): ProfileResponse[] {
+  public getPaginatedProfiles(start: number, end: number): ProfileResponse[] {
     const newProfiles: ProfileResponse[] = [];
     const n: number = this.profiles.length;
     let i: number = start;
