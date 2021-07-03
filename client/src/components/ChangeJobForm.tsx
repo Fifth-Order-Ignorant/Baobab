@@ -10,7 +10,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
 type Job = {
+  /**
+   * Job string.
+   */
   job: string;
+  /**
+   * Whether the job can be edited.
+   */
   canEdit: boolean;
 };
 /**

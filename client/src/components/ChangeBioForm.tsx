@@ -11,7 +11,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
 type Biography = {
+  /**
+   * Biography text.
+   */
   bio: string;
+  /**
+   * Whether the biography can be edited.
+   */
   canEdit: boolean;
 };
 

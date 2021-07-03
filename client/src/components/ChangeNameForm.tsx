@@ -10,8 +10,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
 type Name = {
+  /**
+   * First name of the user.
+   */
   firstName: string;
+  /**
+   * Last name of the user.
+   */
   lastName: string;
+  /**
+   * Whether the name can be edited.
+   */
   canEdit: boolean;
 };
 
