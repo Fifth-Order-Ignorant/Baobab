@@ -4,21 +4,20 @@ import {
   Controller,
   Post,
   Res,
-  UseGuards,
   Req,
   BadRequestException,
 } from '@nestjs/common';
 import { RequestService } from '../services/request.service';
 import { Response } from 'express';
 import { RoleRequest } from 'baobab-common';
-import { JwtAuthGuard } from './jwt.guard';
 import { ApiResponse } from '@nestjs/swagger';
+import { JwtAuth } from './jwt.decorator';
 
 @Controller('request')
 export class RequestController {
   constructor(private _requestService: RequestService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Post('role')
   @ApiResponse({ status: 201, description: 'The role is returned.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
