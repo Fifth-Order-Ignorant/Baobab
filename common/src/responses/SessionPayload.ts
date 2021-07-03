@@ -3,4 +3,4 @@ export class SessionPayload {
   fullName!: string;
   integrityHash!: string;
   exp!: number;
-};
+}

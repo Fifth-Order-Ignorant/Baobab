@@ -3,4 +3,4 @@ export class PostResponse {
   timestamp!: string;
   content!: string;
   postId!: number;
-};
+}
