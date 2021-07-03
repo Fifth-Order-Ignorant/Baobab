@@ -18,7 +18,7 @@ import {
   RepliesPaginationRequest,
   UserRepliesPaginationRequest,
   UserPostsPaginationRequest,
-  PostResponse
+  PostResponse,
 } from 'baobab-common';
 import { Post as PostEntity } from '../entities/post.entity';
 import { JwtAuth } from './jwt.decorator';

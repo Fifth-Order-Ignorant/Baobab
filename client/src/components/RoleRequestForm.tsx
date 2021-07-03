@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
 import axios from 'axios';
-import styles from '/styles/RoleRequest.module.css';
+import styles from '../../styles/RoleRequest.module.css';
 
 /**
  * Renders a textbox from input

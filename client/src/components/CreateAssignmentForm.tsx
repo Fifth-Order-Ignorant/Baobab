@@ -8,7 +8,7 @@ import {
 } from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import styles from '/styles/CreateAssignment.module.css';
+import styles from '../../styles/CreateAssignment.module.css';
 
 function CreateAssignmentForm(): JSX.Element {
   const [mark, setMark] = useState(1);

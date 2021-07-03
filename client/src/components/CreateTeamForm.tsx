@@ -1,6 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
-import styles from '/styles/CreateTeam.module.css';
+import styles from '../../styles/CreateTeam.module.css';
 import {
   CreateTeamRequest,
   CreateTeamRequestSchema,
