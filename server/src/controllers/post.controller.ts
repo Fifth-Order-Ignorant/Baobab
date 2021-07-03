@@ -62,9 +62,7 @@ export class PostController {
   }
 
   @Get('pagination')
-  pagination(
-    @Query() query: PostPaginationRequest,
-  ): PostResponse[] {
+  pagination(@Query() query: PostPaginationRequest): PostResponse[] {
     const paginatedPosts = this._postService.getPaginatedPosts(
       query.start,
       query.end,
@@ -73,9 +71,7 @@ export class PostController {
   }
 
   @Get('replies')
-  replies(
-    @Query() query: RepliesPaginationRequest,
-  ): PostResponse[] {
+  replies(@Query() query: RepliesPaginationRequest): PostResponse[] {
     const paginatedReplies = this._postService.getReplies(
       query.id,
       query.start,
@@ -85,9 +81,7 @@ export class PostController {
   }
 
   @Get('userreplies')
-  userReplies(
-    @Query() query: UserRepliesPaginationRequest,
-  ): PostResponse[] {
+  userReplies(@Query() query: UserRepliesPaginationRequest): PostResponse[] {
     const paginatedReplies = this._postService.getUserReplies(
       query.id,
       query.start,
@@ -97,9 +91,7 @@ export class PostController {
   }
 
   @Get('userposts')
-  userPosts(
-    @Query() query: UserPostsPaginationRequest,
-  ): PostResponse[] {
+  userPosts(@Query() query: UserPostsPaginationRequest): PostResponse[] {
     const paginatedReplies = this._postService.getUserPosts(
       query.id,
       query.start,
@@ -107,5 +99,4 @@ export class PostController {
     );
     return paginatedReplies;
   }
-
 }

@@ -98,6 +98,9 @@ const sendPost = async (
   }
 };
 
+/**
+ * Renders a component that allows the user to send an original post.
+ */
 export function CreatePost(props: CreatePostProps): JSX.Element {
   return (
     <SendPost
@@ -114,6 +117,9 @@ interface ReplyPostProps extends CreatePostProps {
   parent: number;
 }
 
+/**
+ * Renders a component that allows the user to send a reply post.
+ */
 export function ReplyPost(props: ReplyPostProps): JSX.Element {
   return (
     <SendPost

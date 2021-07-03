@@ -9,11 +9,20 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-type Name={
-  firstName: string,
-  lastName: string,
-  canEdit: boolean
-}
+type Name = {
+  /**
+   * First name of the user.
+   */
+  firstName: string;
+  /**
+   * Last name of the user.
+   */
+  lastName: string;
+  /**
+   * Whether the name can be edited.
+   */
+  canEdit: boolean;
+};
 
 /**
  * Renders the textbox for editing the first and last name, and displays them.
@@ -95,11 +104,13 @@ function ChangeNameForm(name: Name): JSX.Element {
     <Form onFinish={handleSubmit(onSubmit)}>
       <Form.Item>
         <p onClick={() => changeState()}>
-          {state === 'default' && <h3>{name.firstName + ' ' + name.lastName}</h3>}
+          {state === 'default' && (
+            <h3>{name.firstName + ' ' + name.lastName}</h3>
+          )}
         </p>
-        {
-          state === 'done' && <h3>{firstName + ' ' + lastName + " (reload to edit again)"}</h3>
-        }
+        {state === 'done' && (
+          <h3>{firstName + ' ' + lastName + ' (reload to edit again)'}</h3>
+        )}
         {state === 'edit' && (
           <Form.Item
             name="firstName"

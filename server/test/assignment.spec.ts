@@ -51,7 +51,7 @@ describe('Assignment Create API Test', () => {
       .send({
         name: 'A1',
         description: 'hi',
-        maxMark: 100
+        maxMark: 100,
       })
       .expect(HttpStatus.CREATED);
   });
