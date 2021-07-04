@@ -6,7 +6,7 @@ import {
   UseGuards,
   Req,
   InternalServerErrorException,
-  BadRequestException
+  BadRequestException,
 } from '@nestjs/common';
 import { TeamService } from '../services/team.service';
 import { Response } from 'express';
@@ -33,7 +33,9 @@ export class TeamController {
 
     if (this._teamService.teamExists(reqBody.teamName)) {
       throw new BadRequestException({
-        errors: [new ValidationError('Team name taken', reqBody.teamName, 'teamName')],
+        errors: [
+          new ValidationError('Team name taken', reqBody.teamName, 'teamName'),
+        ],
       });
     }
 
