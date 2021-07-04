@@ -1,16 +1,12 @@
-import { AssignmentInMemory } from '../dao/memory/assignments.mem';
 import { AssignmentService } from '../services/assignment.service';
 import { Module } from '@nestjs/common';
 import { AssignmentController } from '../controllers/assignment.controller';
 import { AuthModule } from './auth.module';
+import { InMemoryDAOModule } from './memory.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [InMemoryDAOModule, AuthModule],
   controllers: [AssignmentController],
-  providers: [
-    { provide: 'AssignmentDAO', useClass: AssignmentInMemory },
-    AssignmentService,
-  ],
-  exports: [{ provide: 'AssignmentDAO', useClass: AssignmentInMemory }],
+  providers: [AssignmentService],
 })
 export class AssignmentModule {}
