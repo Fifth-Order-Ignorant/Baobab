@@ -45,7 +45,7 @@ function ChangeNameForm(name: Name): JSX.Element {
     setFirstName(data.firstName);
     setLastName(data.lastName);
     try {
-      await axios.post('/api/profile/editname', data);
+      await axios.patch('/api/profile/editname', data);
       changeState();
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
