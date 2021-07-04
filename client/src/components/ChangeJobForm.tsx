@@ -35,7 +35,7 @@ function ChangeJobForm(job: Job): JSX.Element {
   const onSubmit = async (data: EditJobRequest) => {
     setInfo(data.jobTitle);
     try {
-      await axios.post('/api/profile/editjob', data);
+      await axios.patch('/api/profile/editjob', data);
       changeState();
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
