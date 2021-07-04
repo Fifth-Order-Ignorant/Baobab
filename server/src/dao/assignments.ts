@@ -46,21 +46,24 @@ export class AssignmentInMemory implements AssignmentDAO {
     return assignment;
   }
 
-  public getPaginatedAssignments(start: number, end: number): AssignmentResponse[] {
+  public getPaginatedAssignments(
+    start: number,
+    end: number,
+  ): AssignmentResponse[] {
     const newAssignments: AssignmentResponse[] = [];
     const n: number = this.assignments.length;
     let i: number = start;
     while (i < end && i < n) {
       const assignment: Assignment = this.assignments[i];
       const newAssignment: AssignmentResponse = Object({
-      id: i,
-      name: assignment.name,
-      description: assignment.description,
-      maxMark: assignment.maxMark,
+        id: i,
+        name: assignment.name,
+        description: assignment.description,
+        maxMark: assignment.maxMark,
       });
-  newAssignments.push(newAssignment);
-  i++;
-  }
-  return newAssignments; 
+      newAssignments.push(newAssignment);
+      i++;
+    }
+    return newAssignments;
   }
 }

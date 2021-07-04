@@ -9,7 +9,11 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
-import { CreateAssignmentRequest, AssignmentResponse, AssignmentPaginationRequest } from 'baobab-common';
+import {
+  CreateAssignmentRequest,
+  AssignmentResponse,
+  AssignmentPaginationRequest,
+} from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import { ApiResponse } from '@nestjs/swagger';
 
@@ -44,11 +48,13 @@ export class AssignmentController {
   }
 
   @Get('pagination')
-  pagination(@Query() query: AssignmentPaginationRequest): AssignmentResponse[] {
-  const paginatedProfiles = this._assignmentService.getPaginatedAssignments(
-    query.start,
-    query.end,
-  );
-  return paginatedProfiles;
-}
+  pagination(
+    @Query() query: AssignmentPaginationRequest,
+  ): AssignmentResponse[] {
+    const paginatedProfiles = this._assignmentService.getPaginatedAssignments(
+      query.start,
+      query.end,
+    );
+    return paginatedProfiles;
+  }
 }
