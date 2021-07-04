@@ -25,17 +25,23 @@ function CreateTeamForm(): JSX.Element {
 
   const onSubmit = async (data: CreateTeamRequest) => {
     try {
-      setState('done');
-      await axios.post('/api/team/create', data);
-    } catch (error) {
+      await axios.post('/api/team/create', data)
+      .then( _ => {
+        setState('done');
+      })
+    }
+    catch (error) {
       const { errors } = error.response.data as ErrorResponse;
-
+      console.log(error);
+      
       for (const error of errors) {
         setError(error.path as keyof CreateTeamRequest, {
           message: error.message,
         });
       }
-    }
+      setState('form');
+    } 
+
   };
 
   return (
