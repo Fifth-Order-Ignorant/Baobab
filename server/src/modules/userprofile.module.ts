@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
 import { UserProfileController } from '../controllers/userprofile.controller';
 import { UserProfileService } from '../services/userprofile.service';
-import { UserProfileInMemory } from '../dao/memory/userprofiles.mem';
+import { InMemoryDAOModule } from './memory.module';
 
 @Module({
-  imports: [],
+  imports: [InMemoryDAOModule],
   controllers: [UserProfileController],
-  providers: [
-    { provide: 'UserProfileDAO', useClass: UserProfileInMemory },
-    UserProfileService,
-  ],
-  exports: [{ provide: 'UserProfileDAO', useClass: UserProfileInMemory }],
+  providers: [UserProfileService],
 })
 export class UserProfileModule {}

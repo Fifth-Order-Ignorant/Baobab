@@ -1,4 +1,4 @@
-import { UserProfileInMemory } from '../src/dao/userprofiles';
+import { UserProfileInMemory } from '../src/dao/memory/userprofiles.mem';
 
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';

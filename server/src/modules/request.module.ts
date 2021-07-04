@@ -1,16 +1,12 @@
 import { Module } from '@nestjs/common';
 import { RequestController } from '../controllers/request.controller';
 import { RequestService } from '../services/request.service';
-import { RequestInMemory } from '../dao/memory/requests.mem';
 import { AuthModule } from './auth.module';
+import { InMemoryDAOModule } from './memory.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, InMemoryDAOModule],
   controllers: [RequestController],
-  providers: [
-    { provide: 'RequestDAO', useClass: RequestInMemory },
-    RequestService,
-  ],
-  exports: [{ provide: 'RequestDAO', useClass: RequestInMemory }],
+  providers: [RequestService],
 })
 export class RequestModule {}

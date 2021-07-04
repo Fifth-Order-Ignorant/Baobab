@@ -1,5 +1,5 @@
-import { TeamInMemory } from '../src/dao/teams';
-import { UserProfileInMemory } from '../src/dao/userprofiles';
+import { TeamInMemory } from '../src/dao/memory/teams.mem';
+import { UserProfileInMemory } from '../src/dao/memory/userprofiles.mem';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';

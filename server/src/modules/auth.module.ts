@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '../controllers/auth.controller';
-import { UserProfileModule } from './userprofile.module';
 import { AuthService } from '../services/auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from '../controllers/jwt.strategy';
+import { InMemoryDAOModule } from './memory.module';
 
 @Module({
   imports: [
@@ -18,10 +18,10 @@ import { JwtStrategy } from '../controllers/jwt.strategy';
         signOptions: { expiresIn: '60m' },
       }),
     }),
-    UserProfileModule,
+    InMemoryDAOModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService, JwtStrategy, UserProfileModule],
+  exports: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

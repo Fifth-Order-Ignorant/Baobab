@@ -1,4 +1,4 @@
-import { PostInMemory } from '../src/dao/posts';
+import { PostInMemory } from '../src/dao/memory/posts.mem';
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/modules/app.module';

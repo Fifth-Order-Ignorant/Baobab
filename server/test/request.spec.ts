@@ -1,5 +1,5 @@
 import { Role } from '../src/entities/role.entity';
-import { RequestInMemory } from '../src/dao/requests';
+import { RequestInMemory } from '../src/dao/memory/requests.mem';
 
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
