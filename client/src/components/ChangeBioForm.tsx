@@ -40,7 +40,7 @@ function ChangeBioForm(bio: Biography): JSX.Element {
   const onSubmit = async (data: EditBioRequest) => {
     setInfo(data.bio);
     try {
-      await axios.post('/api/profile/editbio', data);
+      await axios.patch('/api/profile/editbio', data);
       changeState();
       GetInfo();
     } catch (error) {
