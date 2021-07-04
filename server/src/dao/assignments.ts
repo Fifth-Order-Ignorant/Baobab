@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Assignment } from '../entities/assignment.entity';
+import { AssignmentResponse } from 'baobab-common';
 
 export interface AssignmentDAO {
   createAssignment(name: string, description: string, maxMark: number): number;
   getById(id: number): Assignment;
+  getPaginatedAssignments(start: number, end: number): AssignmentResponse[];
 }
 
 @Injectable()
@@ -42,5 +44,23 @@ export class AssignmentInMemory implements AssignmentDAO {
       }
     });
     return assignment;
+  }
+
+  public getPaginatedAssignments(start: number, end: number): AssignmentResponse[] {
+    const newAssignments: AssignmentResponse[] = [];
+    const n: number = this.assignments.length;
+    let i: number = start;
+    while (i < end && i < n) {
+      const assignment: Assignment = this.assignments[i];
+      const newAssignment: AssignmentResponse = Object({
+      id: i,
+      name: assignment.name,
+      description: assignment.description,
+      maxMark: assignment.maxMark,
+      });
+  newAssignments.push(newAssignment);
+  i++;
+  }
+  return newAssignments; 
   }
 }
