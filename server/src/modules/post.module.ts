@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PostController } from '../controllers/post.controller';
 import { PostService } from '../services/post.service';
-import { PostInMemory } from '../dao/posts';
+import { PostInMemory } from '../dao/memory/posts.mem';
 import { AuthModule } from './auth.module';
 import { UserProfileModule } from './userprofile.module';
 

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RequestController } from '../controllers/request.controller';
 import { RequestService } from '../services/request.service';
-import { RequestInMemory } from '../dao/requests';
+import { RequestInMemory } from '../dao/memory/requests.mem';
 import { AuthModule } from './auth.module';
 
 @Module({

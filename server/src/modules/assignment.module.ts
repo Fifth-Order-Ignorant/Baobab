@@ -1,4 +1,4 @@
-import { AssignmentInMemory } from './../dao/assignments';
+import { AssignmentInMemory } from '../dao/memory/assignments.mem';
 import { AssignmentService } from '../services/assignment.service';
 import { Module } from '@nestjs/common';
 import { AssignmentController } from '../controllers/assignment.controller';
