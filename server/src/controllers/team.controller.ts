@@ -6,13 +6,14 @@ import {
   UseGuards,
   Req,
   InternalServerErrorException,
-  ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { TeamService } from '../services/team.service';
 import { Response } from 'express';
 import { CreateTeamRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import { ApiResponse } from '@nestjs/swagger';
+import { ValidationError } from 'yup';
 
 @Controller('team')
 export class TeamController {
@@ -31,8 +32,10 @@ export class TeamController {
     const today = new Date();
 
     if (this._teamService.teamExists(reqBody.teamName)) {
-      throw new ConflictException({
-        errors: [],
+      throw new BadRequestException({
+        errors: [
+          new ValidationError('Team name taken', reqBody.teamName, 'teamName'),
+        ],
       });
     }
 
