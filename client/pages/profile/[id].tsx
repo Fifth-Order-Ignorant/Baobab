@@ -10,10 +10,7 @@ import { PostResponse } from 'baobab-common';
  * Renders the profile page for that given user.
  */
 export default function Profile(): JSX.Element {
-  const id = () => {
-    const router = useRouter();
-    return parseInt(router.query.id as unknown as string);
-  };
+  const { id } = useRouter().query;
 
   const fetchUserPosts = async (id: number, page: number) => {
     const newPosts = await axios.get('/api/post/userposts', {
@@ -39,9 +36,7 @@ export default function Profile(): JSX.Element {
             <Tabs defaultActiveKey="profile" type="card">
               <Tabs.TabPane tab="Profile" key="profile">
                 <Row>
-                  <Col>
-                    <About id={id()} />
-                  </Col>
+                  <Col>{id && <About id={parseInt(id as string, 10)} />}</Col>
                 </Row>
               </Tabs.TabPane>
               <Tabs.TabPane tab="Activity" key="activity">
@@ -49,7 +44,12 @@ export default function Profile(): JSX.Element {
                   <Typography>
                     <h2>Recent Activity:</h2>
                   </Typography>
-                  <PostRepliesFeedById id={id()} fetchPosts={fetchUserPosts} />
+                  {id && (
+                    <PostRepliesFeedById
+                      id={parseInt(id as string, 10)}
+                      fetchPosts={fetchUserPosts}
+                    />
+                  )}
                 </div>
               </Tabs.TabPane>
             </Tabs>
