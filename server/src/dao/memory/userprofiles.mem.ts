@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../../entities/user.entity';
 import { Profile } from '../../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
-import { roleToString } from '../../entities/role.entity';
 import { UserProfileDAO } from '../userprofiles';
+import * as os from 'os';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class UserProfileInMemory implements UserProfileDAO {
@@ -19,19 +21,13 @@ export class UserProfileInMemory implements UserProfileDAO {
     this.userProfileCount = 0;
   }
 
-  public addUserProfile(
+  async addUserProfile(
     firstName: string,
     lastName: string,
     email: string,
     password: string,
-  ): number {
-    const newUser = new User(
-      this.highestID,
-      firstName,
-      lastName,
-      email,
-      password,
-    );
+  ): Promise<number> {
+    const newUser = new User(this.highestID, email, password);
     this.users.push(newUser);
     const newProfile = new Profile(this.highestID, firstName, lastName);
     this.profiles.push(newProfile);
@@ -40,11 +36,11 @@ export class UserProfileInMemory implements UserProfileDAO {
     return this.highestID - 1;
   }
 
-  public getUserProfileCount() {
+  async getUserProfileCount(): Promise<number> {
     return this.userProfileCount;
   }
 
-  public getUserByID(id: number): User {
+  async getUserByID(id: number): Promise<User> {
     let user: User;
 
     this.users.forEach((element) => {
@@ -55,7 +51,7 @@ export class UserProfileInMemory implements UserProfileDAO {
     return user;
   }
 
-  public getUserByEmail(email: string): User {
+  async getUserByEmail(email: string): Promise<User> {
     let user: User;
 
     this.users.forEach((element) => {
@@ -66,7 +62,7 @@ export class UserProfileInMemory implements UserProfileDAO {
     return user;
   }
 
-  public getProfileByID(id: number): Profile {
+  async getProfileByID(id: number): Promise<Profile> {
     let profile: Profile;
 
     this.profiles.forEach((element) => {
@@ -77,23 +73,30 @@ export class UserProfileInMemory implements UserProfileDAO {
     return profile;
   }
 
-  public editName(id: number, firstName: string, lastName: string): void {
-    const profile = this.getProfileByID(id);
+  async editName(
+    id: number,
+    firstName: string,
+    lastName: string,
+  ): Promise<void> {
+    const profile = await this.getProfileByID(id);
     profile.firstName = firstName;
     profile.lastName = lastName;
   }
 
-  public editJob(id: number, jobTitle: string): void {
-    const profile = this.getProfileByID(id);
+  async editJob(id: number, jobTitle: string): Promise<void> {
+    const profile = await this.getProfileByID(id);
     profile.jobTitle = jobTitle;
   }
 
-  public editBio(id: number, bio: string): void {
-    const profile = this.getProfileByID(id);
+  async editBio(id: number, bio: string): Promise<void> {
+    const profile = await this.getProfileByID(id);
     profile.bio = bio;
   }
 
-  public getPaginatedProfiles(start: number, end: number): ProfileResponse[] {
+  async getPaginatedProfiles(
+    start: number,
+    end: number,
+  ): Promise<ProfileResponse[]> {
     const newProfiles: ProfileResponse[] = [];
     const n: number = this.profiles.length;
     let i: number = start;
@@ -105,11 +108,31 @@ export class UserProfileInMemory implements UserProfileDAO {
         jobTitle: profile.jobTitle,
         bio: profile.bio,
         id: i,
-        role: roleToString(profile.role),
+        role: profile.role,
       });
       newProfiles.push(newProfile);
       i++;
     }
     return newProfiles;
+  }
+
+  async getProfilePicture(id: number): Promise<NodeJS.ReadableStream> {
+    const profile = await this.getProfileByID(id);
+    if (profile.picture) {
+      return fs.createReadStream(
+        path.join(os.tmpdir(), profile.picture.storedName),
+      );
+    } else {
+      return null;
+    }
+  }
+
+  async updateProfile(profile: Profile): Promise<Profile> {
+    for (let i = 0; i < this.profiles.length; i++) {
+      if (this.profiles[i].id === profile.id) {
+        this.profiles[i] = profile;
+        return this.profiles[i];
+      }
+    }
   }
 }

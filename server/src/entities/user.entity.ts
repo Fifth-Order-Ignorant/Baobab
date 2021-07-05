@@ -3,13 +3,7 @@ export class User {
   private _email: string;
   private _password: string;
 
-  public constructor(
-    id: number,
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-  ) {
+  public constructor(id: number, email: string, password: string) {
     this._id = id;
     this._email = email;
     this._password = password;

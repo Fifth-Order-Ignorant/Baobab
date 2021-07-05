@@ -52,7 +52,7 @@ describe('Role Request Tests', () => {
       .post('/request/role')
       .send({
         description: 'i want role',
-        role: 'entrepreneur',
+        role: 'Entrepreneur',
       })
       .expect(HttpStatus.CREATED);
   });

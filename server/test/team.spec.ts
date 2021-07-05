@@ -62,11 +62,11 @@ describe('Team Create API Test', () => {
 });
 
 describe('Team Creation Test', () => {
-  it('should create a post with valid id', () => {
+  it('should create a post with valid id', async () => {
     const teams = new TeamInMemory();
     const nowTime = new Date();
     const users = new UserProfileInMemory();
-    const userId = users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman',
       'michael092001@gmail.com',

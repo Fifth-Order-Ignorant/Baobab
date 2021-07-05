@@ -8,13 +8,15 @@ export interface UserProfileDAO {
     lastName: string,
     email: string,
     password: string,
-  ): number;
-  getUserProfileCount(): number;
-  getUserByID(id: number): User;
-  getUserByEmail(email: string): User;
-  getProfileByID(id: number): Profile;
-  getPaginatedProfiles(start: number, end: number): ProfileResponse[];
-  editName(id: number, firstName: string, lastName: string): void;
-  editJob(id: number, jobTitle: string): void;
-  editBio(id: number, bio: string): void;
+  ): Promise<number>;
+  getUserProfileCount(): Promise<number>;
+  getUserByID(id: number): Promise<User>;
+  getUserByEmail(email: string): Promise<User>;
+  getProfileByID(id: number): Promise<Profile>;
+  getPaginatedProfiles(start: number, end: number): Promise<ProfileResponse[]>;
+  editName(id: number, firstName: string, lastName: string): Promise<void>;
+  editJob(id: number, jobTitle: string): Promise<void>;
+  editBio(id: number, bio: string): Promise<void>;
+  getProfilePicture(id: number): Promise<NodeJS.ReadableStream>;
+  updateProfile(profile: Profile): Promise<Profile>;
 }
