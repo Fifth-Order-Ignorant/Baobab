@@ -22,26 +22,4 @@ export class RequestService {
       ),
     );
   }
-
-  stringToRole(roleString: string): Role {
-    let role: Role;
-    switch (roleString) {
-      case 'default':
-        role = Role.DEFAULT;
-        break;
-      case 'entrepreneur':
-        role = Role.ENTREPRENEUR;
-        break;
-      case 'investor representative':
-        role = Role.INVESTOR_REP;
-        break;
-      case 'service provider representative':
-        role = Role.SERVICE_PROVIDER_REP;
-        break;
-      default:
-        role = undefined;
-        break;
-    }
-    return role;
-  }
 }

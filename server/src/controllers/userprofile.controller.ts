@@ -27,11 +27,8 @@ export class UserProfileController {
   @Post('register')
   @ApiResponse({ status: 201, description: 'The user registered.' })
   @ApiResponse({ status: 400, description: 'The email is taken.' })
-  register(
-    @Body() reqBody: RegisterRequest,
-    // @Res({ passthrough: true }) res: Response,
-  ) {
-    const user = this._userProfileService.registerUser(
+  async register(@Body() reqBody: RegisterRequest) {
+    const user = await this._userProfileService.registerUser(
       reqBody.firstName,
       reqBody.lastName,
       reqBody.email,
@@ -54,9 +51,9 @@ export class UserProfileController {
     description: 'The profile is correctly fetched.',
   })
   @ApiResponse({ status: 400, description: 'The request is invalid.' })
-  getProfile(@Body() reqBody: ProfileViewRequest) {
+  async getProfile(@Body() reqBody: ProfileViewRequest) {
     const id = reqBody.userId;
-    if (this._userProfileService.isValidProfile(id)) {
+    if (await this._userProfileService.isValidProfile(id)) {
       return this._userProfileService.getProfile(id);
     } else {
       throw new BadRequestException({
@@ -66,11 +63,14 @@ export class UserProfileController {
   }
 
   @Get('pagination')
-  pagination(@Query() query: ProfilePaginationRequest): ProfileResponse[] {
-    const paginatedProfiles = this._userProfileService.getPaginatedProfiles(
-      query.start,
-      query.end,
-    );
+  async pagination(
+    @Query() query: ProfilePaginationRequest,
+  ): Promise<ProfileResponse[]> {
+    const paginatedProfiles =
+      await this._userProfileService.getPaginatedProfiles(
+        query.start,
+        query.end,
+      );
     return paginatedProfiles;
   }
 }
