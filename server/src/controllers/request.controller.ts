@@ -12,6 +12,7 @@ import { Response } from 'express';
 import { RoleRequest } from 'baobab-common';
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuth } from './jwt.decorator';
+import { Role } from '../entities/role.entity';
 
 @Controller('request')
 export class RequestController {
@@ -21,16 +22,14 @@ export class RequestController {
   @Post('role')
   @ApiResponse({ status: 201, description: 'The role is returned.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
-  requestRole(
+  async requestRole(
     @Body() reqBody: RoleRequest,
     @Res({ passthrough: true }) res: Response,
     @Req() req,
   ) {
     const today = new Date();
 
-    const role = this._requestService.stringToRole(reqBody.role);
-
-    if (!role) {
+    if (!Object.values<string>(Role).includes(reqBody.role)) {
       throw new BadRequestException({
         errors: [],
       });
@@ -40,7 +39,7 @@ export class RequestController {
       req.user.id,
       reqBody.description,
       today,
-      role,
+      reqBody.role as Role,
     );
 
     if (!request) {

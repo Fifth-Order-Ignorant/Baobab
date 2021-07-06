@@ -26,31 +26,45 @@ export class PostService {
     return this._postRepository.getByID(parentID);
   }
 
-  getPaginatedPosts(start: number, end: number): PostResponse[] {
+  async getPaginatedPosts(start: number, end: number): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
       this._postRepository.getParentPosts(start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  getReplies(postId: number, start: number, end: number): PostResponse[] {
+  async getReplies(
+    postId: number,
+    start: number,
+    end: number,
+  ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
       this._postRepository.getReplies(postId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  getUserReplies(userId: number, start: number, end: number): PostResponse[] {
+  async getUserReplies(
+    userId: number,
+    start: number,
+    end: number,
+  ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
       this._postRepository.getRepliesOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  getUserPosts(userId: number, start: number, end: number): PostResponse[] {
+  async getUserPosts(
+    userId: number,
+    start: number,
+    end: number,
+  ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
       this._postRepository.getPostsOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  changeIdToAuthor(lst: Record<string, string | number>[]): PostResponse[] {
+  async changeIdToAuthor(
+    lst: Record<string, string | number>[],
+  ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] = lst;
     const newPosts: PostResponse[] = [];
     const n: number = posts.length;
@@ -59,8 +73,9 @@ export class PostService {
       const post: Record<string, string | number> = posts[i];
       if (typeof post !== 'undefined') {
         const newPost: PostResponse = {
-          author: this._userRepository.getProfileByID(post.author as number)
-            .name,
+          author: (
+            await this._userRepository.getProfileByID(post.author as number)
+          ).name,
           timestamp: post.timestamp as string,
           content: post.content as string,
           postId: post.postId as number,

@@ -1,4 +1,4 @@
-import { UserProfileInMemory } from '../src/dao/userprofiles';
+import { UserProfileInMemory } from '../src/dao/memory/userprofiles.mem';
 
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
@@ -8,7 +8,7 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
-import { Role, roleToString } from '../src/entities/role.entity';
+import { Role } from '../src/entities/role.entity';
 
 describe('End to end profile editing tests', () => {
   let app: INestApplication;
@@ -220,54 +220,54 @@ describe('End to end profile viewing tests', () => {
 });
 
 describe('User tests', () => {
-  it('should create a user', () => {
+  it('should create a user', async () => {
     const users = new UserProfileInMemory();
 
-    users.addUserProfile(
+    await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    expect(users.getUserProfileCount() == 1);
+    expect((await users.getUserProfileCount()) == 1);
   });
 
-  it('should return a valid user given id', () => {
+  it('should return a valid user given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = users.addUserProfile(
+    const userID = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const user = users.getUserByID(userID);
+    const user = await users.getUserByID(userID);
     expect(user.email == 'michael092001@gmail.com');
   });
 
-  it('should return a valid profile given id', () => {
+  it('should return a valid profile given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = users.addUserProfile(
+    const userID = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const profile = users.getProfileByID(userID);
+    const profile = await users.getProfileByID(userID);
     expect(profile.name == 'Michael Sheinman Orenstrakh');
   });
 });
 
 describe('Profile Pagination Basic Functionality', () => {
-  it('should return the paginated data in the right format', () => {
+  it('should return the paginated data in the right format', async () => {
     const users = new UserProfileInMemory();
-    const userID = users.addUserProfile(
+    const userID = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
 
-    const profile1 = users.getProfileByID(userID);
+    const profile1 = await users.getProfileByID(userID);
     profile1.changeRole(Role.INVESTOR_REP);
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
@@ -277,7 +277,7 @@ describe('Profile Pagination Basic Functionality', () => {
       'michael092002@gmail.com',
       '12345',
     );
-    const profiles = users.getPaginatedProfiles(0, 2);
+    const profiles = await users.getPaginatedProfiles(0, 2);
 
     expect(profiles).toContainEqual(
       Object({
@@ -286,7 +286,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
         jobTitle: 'OP Programmer',
-        role: roleToString(Role.INVESTOR_REP),
+        role: Role[Role.INVESTOR_REP],
       }),
     );
     expect(profiles).toContainEqual(
@@ -296,7 +296,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',
         jobTitle: '',
-        role: roleToString(Role.DEFAULT),
+        role: Role[Role.DEFAULT],
       }),
     );
     expect(profiles).toEqual([
@@ -306,7 +306,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
         jobTitle: 'OP Programmer',
-        role: roleToString(Role.INVESTOR_REP),
+        role: Role[Role.INVESTOR_REP],
       }),
       Object({
         id: userID2,
@@ -314,7 +314,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',
         jobTitle: '',
-        role: roleToString(Role.DEFAULT),
+        role: Role[Role.DEFAULT],
       }),
     ]);
   });
