@@ -6,7 +6,7 @@ import { FileInfoSchema } from './fileinfo.schema';
 export const ProfileSchema = new Schema<
   Profile,
   Model<Profile>,
-  Omit<Profile, 'id'> & { _id: Profile['id'] }
+  Profile & { _id: Profile['id'] }
 >(
   {
     _id: {
@@ -41,3 +41,5 @@ export const ProfileSchema = new Schema<
   },
   { id: false },
 );
+
+ProfileSchema.loadClass(Profile);

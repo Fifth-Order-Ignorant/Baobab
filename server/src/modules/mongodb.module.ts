@@ -37,6 +37,7 @@ class MulterConfigService implements MulterOptionsFactory {
           connection.plugin(require('mongoose-lean-virtuals'));
           return connection;
         },
+        useFindAndModify: false,
       }),
     }),
     MongooseModule.forFeature([

@@ -4,7 +4,7 @@ import { User } from '../../../entities/user.entity';
 export const UserSchema = new Schema<
   User,
   Model<User>,
-  Omit<User, 'id'> & { _id: User['id'] }
+  User & { _id: User['id'] }
 >(
   {
     _id: {
@@ -22,3 +22,5 @@ export const UserSchema = new Schema<
   },
   { id: false },
 );
+
+UserSchema.loadClass(User);

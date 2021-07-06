@@ -5,7 +5,6 @@ import { Connection, Model } from 'mongoose';
 import { Profile } from '../../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { GridFSBucket } from 'mongodb';
-import { Role } from '../../entities/role.entity';
 
 export class UserProfileMongoDAO implements UserProfileDAO {
   private _gridFS: GridFSBucket;
@@ -26,18 +25,8 @@ export class UserProfileMongoDAO implements UserProfileDAO {
   ): Promise<number> {
     const id = await this._users.countDocuments();
 
-    await this._users.create({ id: id, email: email, password: password });
-    await this._profiles.create({
-      id: id,
-      firstName: firstName,
-      lastName: lastName,
-      bio: '',
-      externalLinks: [],
-      tags: [],
-      jobTitle: '',
-      role: Role.DEFAULT,
-      picture: null,
-    });
+    await this._users.create(new User(id, email, password));
+    await this._profiles.create(new Profile(id, firstName, lastName));
 
     return id;
   }
@@ -117,7 +106,7 @@ export class UserProfileMongoDAO implements UserProfileDAO {
 
   async updateProfile(profile: Profile): Promise<Profile> {
     return this._profiles
-      .findOneAndUpdate({ id: profile.id }, profile, { new: true })
+      .findByIdAndUpdate(profile.id, profile, { new: true })
       .lean({ virtuals: true });
   }
 }

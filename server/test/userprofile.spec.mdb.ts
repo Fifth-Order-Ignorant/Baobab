@@ -37,6 +37,40 @@ describe('MongoDB User Profile DAO Tests', () => {
     expect(profile.id).toEqual(0);
   });
 
+  it('Update Profile', async () => {
+    const id = await dao.addUserProfile(
+      'Murasaki',
+      'Shion',
+      'tamanegi@mail.moe',
+      'garlic',
+    );
+
+    const oldProfile = await dao.getProfileByID(id);
+
+    oldProfile.firstName = 'Minato';
+    oldProfile.lastName = 'Aqua';
+
+    await dao.updateProfile(oldProfile);
+
+    const newProfile = await dao.getProfileByID(id);
+
+    expect(newProfile.name).toEqual('Minato Aqua');
+  });
+
+  it('Profile Pagination', async () => {
+    const [firstProfile] = await dao.getPaginatedProfiles(0, 1);
+
+    expect(firstProfile.firstName + ' ' + firstProfile.lastName).toEqual(
+      'Mio Akiyama',
+    );
+
+    const [secondProfile] = await dao.getPaginatedProfiles(1, 2);
+
+    expect(secondProfile.firstName + ' ' + secondProfile.lastName).toEqual(
+      'Minato Aqua',
+    );
+  });
+
   // close mongoose connection to prevent Jest from hanging
   afterAll(async () => {
     await moduleRef.close();
