@@ -43,8 +43,7 @@
     "mongoose": "^5.13.2",
     "@nestjs/mongoose": "^7.2.4",
     "multer-gridfs-storage": "^5.0.0",
-    "mime-types": "^2.1.31",
-    "mongoose-lean-virtuals": "^0.8.0"
+    "mime-types": "^2.1.31"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",

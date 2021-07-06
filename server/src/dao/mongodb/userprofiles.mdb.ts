@@ -38,11 +38,10 @@ export class UserProfileMongoDAO implements UserProfileDAO {
     // this is not optimal, optimal approach would be to receive a cursor
     // on the sorting attribute instead
 
-    const queryRes = await this._profiles
+    const queryRes: Profile[] = await this._profiles
       .find()
       .skip(start)
-      .limit(end - start)
-      .lean({ virtuals: true });
+      .limit(end - start);
 
     const profiles: ProfileResponse[] = [];
 
@@ -61,17 +60,15 @@ export class UserProfileMongoDAO implements UserProfileDAO {
   }
 
   async getProfileByID(id: number): Promise<Profile> {
-    return this._profiles.findById(id).lean<Profile>({ virtuals: true });
+    return this._profiles.findById(id);
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    return this._users
-      .findOne(this._users.translateAliases({ email }))
-      .lean<User>({ virtuals: true });
+    return this._users.findOne(this._users.translateAliases({ email }));
   }
 
   async getUserByID(id: number): Promise<User> {
-    return this._users.findById(id).lean<User>({ virtuals: true });
+    return this._users.findById(id);
   }
 
   async getUserProfileCount(): Promise<number> {
@@ -83,15 +80,12 @@ export class UserProfileMongoDAO implements UserProfileDAO {
     if (profile.picture) {
       return this._gridFS.openDownloadStreamByName(profile.picture.storedName);
     }
-
     return null;
   }
 
   async updateProfile(profile: Profile): Promise<Profile> {
-    return this._profiles
-      .findByIdAndUpdate(profile.id, this._profiles.translateAliases(profile), {
-        new: true,
-      })
-      .lean({ virtuals: true });
+    return this._profiles.findByIdAndUpdate(profile.id, profile, {
+      new: true,
+    });
   }
 }
