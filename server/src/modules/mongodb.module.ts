@@ -32,11 +32,6 @@ class MulterConfigService implements MulterOptionsFactory {
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('mongoUri'),
-        connectionFactory: (connection) => {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          connection.plugin(require('mongoose-lean-virtuals'));
-          return connection;
-        },
         useFindAndModify: false,
       }),
     }),
