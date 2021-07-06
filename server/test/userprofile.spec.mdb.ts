@@ -3,6 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '../src/modules/configuration';
+import { FileInfo } from '../src/entities/fileinfo.entity';
+import * as mime from 'mime-types';
 
 describe('MongoDB User Profile DAO Tests', () => {
   let moduleRef: TestingModule;
@@ -69,6 +71,29 @@ describe('MongoDB User Profile DAO Tests', () => {
     expect(secondProfile.firstName + ' ' + secondProfile.lastName).toEqual(
       'Minato Aqua',
     );
+  });
+
+  it('Profile Picture Update', async () => {
+    const oldProfile = await dao.getProfileByID(1);
+
+    oldProfile.picture = new FileInfo(
+      'akutan.jpg',
+      mime.lookup('jpg') as string,
+      1024,
+      'akutan',
+    );
+
+    await dao.updateProfile(oldProfile);
+
+    const newProfile = await dao.getProfileByID(1);
+
+    expect(newProfile.picture.originalName).toEqual('akutan.jpg');
+  });
+
+  it('Email Query', async () => {
+    const user = await dao.getUserByEmail('tamanegi@mail.moe');
+
+    expect(user.password).toEqual('garlic');
   });
 
   // close mongoose connection to prevent Jest from hanging

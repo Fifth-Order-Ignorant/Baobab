@@ -1,42 +1,45 @@
-import { Model, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { Profile } from '../../../entities/profile.entity';
 import { Role } from '../../../entities/role.entity';
 import { FileInfoSchema } from './fileinfo.schema';
 
-export const ProfileSchema = new Schema<
-  Profile,
-  Model<Profile>,
-  Profile & { _id: Profile['id'] }
->(
+export const ProfileSchema = new Schema<Profile>(
   {
     _id: {
       type: Number,
       alias: 'id',
     },
-    firstName: {
+    _firstName: {
       type: String,
       required: true,
+      alias: 'firstName',
     },
-    lastName: {
+    _lastName: {
       type: String,
       required: true,
+      alias: 'lastName',
     },
-    bio: {
+    _bio: {
       type: String,
+      alias: 'bio',
     },
-    externalLinks: {
+    _externalLinks: {
       type: [String],
       required: true,
+      alias: 'externalLinks',
     },
-    jobTitle: {
+    _jobTitle: {
       type: String,
+      alias: 'jobTitle',
     },
-    role: {
+    _role: {
       type: String,
       enum: Object.values(Role),
+      alias: 'role',
     },
-    picture: {
+    _picture: {
       type: FileInfoSchema,
+      alias: 'picture',
     },
   },
   { id: false },

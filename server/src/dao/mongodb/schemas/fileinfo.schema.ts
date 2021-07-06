@@ -1,24 +1,30 @@
-import { Model, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { FileInfo } from '../../../entities/fileinfo.entity';
 
-export const FileInfoSchema = new Schema<FileInfo, Model<FileInfo>, FileInfo>(
+export const FileInfoSchema = new Schema<FileInfo>(
   {
-    storedName: {
+    _storedName: {
       type: String,
       required: true,
+      alias: 'storedName',
     },
-    mimetype: {
+    _mimetype: {
       type: String,
       required: true,
+      alias: 'mimetype',
     },
-    originalName: {
+    _originalName: {
       type: String,
       required: true,
+      alias: 'originalName',
     },
-    size: {
+    _size: {
       type: Number,
       required: true,
+      alias: 'size',
     },
   },
   { _id: false },
 );
+
+FileInfoSchema.loadClass(FileInfo);

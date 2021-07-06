@@ -1,23 +1,21 @@
-import { Model, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { User } from '../../../entities/user.entity';
 
-export const UserSchema = new Schema<
-  User,
-  Model<User>,
-  User & { _id: User['id'] }
->(
+export const UserSchema = new Schema<User>(
   {
     _id: {
       type: Number,
       alias: 'id',
     },
-    email: {
+    _email: {
       type: String,
       required: true,
+      alias: 'email',
     },
-    password: {
+    _password: {
       type: String,
       required: true,
+      alias: 'password',
     },
   },
   { id: false },

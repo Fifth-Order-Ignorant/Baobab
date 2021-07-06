@@ -43,7 +43,9 @@ export class UserProfileService {
   }
 
   async editJob(id: number, jobTitle: string): Promise<void> {
-    await this._userProfileRepository.editJob(id, jobTitle);
+    const profile = await this._userProfileRepository.getProfileByID(id);
+    profile.jobTitle = jobTitle;
+    await this._userProfileRepository.updateProfile(profile);
   }
 
   async editName(
@@ -51,11 +53,16 @@ export class UserProfileService {
     firstName: string,
     lastName: string,
   ): Promise<void> {
-    await this._userProfileRepository.editName(id, firstName, lastName);
+    const profile = await this._userProfileRepository.getProfileByID(id);
+    profile.firstName = firstName;
+    profile.lastName = lastName;
+    await this._userProfileRepository.updateProfile(profile);
   }
 
   async editBio(id: number, bio: string): Promise<void> {
-    await this._userProfileRepository.editBio(id, bio);
+    const profile = await this._userProfileRepository.getProfileByID(id);
+    profile.bio = bio;
+    await this._userProfileRepository.updateProfile(profile);
   }
 
   async getProfile(id: number): Promise<[string, string, string, string]> {

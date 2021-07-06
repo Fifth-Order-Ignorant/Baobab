@@ -31,25 +31,6 @@ export class UserProfileMongoDAO implements UserProfileDAO {
     return id;
   }
 
-  async editBio(id: number, bio: string): Promise<void> {
-    await this._profiles.findByIdAndUpdate(id, { bio: bio });
-  }
-
-  async editJob(id: number, jobTitle: string): Promise<void> {
-    await this._profiles.findByIdAndUpdate(id, { jobTitle: jobTitle });
-  }
-
-  async editName(
-    id: number,
-    firstName: string,
-    lastName: string,
-  ): Promise<void> {
-    await this._profiles.findByIdAndUpdate(id, {
-      firstName: firstName,
-      lastName: lastName,
-    });
-  }
-
   async getPaginatedProfiles(
     start: number,
     end: number,
@@ -84,7 +65,9 @@ export class UserProfileMongoDAO implements UserProfileDAO {
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    return this._users.findOne({ email: email }).lean<User>({ virtuals: true });
+    return this._users
+      .findOne(this._users.translateAliases({ email }))
+      .lean<User>({ virtuals: true });
   }
 
   async getUserByID(id: number): Promise<User> {
@@ -106,7 +89,9 @@ export class UserProfileMongoDAO implements UserProfileDAO {
 
   async updateProfile(profile: Profile): Promise<Profile> {
     return this._profiles
-      .findByIdAndUpdate(profile.id, profile, { new: true })
+      .findByIdAndUpdate(profile.id, this._profiles.translateAliases(profile), {
+        new: true,
+      })
       .lean({ virtuals: true });
   }
 }

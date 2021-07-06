@@ -73,26 +73,6 @@ export class UserProfileInMemory implements UserProfileDAO {
     return profile;
   }
 
-  async editName(
-    id: number,
-    firstName: string,
-    lastName: string,
-  ): Promise<void> {
-    const profile = await this.getProfileByID(id);
-    profile.firstName = firstName;
-    profile.lastName = lastName;
-  }
-
-  async editJob(id: number, jobTitle: string): Promise<void> {
-    const profile = await this.getProfileByID(id);
-    profile.jobTitle = jobTitle;
-  }
-
-  async editBio(id: number, bio: string): Promise<void> {
-    const profile = await this.getProfileByID(id);
-    profile.bio = bio;
-  }
-
   async getPaginatedProfiles(
     start: number,
     end: number,
