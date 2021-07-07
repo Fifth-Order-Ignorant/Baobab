@@ -8,6 +8,7 @@ import { PostModule } from './post.module';
 import { TeamModule } from './team.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
+import { InMemoryDAOModule } from './memory.module';
 
 @Module({
   imports: [
@@ -15,6 +16,8 @@ import configuration from './configuration';
       isGlobal: true,
       load: [configuration],
     }),
+    InMemoryDAOModule,
+    // other modules below here
     UserProfileModule,
     AuthModule,
     UserProfileEditModule,

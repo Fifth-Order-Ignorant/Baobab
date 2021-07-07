@@ -4,5 +4,5 @@ export class ProfileResponse {
   firstName!: string;
   lastName!: string;
   jobTitle!: string;
-  role!: number;
+  role!: string;
 }

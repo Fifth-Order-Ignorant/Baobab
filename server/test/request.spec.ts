@@ -1,5 +1,5 @@
 import { Role } from '../src/entities/role.entity';
-import { RequestInMemory } from '../src/dao/requests';
+import { RequestInMemory } from '../src/dao/memory/requests.mem';
 
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
@@ -52,7 +52,7 @@ describe('Role Request Tests', () => {
       .post('/request/role')
       .send({
         description: 'i want role',
-        role: 'entrepreneur',
+        role: 'Entrepreneur',
       })
       .expect(HttpStatus.CREATED);
   });
