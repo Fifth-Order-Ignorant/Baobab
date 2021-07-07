@@ -6,14 +6,25 @@ import {
   Post,
   Res,
   Req,
+  UseInterceptors,
+  UploadedFile,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
+import {
+  EditNameRequest,
+  EditJobRequest,
+  EditBioRequest,
+  ProfilePictureRequest,
+} from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponse } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { JwtAuth } from './jwt.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as mime from 'mime-types';
 
 @Controller('profile')
 export class UserProfileEditController {
@@ -96,6 +107,52 @@ export class UserProfileEditController {
       throw new BadRequestException({
         errors: [],
       });
+    }
+  }
+
+  @JwtAuth()
+  @Post('picture')
+  @UseInterceptors(
+    FileInterceptor('picture', {
+      fileFilter: (request, file, callback) => {
+        if ([mime.lookup('jpg'), mime.lookup('png')].includes(file.mimetype)) {
+          callback(null, true);
+        } else {
+          callback(null, false);
+        }
+      },
+    }),
+  )
+  async editPicture(@Req() req, @UploadedFile() file: Express.Multer.File) {
+    // when the callback above is rejected
+    if (!file) {
+      throw new BadRequestException();
+    }
+
+    await this._userProfileService.editPicture(
+      req.user.id,
+      file.originalname,
+      file.mimetype,
+      file.size,
+      file.filename,
+    );
+  }
+
+  @Get('picture/:id')
+  async getPicture(
+    @Param() params: ProfilePictureRequest,
+    @Res() res: Response,
+  ) {
+    const pictureInfo = await this._userProfileService.getPictureInfo(
+      params.id,
+    );
+    if (pictureInfo) {
+      const picture = await this._userProfileService.getPicture(params.id);
+
+      res.header('Content-Type', pictureInfo.mimetype);
+      picture.pipe(res);
+    } else {
+      throw new NotFoundException();
     }
   }
 }
