@@ -41,18 +41,20 @@ class MulterConfigService implements MulterOptionsFactory {
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Profile.name, schema: ProfileSchema },
-      { name: Request.name, schema: RequestSchema }
+      { name: Request.name, schema: RequestSchema },
     ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
   ],
-  providers: [{ provide: 'UserProfileDAO', useClass: UserProfileMongoDAO }, 
-              { provide: 'RequestDAO', useClass: RequestMongoDAO }],
+  providers: [
+    { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
+    { provide: 'RequestDAO', useClass: RequestMongoDAO },
+  ],
   exports: [
     MulterModule,
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
-    { provide: 'RequestDAO', useClass: RequestMongoDAO }
+    { provide: 'RequestDAO', useClass: RequestMongoDAO },
   ],
 })
 export class MongoDBDAOModule {}

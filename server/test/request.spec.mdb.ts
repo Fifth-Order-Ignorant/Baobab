@@ -23,9 +23,9 @@ describe('MongoDB Request DAO Tests', () => {
     requestDao = moduleRef.get<RequestDAO>('RequestDAO');
   });
   it('Create Request', async () => {
-    const userId: number = 0;
+    const userId = 0;
     const currentDate: Date = new Date();
-    const description: string = 'Can i have mod??';
+    const description = 'Can i have mod??';
     const role: Role = Role.INVESTOR_REP;
     const id = await requestDao.createRequest(
       userId,
