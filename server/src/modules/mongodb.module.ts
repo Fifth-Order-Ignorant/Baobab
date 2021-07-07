@@ -6,6 +6,9 @@ import { UserSchema } from '../dao/mongodb/schemas/user.schema';
 import { Profile } from '../entities/profile.entity';
 import { ProfileSchema } from '../dao/mongodb/schemas/profile.schema';
 import { UserProfileMongoDAO } from '../dao/mongodb/userprofiles.mdb';
+import { Request } from '../entities/request.entity';
+import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
+import { RequestMongoDAO } from '../dao/mongodb/requests.mdb';
 import { GridFsStorage } from 'multer-gridfs-storage/lib/gridfs';
 import { Connection } from 'mongoose';
 import {
@@ -38,15 +41,18 @@ class MulterConfigService implements MulterOptionsFactory {
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Profile.name, schema: ProfileSchema },
+      { name: Request.name, schema: RequestSchema }
     ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
   ],
-  providers: [{ provide: 'UserProfileDAO', useClass: UserProfileMongoDAO }],
+  providers: [{ provide: 'UserProfileDAO', useClass: UserProfileMongoDAO }, 
+              { provide: 'RequestDAO', useClass: RequestMongoDAO }],
   exports: [
     MulterModule,
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
+    { provide: 'RequestDAO', useClass: RequestMongoDAO }
   ],
 })
 export class MongoDBDAOModule {}
