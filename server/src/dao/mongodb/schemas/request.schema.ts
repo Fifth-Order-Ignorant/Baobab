@@ -34,8 +34,8 @@ export const RequestSchema = new Schema<
     role: {
       type: String,
       enum: Object.values(Role),
-      required: true
-    }
+      required: true,
+    },
   },
   { id: false },
 );
