@@ -38,17 +38,13 @@ export class PostInMemory implements PostDAO {
   }
 
   public async getChilds(id: number): Promise<Post[]> {
-    let children: Post[] = [];
-    for (let i = 0; i < this.posts.length; i++){
-      if (this.posts[i].parent.id === id){
+    const children: Post[] = [];
+    for (let i = 0; i < this.posts.length; i++) {
+      if (this.posts[i].parent.id === id) {
         children.push(this.posts[i]);
       }
     }
     return children;
-  }
-
-  public async getParent(id: number): Promise<Post> {
-    return (await this.getByID(id)).parent;
   }
 
   public async getParentPosts(

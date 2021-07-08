@@ -18,65 +18,68 @@ export class PostMongoDAO implements PostDAO {
   }
 
   async getChilds(id: number): Promise<Post[]> {
-    return this._posts.translateAliases({ parent: { id: id } });
+    return this._posts.find(this._posts.translateAliases({ parent: id }));
   }
   async getByID(id: number): Promise<Post> {
-    return this._posts.findById(id).populate('_parent');
+    return this._posts.findById(id);
   }
-  async getParent(id: number): Promise<Post> {
-    const post: Post = await this._posts.findById(id);
-    return post.parent;
-  }
+
   async getParentPosts(
     start: number,
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .where('parent')
-      .exists(false)
-      .sort({ timestamp: 'asc' })
-      .slice([start, end]);
+      .find(this._posts.translateAliases({ parent: null }))
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .skip(start)
+      .limit(end - start);
     return this.postsToRecords(posts);
   }
+
   async getReplies(
     postId: number,
     start: number,
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .translateAliases({ parent: { id: postId } })
-      .sort({ timestamp: 'asc' })
-      .slice([start, end]);
+      .find(this._posts.translateAliases({ parent: postId }))
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .skip(start)
+      .limit(end - start);
     return this.postsToRecords(posts);
   }
+
   async getRepliesOfUser(
     userId: number,
     start: number,
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .find({ userID: userId })
-      .where('parent')
-      .exists(true)
-      .sort({ timestamp: 'asc' })
-      .slice([start, end]);
+      .find(this._posts.translateAliases({ userID: userId }))
+      .where('_parent')
+      .ne(null)
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .skip(start)
+      .limit(end - start);
     return this.postsToRecords(posts);
   }
+
   async getPostsOfUser(
     userId: number,
     start: number,
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .find({ userID: userId })
-      .sort({ timestamp: 'asc' })
-      .slice([start, end]);
+      .find(this._posts.translateAliases({ userID: userId }))
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .skip(start)
+      .limit(end - start);
     return this.postsToRecords(posts);
   }
 
   // TODO: Records should be refactored into the controller.
   private postsToRecords(posts: Post[]) {
-    let records: Record<string, string | number>[] = [];
+    const records: Record<string, string | number>[] = [];
     for (let i = 0; i < posts.length; i++) {
       records.push(
         Object({

@@ -19,6 +19,7 @@ export const PostSchema = new Schema<Post>(
       type: Number,
       alias: 'parent',
       ref: Post.name,
+      autopopulate: true,
     },
     _timestamp: {
       type: Date,
@@ -28,5 +29,8 @@ export const PostSchema = new Schema<Post>(
   },
   { id: false },
 );
-// PostSchema.virtual('posts', {ref: 'posts', localField: 'parent', foreignField: 'id'}).loadClass(Post);
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+PostSchema.plugin(require('mongoose-autopopulate'));
+
 PostSchema.loadClass(Post);

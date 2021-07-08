@@ -32,10 +32,31 @@ describe('MongoDB User Profile DAO Tests', () => {
   });
 
   it('Create a reply', async () => {
-    const parentId = await dao.createPost(0, 'Hello world!', new Date(), null);
-    const childId = await dao.createPost(0, 'Goodbye world!', new Date(), await dao.getByID(parentId));
+    const childId = await dao.createPost(
+      0,
+      'Goodbye world!',
+      new Date(),
+      await dao.getByID(0),
+    );
     const childPost = await dao.getByID(childId);
-    expect(childPost.parent).toEqual(await dao.getByID(parentId));
+    expect(childPost.parent.id).toEqual(0);
+  });
+
+  it('Fetch Children', async () => {
+    const children = await dao.getChilds(0);
+    expect(children[0].id).toEqual(1);
+  });
+
+  it('Paginate Original Posts', async () => {
+    await dao.createPost(0, 'Akukin Kensetsu', new Date(), null);
+
+    const [firstPost] = await dao.getParentPosts(0, 1);
+
+    expect(firstPost.content).toEqual('Hello world!');
+
+    const [secondPost] = await dao.getParentPosts(1, 2);
+
+    expect(secondPost.content).toEqual('Akukin Kensetsu');
   });
 
   // close mongoose connection to prevent Jest from hanging

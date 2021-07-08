@@ -9,8 +9,10 @@ export interface PostDAO {
   ): Promise<number>;
   getChilds(id: number): Promise<Post[]>;
   getByID(id: number): Promise<Post>;
-  getParent(id: number): Promise<Post>;
-  getParentPosts(start: number, end: number): Promise<Record<string, string | number>[]>;
+  getParentPosts(
+    start: number,
+    end: number,
+  ): Promise<Record<string, string | number>[]>;
   getReplies(
     postId: number,
     start: number,
