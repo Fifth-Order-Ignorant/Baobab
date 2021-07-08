@@ -80,28 +80,28 @@ describe('Role Request Tests', () => {
 });
 
 describe('Request Basic Functionality', () => {
-  it('should create a request with valid id', () => {
+  it('should create a request with valid id', async () => {
     const requests = new RequestInMemory();
 
-    const requestID = requests.createRequest(
+    const requestID = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
-    return expect(requests.getById(requestID).id).toEqual(requestID);
+    return expect((await requests.getById(requestID)).id).toEqual(requestID);
   });
 
-  it('should return a request with requested Role', () => {
+  it('should return a request with requested Role', async () => {
     const requests = new RequestInMemory();
-    const requestID = requests.createRequest(
+    const requestID = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
 
-    const request = requests.getById(requestID);
+    const request = await requests.getById(requestID);
     return expect(request.role).toEqual(Role.INVESTOR_REP);
   });
 });
