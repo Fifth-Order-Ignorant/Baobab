@@ -1,37 +1,33 @@
-import { Model, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { Request } from '../../../entities/request.entity';
 import { Role } from '../../../entities/role.entity';
 import { RequestStatus } from '../../../entities/requeststatus.entity';
 
-export const RequestSchema = new Schema<
-  Request,
-  Model<Request>,
-  Request & { _id: Request['id'] }
->(
+export const RequestSchema = new Schema<Request>(
   {
     _id: {
       type: Number,
       alias: 'id',
       required: true,
     },
-    userID: {
+    _userID: {
       type: Number,
       required: true,
     },
-    status: {
+    _status: {
       type: Number,
       enum: Object.values(RequestStatus),
       required: true,
     },
-    timestamp: {
+    _timestamp: {
       type: Date,
       required: true,
     },
-    description: {
+    _description: {
       type: String,
       required: true,
     },
-    role: {
+    _role: {
       type: String,
       enum: Object.values(Role),
       required: true,
