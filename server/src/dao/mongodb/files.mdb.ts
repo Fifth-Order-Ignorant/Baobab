@@ -19,7 +19,7 @@ export class MulterConfigService implements MulterOptionsFactory {
         db: this._connection,
         file: (request, file) => {
           return {
-            filename: file.id,
+            filename: file.id.toString(),
           };
         },
       }),
