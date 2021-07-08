@@ -14,23 +14,20 @@ export class PostInMemory implements PostDAO {
     this.postCount = 0;
   }
 
-  public createPost(
+  public async createPost(
     userID: number,
     content: string,
     timestamp: Date,
     parent: Post,
-  ): number {
+  ): Promise<number> {
     const post = new Post(this.highestID, userID, content, timestamp, parent);
     this.posts.push(post);
-    if (parent) {
-      parent.addChild(post);
-    }
     this.highestID++;
 
     return this.highestID - 1;
   }
 
-  public getByID(id: number): Post {
+  public async getByID(id: number): Promise<Post> {
     let post: Post;
     this.posts.forEach((element) => {
       if (element.id === id) {
@@ -40,18 +37,24 @@ export class PostInMemory implements PostDAO {
     return post;
   }
 
-  public getChilds(id: number): Post[] {
-    return this.getByID(id).childs;
+  public async getChilds(id: number): Promise<Post[]> {
+    let children: Post[] = [];
+    for (let i = 0; i < this.posts.length; i++){
+      if (this.posts[i].parent.id === id){
+        children.push(this.posts[i]);
+      }
+    }
+    return children;
   }
 
-  public getParent(id: number): Post {
-    return this.getByID(id).parent;
+  public async getParent(id: number): Promise<Post> {
+    return (await this.getByID(id)).parent;
   }
 
-  public getParentPosts(
+  public async getParentPosts(
     start: number,
     end: number,
-  ): Record<string, string | number>[] {
+  ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
@@ -80,11 +83,11 @@ export class PostInMemory implements PostDAO {
     return lst;
   }
 
-  public getReplies(
+  public async getReplies(
     postId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[] {
+  ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
@@ -113,11 +116,11 @@ export class PostInMemory implements PostDAO {
     return lst;
   }
 
-  public getRepliesOfUser(
+  public async getRepliesOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[] {
+  ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
@@ -147,11 +150,11 @@ export class PostInMemory implements PostDAO {
     return lst;
   }
 
-  public getPostsOfUser(
+  public async getPostsOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[] {
+  ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];

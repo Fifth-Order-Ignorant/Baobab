@@ -31,7 +31,7 @@ export class PostController {
   @Post('create')
   @ApiResponse({ status: 201, description: 'The post is created.' })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
-  createPost(
+  async createPost(
     @Body() reqBody: PostRequest,
     @Res({ passthrough: true }) res: Response,
     @Req() req,
@@ -41,7 +41,7 @@ export class PostController {
     if (reqBody.parentID == -1) {
       parent = undefined;
     } else {
-      parent = this._postService.getParentPost(reqBody.parentID);
+      parent = await this._postService.getParentPost(reqBody.parentID);
       if (!parent) {
         throw new BadRequestException({
           errors: [],

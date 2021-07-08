@@ -6,24 +6,24 @@ export interface PostDAO {
     content: string,
     timestamp: Date,
     parent: Post,
-  ): number;
-  getChilds(id: number): Post[];
-  getByID(id: number): Post;
-  getParent(id: number): Post;
-  getParentPosts(start: number, end: number): Record<string, string | number>[];
+  ): Promise<number>;
+  getChilds(id: number): Promise<Post[]>;
+  getByID(id: number): Promise<Post>;
+  getParent(id: number): Promise<Post>;
+  getParentPosts(start: number, end: number): Promise<Record<string, string | number>[]>;
   getReplies(
     postId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[];
+  ): Promise<Record<string, string | number>[]>;
   getRepliesOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[];
+  ): Promise<Record<string, string | number>[]>;
   getPostsOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Record<string, string | number>[];
+  ): Promise<Record<string, string | number>[]>;
 }
