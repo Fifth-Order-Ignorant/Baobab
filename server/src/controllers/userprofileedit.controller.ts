@@ -143,14 +143,10 @@ export class UserProfileEditController {
     @Param() params: ProfilePictureRequest,
     @Res() res: Response,
   ) {
-    const pictureInfo = await this._userProfileService.getPictureInfo(
-      params.id,
-    );
-    if (pictureInfo) {
-      const picture = await this._userProfileService.getPicture(params.id);
-
-      res.header('Content-Type', pictureInfo.mimetype);
-      picture.pipe(res);
+    const picture = await this._userProfileService.getPicture(params.id);
+    if (picture) {
+      res.header('Content-Type', picture.info.mimetype);
+      picture.data.pipe(res);
     } else {
       throw new NotFoundException();
     }

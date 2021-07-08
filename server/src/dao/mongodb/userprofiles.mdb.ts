@@ -5,7 +5,9 @@ import { Connection, Model } from 'mongoose';
 import { Profile } from '../../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { GridFSBucket } from 'mongodb';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UserProfileMongoDAO implements UserProfileDAO {
   private _gridFS: GridFSBucket;
 
@@ -40,6 +42,7 @@ export class UserProfileMongoDAO implements UserProfileDAO {
 
     const queryRes: Profile[] = await this._profiles
       .find()
+      .sort(this._profiles.translateAliases({ id: 1 }))
       .skip(start)
       .limit(end - start);
 
@@ -73,14 +76,6 @@ export class UserProfileMongoDAO implements UserProfileDAO {
 
   async getUserProfileCount(): Promise<number> {
     return this._users.countDocuments();
-  }
-
-  async getProfilePicture(id: number): Promise<NodeJS.ReadableStream> {
-    const profile = await this.getProfileByID(id);
-    if (profile.picture) {
-      return this._gridFS.openDownloadStreamByName(profile.picture.storedName);
-    }
-    return null;
   }
 
   async updateProfile(profile: Profile): Promise<Profile> {
