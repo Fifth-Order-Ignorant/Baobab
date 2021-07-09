@@ -44,4 +44,11 @@ export class RequestService {
     }
     return role;
   }
+
+  getRequests(
+    start: number,
+    end: number,
+  ): Request[] {
+    return this._requestRepository.getPaginatedRequests(start, end);
+  }
 }

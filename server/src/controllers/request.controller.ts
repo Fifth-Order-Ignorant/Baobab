@@ -9,9 +9,10 @@ import {
 } from '@nestjs/common';
 import { RequestService } from '../services/request.service';
 import { Response } from 'express';
-import { RoleRequest } from 'baobab-common';
+import { RoleRequest, RequestPaginationRequest } from 'baobab-common';
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuth } from './jwt.decorator';
+import { Request } from '../entities/request.entity';
 
 @Controller('request')
 export class RequestController {
@@ -48,5 +49,16 @@ export class RequestController {
         errors: [],
       });
     }
+  }
+
+  @Post('pagination')
+  pagination(
+    @Body() reqBody: RequestPaginationRequest,
+  ): Request[] {
+    const paginatedRequests: Request[] = this._requestService.getRequests(
+      reqBody.start,
+      reqBody.end,
+    );
+    return paginatedRequests;
   }
 }

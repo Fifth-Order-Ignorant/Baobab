@@ -10,6 +10,7 @@ export interface RequestDAO {
     role: Role,
   ): number;
   getById(id: number);
+  getPaginatedRequests(start: number, end: number);
 }
 
 @Injectable()
@@ -50,5 +51,21 @@ export class RequestInMemory implements RequestDAO {
       }
     });
     return request;
+  }
+
+  public getPaginatedRequests(
+    start: number,
+    end: number,
+  ): Request[] {
+    const requests: Request[] = this.requests;
+    const n: number = requests.length;
+    const lst: Request[] = [];
+    let count = start;
+    while (count < end && count < n) {
+      const post: Request = requests[count];
+      lst.push(post);
+      count++;
+    }
+    return lst;
   }
 }
