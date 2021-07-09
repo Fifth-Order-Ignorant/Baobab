@@ -20,7 +20,13 @@ import {
   ProfilePictureRequest,
 } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { JwtAuth } from './jwt.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -123,6 +129,10 @@ export class UserProfileEditController {
       },
     }),
   )
+  @ApiCreatedResponse({ description: 'Profile picture update successful.' })
+  @ApiBadRequestResponse({
+    description: 'Uploaded file is not a JPG or PNG image.',
+  })
   async editPicture(@Req() req, @UploadedFile() file: Express.Multer.File) {
     // when the callback above is rejected
     if (!file) {
@@ -138,6 +148,8 @@ export class UserProfileEditController {
     );
   }
 
+  @ApiOkResponse({ description: 'Profile picture download successful.' })
+  @ApiNotFoundResponse({ description: 'Profile picture not found.' })
   @Get('picture/:id')
   async getPicture(
     @Param() params: ProfilePictureRequest,
