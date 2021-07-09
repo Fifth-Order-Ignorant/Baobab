@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Res,
   Req,
   UseInterceptors,
@@ -59,8 +60,8 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @Post('editname')
-  @ApiResponse({ status: 201, description: 'Name is updated.' })
+  @Patch('editname')
+  @ApiResponse({ status: 200, description: 'Name is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async editName(@Req() req, @Body() reqBody: EditNameRequest) {
     const id = req.user.id;
@@ -79,7 +80,7 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @ApiResponse({ status: 201, description: 'Job is updated.' })
+  @ApiResponse({ status: 200, description: 'Job is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Post('editjob')
   async editJob(
@@ -98,9 +99,9 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @ApiResponse({ status: 201, description: 'Bio is updated.' })
+  @ApiResponse({ status: 200, description: 'Bio is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Post('editbio')
+  @Patch('editbio')
   async editBio(
     @Body() reqBody: EditBioRequest,
     @Res({ passthrough: true }) res: Response,
