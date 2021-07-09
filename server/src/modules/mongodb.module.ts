@@ -5,6 +5,8 @@ import { User } from '../entities/user.entity';
 import { UserSchema } from '../dao/mongodb/schemas/user.schema';
 import { Profile } from '../entities/profile.entity';
 import { ProfileSchema } from '../dao/mongodb/schemas/profile.schema';
+import { Assignment } from '../entities/assignment.entity';
+import { AssignmentSchema } from '../dao/mongodb/schemas/assignment.schema';
 import { UserProfileMongoDAO } from '../dao/mongodb/userprofiles.mdb';
 import { Request } from '../entities/request.entity';
 import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
@@ -16,6 +18,7 @@ import {
   MulterModuleOptions,
   MulterOptionsFactory,
 } from '@nestjs/platform-express';
+import { AssignmentMongoDAO } from '../dao/mongodb/assignments.mdb';
 
 @Injectable()
 class MulterConfigService implements MulterOptionsFactory {
@@ -42,6 +45,7 @@ class MulterConfigService implements MulterOptionsFactory {
       { name: User.name, schema: UserSchema },
       { name: Profile.name, schema: ProfileSchema },
       { name: Request.name, schema: RequestSchema },
+      { name: Assignment.name, schema: AssignmentSchema },
     ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
@@ -50,11 +54,13 @@ class MulterConfigService implements MulterOptionsFactory {
   providers: [
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
+    { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
   ],
   exports: [
     MulterModule,
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
+    { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
   ],
 })
 export class MongoDBDAOModule {}
