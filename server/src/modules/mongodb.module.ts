@@ -8,6 +8,10 @@ import { ProfileSchema } from '../dao/mongodb/schemas/profile.schema';
 import { Assignment } from '../entities/assignment.entity';
 import { AssignmentSchema } from '../dao/mongodb/schemas/assignment.schema';
 import { UserProfileMongoDAO } from '../dao/mongodb/userprofiles.mdb';
+import { Post } from '../entities/post.entity';
+import { PostSchema } from '../dao/mongodb/schemas/post.schema';
+import { PostMongoDAO } from '../dao/mongodb/posts.mdb';
+
 import { Request } from '../entities/request.entity';
 import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
 import { RequestMongoDAO } from '../dao/mongodb/requests.mdb';
@@ -44,6 +48,7 @@ class MulterConfigService implements MulterOptionsFactory {
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Profile.name, schema: ProfileSchema },
+      { name: Post.name, schema: PostSchema },
       { name: Request.name, schema: RequestSchema },
       { name: Assignment.name, schema: AssignmentSchema },
     ]),
@@ -53,12 +58,14 @@ class MulterConfigService implements MulterOptionsFactory {
   ],
   providers: [
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
+    { provide: 'PostDAO', useClass: PostMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
   ],
   exports: [
     MulterModule,
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
+    { provide: 'PostDAO', useClass: PostMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
   ],
