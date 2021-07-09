@@ -14,6 +14,5 @@ export interface UserProfileDAO {
   getUserByEmail(email: string): Promise<User>;
   getProfileByID(id: number): Promise<Profile>;
   getPaginatedProfiles(start: number, end: number): Promise<ProfileResponse[]>;
-  getProfilePicture(id: number): Promise<NodeJS.ReadableStream>;
   updateProfile(profile: Profile): Promise<Profile>;
 }

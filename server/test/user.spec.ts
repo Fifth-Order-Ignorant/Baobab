@@ -9,6 +9,9 @@ import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import { Role } from '../src/entities/role.entity';
+import * as superagent from 'superagent';
+import * as crypto from 'crypto';
+import * as fs from 'fs';
 
 describe('End to end profile editing tests', () => {
   let app: INestApplication;
@@ -25,6 +28,10 @@ describe('End to end profile editing tests', () => {
     app.useGlobalPipes(new YupValidationPipe());
     app.use(cookieParser());
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it(`lets you get your profile`, async () => {
@@ -151,8 +158,37 @@ describe('End to end profile editing tests', () => {
     done();
   });
 
-  afterAll(async () => {
-    await app.close();
+  it('Profile Picture Upload', async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    await agent
+      .post('/profile/picture')
+      .attach('picture', './test/pfp.png')
+      .expect(HttpStatus.CREATED);
+
+    const pfpDownload = await agent
+      .get('/profile/picture/0')
+      .expect(HttpStatus.OK)
+      .buffer(true)
+      // eslint-disable-next-line import/namespace
+      .parse(superagent.parse.image);
+
+    const localChecksum = crypto
+      .createHash('md5')
+      .update(fs.readFileSync('./test/pfp.png'))
+      .digest('hex');
+
+    const downloadChecksum = crypto
+      .createHash('md5')
+      .update(pfpDownload.body)
+      .digest('hex');
+
+    expect(downloadChecksum).toEqual(localChecksum);
   });
 });
 
@@ -271,7 +307,7 @@ describe('Profile Pagination Basic Functionality', () => {
     profile1.changeRole(Role.INVESTOR_REP);
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
-    const userID2 = users.addUserProfile(
+    const userID2 = await users.addUserProfile(
       'Michael',
       'Sheinman (Clone)',
       'michael092002@gmail.com',
@@ -279,26 +315,6 @@ describe('Profile Pagination Basic Functionality', () => {
     );
     const profiles = await users.getPaginatedProfiles(0, 2);
 
-    expect(profiles).toContainEqual(
-      Object({
-        id: userID,
-        bio: 'I love chihuahuas.',
-        firstName: 'Michael',
-        lastName: 'Sheinman Orenstrakh',
-        jobTitle: 'OP Programmer',
-        role: Role[Role.INVESTOR_REP],
-      }),
-    );
-    expect(profiles).toContainEqual(
-      Object({
-        id: userID2,
-        bio: '',
-        firstName: 'Michael',
-        lastName: 'Sheinman (Clone)',
-        jobTitle: '',
-        role: Role[Role.DEFAULT],
-      }),
-    );
     expect(profiles).toEqual([
       Object({
         id: userID,
@@ -306,7 +322,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
         jobTitle: 'OP Programmer',
-        role: Role[Role.INVESTOR_REP],
+        role: Role.INVESTOR_REP,
       }),
       Object({
         id: userID2,
@@ -314,7 +330,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',
         jobTitle: '',
-        role: Role[Role.DEFAULT],
+        role: Role.DEFAULT,
       }),
     ]);
   });
