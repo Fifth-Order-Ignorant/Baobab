@@ -4,6 +4,9 @@ import { Connection, Model } from 'mongoose';
 import { Assignment } from '../../entities/assignment.entity';
 import { GridFSBucket } from 'mongodb';
 
+/**
+ * Save Assignment Entities in a MongoDB Database
+ */
 export class AssignmentMongoDAO implements AssignmentDAO {
     private _gridFS: GridFSBucket;
 
