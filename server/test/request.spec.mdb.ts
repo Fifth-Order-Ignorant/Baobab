@@ -58,4 +58,8 @@ describe('MongoDB Request DAO Tests', () => {
     request = await requestDao.getById(req2Id);
     expect(request.id).toEqual(req2Id);
   });
+  // close mongoose connection to prevent Jest from hanging
+  afterAll(async () => {
+    await moduleRef.close();
+  });
 });
