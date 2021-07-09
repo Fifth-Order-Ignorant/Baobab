@@ -18,7 +18,7 @@ export class PostMongoDAO implements PostDAO {
   }
 
   async getChilds(id: number): Promise<Post[]> {
-    return this._posts.find(this._posts.translateAliases({ parent: id }));
+    return this._posts.find(await this._posts.translateAliases({ parent: id }));
   }
   async getByID(id: number): Promise<Post> {
     return this._posts.findById(id);
@@ -29,8 +29,8 @@ export class PostMongoDAO implements PostDAO {
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .find(this._posts.translateAliases({ parent: null }))
-      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .find(await this._posts.translateAliases({ parent: null }))
+      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return this.postsToRecords(posts);
@@ -42,8 +42,8 @@ export class PostMongoDAO implements PostDAO {
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .find(this._posts.translateAliases({ parent: postId }))
-      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .find(await this._posts.translateAliases({ parent: postId }))
+      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return this.postsToRecords(posts);
@@ -55,10 +55,10 @@ export class PostMongoDAO implements PostDAO {
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .find(this._posts.translateAliases({ userID: userId }))
+      .find(await this._posts.translateAliases({ userID: userId }))
       .where('_parent')
       .ne(null)
-      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return this.postsToRecords(posts);
@@ -70,8 +70,8 @@ export class PostMongoDAO implements PostDAO {
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const posts: Post[] = await this._posts
-      .find(this._posts.translateAliases({ userID: userId }))
-      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
+      .find(await this._posts.translateAliases({ userID: userId }))
+      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return this.postsToRecords(posts);
