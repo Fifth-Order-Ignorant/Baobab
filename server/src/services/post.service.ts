@@ -28,7 +28,7 @@ export class PostService {
 
   async getPaginatedPosts(start: number, end: number): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
-    await this._postRepository.getParentPosts(start, end);
+      await this._postRepository.getParentPosts(start, end);
     return this.changeIdToAuthor(posts);
   }
 
@@ -38,7 +38,7 @@ export class PostService {
     end: number,
   ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
-    await this._postRepository.getReplies(postId, start, end);
+      await this._postRepository.getReplies(postId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
@@ -48,7 +48,7 @@ export class PostService {
     end: number,
   ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
-    await this._postRepository.getRepliesOfUser(userId, start, end);
+      await this._postRepository.getRepliesOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 

@@ -1,4 +1,4 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import { Post } from '../../../entities/post.entity';
 
 export const PostSchema = new Schema<Post>(
