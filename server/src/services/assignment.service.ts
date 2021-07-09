@@ -8,13 +8,13 @@ export class AssignmentService {
     @Inject('AssignmentDAO') private _assignmentRepository: AssignmentDAO,
   ) {}
 
-  createAssignment(
+  async createAssignment(
     name: string,
     description: string,
     maxMark = -1,
-  ): Assignment {
-    return this._assignmentRepository.getById(
-      this._assignmentRepository.createAssignment(name, description, maxMark),
+  ): Promise<Assignment> {
+    return await this._assignmentRepository.getById(
+      await this._assignmentRepository.createAssignment(name, description, maxMark),
     );
   }
 }
