@@ -1,4 +1,5 @@
 import { Role } from '../entities/role.entity';
+import { Request } from '../entities/request.entity';
 
 export interface RequestDAO {
   createRequest(
@@ -6,6 +7,6 @@ export interface RequestDAO {
     description: string,
     timestamp: Date,
     role: Role,
-  ): number;
-  getById(id: number);
+  ): Promise<number>;
+  getById(id: number): Promise<Request>;
 }
