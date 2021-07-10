@@ -38,7 +38,12 @@ function AuthProvider({
         return value;
       },
       (error) => {
-        updateToken();
+        // 401 = outdated token, 403 = stale info
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          setToken(undefined);
+        } else {
+          updateToken();
+        }
         return Promise.reject(error);
       },
     );
