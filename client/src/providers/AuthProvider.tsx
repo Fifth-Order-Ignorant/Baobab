@@ -38,11 +38,7 @@ function AuthProvider({
         return value;
       },
       (error) => {
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
-          setToken(undefined);
-        } else {
-          updateToken();
-        }
+        updateToken();
         return Promise.reject(error);
       },
     );
