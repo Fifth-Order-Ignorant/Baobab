@@ -172,7 +172,7 @@ describe('End to end profile editing tests', () => {
       .expect(HttpStatus.CREATED);
 
     const pfpDownload = await agent
-      .get('/profile/picture/0')
+      .get('/user/picture/0')
       .expect(HttpStatus.OK)
       .buffer(true)
       // eslint-disable-next-line import/namespace
