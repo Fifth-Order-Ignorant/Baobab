@@ -69,8 +69,11 @@ function AvatarComponent({ id }: AvatarComponentProps): JSX.Element {
           <Avatar
             size={200}
             className={styles.avatar}
-            // a likely suboptimal way to immediately update profile picture
-            src={`/api/user/picture/${id.toString()}?cacheBreak=${new Date().getTime()}`}
+            // ignore cache on own profile so picture changes reflect
+            // immediately to not confuse the user
+            src={`/api/user/picture/${id.toString()}${
+              id === authState?.id ? `?cacheBreak=${new Date().getTime()}` : ''
+            }`}
             icon={<UserOutlined />}
           />
         )}
