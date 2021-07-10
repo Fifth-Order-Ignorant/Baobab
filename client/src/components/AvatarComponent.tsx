@@ -4,7 +4,7 @@ import { Avatar, Spin, Upload } from 'antd';
 import styles from '../../styles/Profile.module.css';
 import { UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import * as mime from 'mime-types';
+import * as mime from 'mime';
 
 type AvatarComponentProps = {
   /**
@@ -13,6 +13,9 @@ type AvatarComponentProps = {
   id: number;
 };
 
+/**
+ * Component for displaying a profile's avatar.
+ */
 function AvatarComponent({ id }: AvatarComponentProps): JSX.Element {
   const authState = useContext(AuthContext);
 
@@ -41,7 +44,7 @@ function AvatarComponent({ id }: AvatarComponentProps): JSX.Element {
         maxCount={1}
         showUploadList={false}
         className="avatar-uploader"
-        accept={`${mime.lookup('jpg')},${mime.lookup('png')}`}
+        accept={`${mime.getType('jpg')},${mime.getType('png')}`}
         customRequest={(options) => {
           const data = new FormData();
           data.append('picture', options.file);

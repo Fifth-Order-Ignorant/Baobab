@@ -31,7 +31,7 @@ import {
 import { AuthService } from '../services/auth.service';
 import { JwtAuth } from './jwt.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as mime from 'mime-types';
+import * as mime from 'mime';
 
 @Controller('profile')
 export class UserProfileEditController {
@@ -122,7 +122,9 @@ export class UserProfileEditController {
   @UseInterceptors(
     FileInterceptor('picture', {
       fileFilter: (request, file, callback) => {
-        if ([mime.lookup('jpg'), mime.lookup('png')].includes(file.mimetype)) {
+        if (
+          [mime.getType('jpg'), mime.getType('png')].includes(file.mimetype)
+        ) {
           callback(null, true);
         } else {
           callback(null, false);

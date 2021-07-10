@@ -22,7 +22,7 @@
     "react-dom": "17.0.2",
     "react-hook-form": "^7.7.1",
     "react-infinite-scroller": "^1.2.4",
-    "mime-types": "^2.1.31",
+    "mime": "^2.5.2",
     "moment": "^2.29.1",
     "yup": "^0.32.9"
   },
@@ -43,7 +43,7 @@
     "@types/react": "17.0.8",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
-    "@types/mime-types": "^2.1.0",
+    "@types/mime": "^2.0.3",
     "babel-loader": "^8.2.2",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
