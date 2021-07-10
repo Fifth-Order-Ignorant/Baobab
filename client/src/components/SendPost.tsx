@@ -1,9 +1,10 @@
 import Card from './Card';
-import { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { Avatar, Form, Input, Comment, Button, Col, Row, message } from 'antd';
 import styles from '../../styles/Post.module.css';
 import { PostRequest } from 'baobab-common';
 import axios from 'axios';
+import { UserOutlined } from '@ant-design/icons';
 
 /**
  * Interface for the SendPost props.
@@ -49,7 +50,12 @@ function SendPost(props: SendPostProps): JSX.Element {
           <Comment
             className={styles.postComment}
             author={props.author}
-            avatar={<Avatar />}
+            avatar={
+              <Avatar
+                src={`/api/user/picture/${props.authorId.toString()}`}
+                icon={<UserOutlined />}
+              />
+            }
             content={
               <Form.Item>
                 <Input.TextArea rows={4} onChange={onPostChange} value={post} />
@@ -78,6 +84,10 @@ interface CreatePostProps {
    * Post sender.
    */
   author: string;
+  /**
+   * Post sender ID.
+   */
+  authorId: number;
 }
 
 const sendPost = async (
@@ -105,6 +115,7 @@ export function CreatePost(props: CreatePostProps): JSX.Element {
   return (
     <SendPost
       author={props.author}
+      authorId={props.authorId}
       sendPost={(content) => sendPost(content, -1)}
     />
   );
@@ -124,6 +135,7 @@ export function ReplyPost(props: ReplyPostProps): JSX.Element {
   return (
     <SendPost
       author={props.author}
+      authorId={props.authorId}
       sendPost={(content) => sendPost(content, props.parent)}
     />
   );

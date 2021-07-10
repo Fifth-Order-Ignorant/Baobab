@@ -15,4 +15,8 @@ export class PostResponse {
    * ID of the post.
    */
   postId!: number;
+  /**
+   * ID of the author.
+   */
+  authorId!: number;
 }
