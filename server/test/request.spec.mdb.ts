@@ -1,4 +1,4 @@
-import { RequestDAO } from '../src/dao/request';
+import { RequestDAO } from '../src/dao/requests';
 import { Role } from '../src/entities/role.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
