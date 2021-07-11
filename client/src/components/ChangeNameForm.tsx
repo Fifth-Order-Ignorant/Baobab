@@ -42,10 +42,13 @@ function ChangeNameForm(name: Name): JSX.Element {
   });
 
   const onSubmit = async (data: EditNameRequest) => {
+    data.firstName = (document.getElementById("firstName") as HTMLInputElement).value;
+    data.lastName = (document.getElementById("lastName") as HTMLInputElement).value;
+    console.log(data);
     setFirstName(data.firstName);
     setLastName(data.lastName);
     try {
-      await axios.post('/api/profile/editname', data);
+      await axios.patch('/api/profile/editname', data);
       changeState();
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
@@ -75,6 +78,11 @@ function ChangeNameForm(name: Name): JSX.Element {
       });
   };
 
+  useEffect(() => {
+    setFirstName(name.firstName);
+    setLastName(name.lastName);
+  }, [name]);
+
   const GetLastName = () => {
     axios
       .get('/api/profile/myprofile')
@@ -96,7 +104,7 @@ function ChangeNameForm(name: Name): JSX.Element {
     if (state == 'default' && name.canEdit) {
       setState('edit');
     } else if (state == 'edit') {
-      setState('done');
+      setState('default');
     }
   };
 
@@ -105,12 +113,9 @@ function ChangeNameForm(name: Name): JSX.Element {
       <Form.Item>
         <p onClick={() => changeState()}>
           {state === 'default' && (
-            <h3>{name.firstName + ' ' + name.lastName}</h3>
+            <h3>{firstName + ' ' + lastName}</h3>
           )}
         </p>
-        {state === 'done' && (
-          <h3>{firstName + ' ' + lastName + ' (reload to edit again)'}</h3>
-        )}
         {state === 'edit' && (
           <Form.Item
             name="firstName"
@@ -120,7 +125,8 @@ function ChangeNameForm(name: Name): JSX.Element {
           >
             <Input
               size="large"
-              placeholder={name.firstName}
+              placeholder={firstName}
+              id={"firstName"}
               {...register('firstName')}
             />
           </Form.Item>
@@ -134,7 +140,8 @@ function ChangeNameForm(name: Name): JSX.Element {
           >
             <Input
               size="large"
-              placeholder={name.lastName}
+              placeholder={lastName}
+              id={"lastName"}
               {...register('lastName')}
             />
           </Form.Item>

@@ -33,9 +33,10 @@ function ChangeJobForm(job: Job): JSX.Element {
   });
 
   const onSubmit = async (data: EditJobRequest) => {
+    data.jobTitle = (document.getElementById("job") as HTMLInputElement).value;
     setInfo(data.jobTitle);
     try {
-      await axios.post('/api/profile/editjob', data);
+      await axios.patch('/api/profile/editjob', data);
       changeState();
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
@@ -77,16 +78,19 @@ function ChangeJobForm(job: Job): JSX.Element {
     if (state == 'default' && job.canEdit) {
       setState('edit');
     } else if (state == 'edit') {
-      setState('done');
+      setState('default');
     }
   };
+
+  useEffect(() => {
+    setInfo(job.job);
+  }, [job]);
 
   return (
     <Form onFinish={handleSubmit(onSubmit)}>
       <Form.Item>
         <p onClick={() => changeState()}>
-          {state === 'default' && <h3>{job.job}</h3>}
-          {state === 'done' && <h3>{info + ' (reload to edit again)'}</h3>}
+          {state === 'default' && <h3>{info}</h3>}
         </p>
         {state === 'edit' && (
           <Form.Item
@@ -94,7 +98,7 @@ function ChangeJobForm(job: Job): JSX.Element {
             validateStatus={errors.jobTitle ? 'error' : ''}
             help={errors.jobTitle?.message}
           >
-            <Input defaultValue={job.job} {...register('jobTitle')} />
+            <Input defaultValue={info} id="job" {...register('jobTitle')} />
           </Form.Item>
         )}
         {state === 'edit' && (

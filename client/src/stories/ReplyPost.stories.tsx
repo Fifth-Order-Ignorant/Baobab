@@ -7,5 +7,5 @@ export default {
 } as Meta;
 
 export const Basic = (): JSX.Element => (
-  <ReplyPost author={'John Deer'} parent={0} />
+  <ReplyPost author={'John Deer'} authorId={0} parent={0} />
 );

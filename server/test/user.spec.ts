@@ -67,12 +67,12 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/profile/editname')
+      .patch('/profile/editname')
       .send({
         firstName: 'ethan2',
         lastName: 'lam2',
       })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
   });
 
   it(`changes your name correctly`, async (done) => {
@@ -101,11 +101,11 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/profile/editjob')
+      .patch('/profile/editjob')
       .send({
         jobTitle: 'marketing vp',
       })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
   });
 
   it(`changes your job correctly`, async (done) => {
@@ -134,11 +134,11 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/profile/editbio')
+      .patch('/profile/editbio')
       .send({
         bio: 'haha!',
       })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
   });
 
   it(`changes your bio correctly`, async (done) => {
@@ -172,7 +172,7 @@ describe('End to end profile editing tests', () => {
       .expect(HttpStatus.CREATED);
 
     const pfpDownload = await agent
-      .get('/profile/picture/0')
+      .get('/user/picture/0')
       .expect(HttpStatus.OK)
       .buffer(true)
       // eslint-disable-next-line import/namespace

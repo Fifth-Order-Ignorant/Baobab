@@ -1,9 +1,10 @@
 import { Row, Col, Typography, List, Avatar } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from '../styles/ProfileList.module.css';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
+import { UserOutlined } from '@ant-design/icons';
 /**
  * Interface for the props that are required for each profile preview
  */
@@ -73,7 +74,10 @@ const Profiles = (): JSX.Element => {
                     <List.Item>
                       <List.Item.Meta
                         avatar={
-                          <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                          <Avatar
+                            src={`/api/user/picture/${item.id.toString()}`}
+                            icon={<UserOutlined />}
+                          />
                         }
                         title={item.firstName + ' ' + item.lastName}
                         description={item.jobTitle}
