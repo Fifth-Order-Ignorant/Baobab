@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Role } from '../entities/role.entity';
-import { RequestDAO } from '../dao/request';
+import { RequestDAO } from '../dao/requests';
 import { Request } from '../entities/request.entity';
 
 @Injectable()
