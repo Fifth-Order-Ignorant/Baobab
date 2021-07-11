@@ -89,54 +89,43 @@ describe('Post Creation Tests', () => {
 });
 
 describe('Post Basic Functionality', () => {
-  it('should create a post with valid id', () => {
+  it('should create a post with valid id', async () => {
     const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const postId = posts.createPost(1, 'hello', nowTime, undefined);
-    expect(posts.getByID(postId).id == postId);
+    const postId = await posts.createPost(1, 'hello', nowTime, undefined);
+    expect((await posts.getByID(postId)).id == postId);
   });
 
-  it('should return a post given an id', () => {
+  it('should return a post given an id', async () => {
     const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const postId = posts.createPost(1, 'hello', nowTime, undefined);
-    const post = posts.getByID(postId);
+    const postId = await posts.createPost(1, 'hello', nowTime, undefined);
+    const post = await posts.getByID(postId);
     expect(post.parent == undefined);
   });
 
-  it('lets you create a post with a parent', () => {
+  it('lets you create a post with a parent', async () => {
     const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = posts.getByID(post1);
-    const post2 = posts.createPost(1, 'hello2', nowTime, parentPost);
-    const post = posts.getByID(post2);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = await posts.getByID(post1);
+    const post2 = await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const post = await posts.getByID(post2);
     expect(post.parent == parentPost);
-  });
-
-  it('lets you create a post with a parent and parent correctly stores the child', () => {
-    const posts = new PostInMemory();
-
-    const nowTime = new Date();
-    const post1 = posts.createPost(2, 'hi', nowTime, undefined);
-    const parentPost = posts.getByID(post1);
-    const post2 = posts.createPost(3, 'hi2', nowTime, parentPost);
-
-    expect(parentPost.childs[0].id == post2);
   });
 });
 
 describe('Post Pagination Basic Functionality', () => {
-  it('should return the parent posts paginated data in the right format', () => {
+  it('should return the parent posts paginated data in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = posts.getByID(post1);
-    posts.createPost(1, 'hello2', nowTime, parentPost);
-    const postPagination = posts.getParentPosts(0, 2);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = await posts.getByID(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = await posts.getParentPosts(0, 2);
     const expected: Record<string, string | number>[] = [
       Object({
         author: 1,
@@ -148,13 +137,13 @@ describe('Post Pagination Basic Functionality', () => {
     expect(postPagination).toEqual(expected);
   });
 
-  it('should return the replies paginated data in the right format', () => {
+  it('should return the replies paginated data in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = posts.getByID(post1);
-    posts.createPost(1, 'hello2', nowTime, parentPost);
-    const postPagination = posts.getReplies(0, 0, 2);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = await posts.getByID(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = await posts.getReplies(0, 0, 2);
     const expected: Record<string, string | number>[] = [
       Object({
         author: 1,
@@ -166,13 +155,13 @@ describe('Post Pagination Basic Functionality', () => {
     expect(postPagination).toEqual(expected);
   });
 
-  it('should return the paginated data in the right format', () => {
+  it('should return the paginated data in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = posts.getByID(post1);
-    posts.createPost(1, 'hello2', nowTime, parentPost);
-    const postPagination = posts.getRepliesOfUser(1, 0, 2);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = await posts.getByID(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = await posts.getRepliesOfUser(1, 0, 2);
     const expected: Record<string, string | number>[] = [
       Object({
         author: 1,
@@ -184,13 +173,13 @@ describe('Post Pagination Basic Functionality', () => {
     expect(postPagination).toEqual(expected);
   });
 
-  it('should return the paginated data of one user posts in the right format', () => {
+  it('should return the paginated data of one user posts in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = posts.getByID(post1);
-    posts.createPost(1, 'hello2', nowTime, parentPost);
-    const postPagination = posts.getPostsOfUser(1, 0, 2);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
+    const parentPost = await posts.getByID(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const postPagination = await posts.getPostsOfUser(1, 0, 2);
     const expected: Record<string, string | number>[] = [
       Object({
         author: 1,

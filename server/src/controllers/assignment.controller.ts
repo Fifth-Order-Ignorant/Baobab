@@ -19,16 +19,16 @@ export class AssignmentController {
   @Post('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
-  createAssignment(@Body() reqBody: CreateAssignmentRequest) {
+  async createAssignment(@Body() reqBody: CreateAssignmentRequest) {
     let assignment: Assignment;
     if (reqBody.maxMark) {
-      assignment = this._assignmentService.createAssignment(
+      assignment = await this._assignmentService.createAssignment(
         reqBody.name,
         reqBody.description,
         reqBody.maxMark,
       );
     } else {
-      assignment = this._assignmentService.createAssignment(
+      assignment = await this._assignmentService.createAssignment(
         reqBody.name,
         reqBody.description,
       );

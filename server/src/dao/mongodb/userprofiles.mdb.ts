@@ -6,6 +6,9 @@ import { Profile } from '../../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { GridFSBucket } from 'mongodb';
 
+/**
+ * Save UserProfileEntities in a MongoDB Database
+ */
 export class UserProfileMongoDAO implements UserProfileDAO {
   private _gridFS: GridFSBucket;
 
