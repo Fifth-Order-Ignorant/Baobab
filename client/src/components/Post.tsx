@@ -1,4 +1,4 @@
-import { Comment, Tooltip, Avatar, Button } from 'antd';
+import { Comment, Tooltip, Avatar, Button, List } from 'antd';
 import Card from './Card';
 import React, { useContext, useEffect, useState } from 'react';
 import styles from '../../styles/Post.module.css';
@@ -7,6 +7,9 @@ import { ReplyPost } from './SendPost';
 import { PostList } from './PostList';
 import { PostResponse, REPLY_LIMIT } from 'baobab-common';
 import { AuthContext } from '../providers/AuthProvider';
+import TagList from './TagList';
+import SampleTags from '../constants/SampleTags';
+// <TagList tags={SampleTags} />
 
 /**
  * Required props for rendering a post.
@@ -83,39 +86,47 @@ export function Post(props: PostProps): JSX.Element {
   return (
     <Card>
       <div>
-        <Comment
-          className={styles.postComment}
-          actions={[
-            <span
-              key="showReplies"
-              onClick={() => setShowReplies((prevState) => !prevState)}
-              style={replies.length > 0 ? {} : { display: 'none' }}
-            >
-              Show Replies
-            </span>,
-            <span
-              key="reply"
-              onClick={() => {
-                setReplyOpen(true);
-              }}
-              style={
-                authState && props.depth < REPLY_LIMIT
-                  ? {}
-                  : { display: 'none' }
+        <List>
+          <List.Item>
+            <Comment
+              className={styles.postComment}
+              actions={[
+                <span
+                  key="showReplies"
+                  onClick={() => setShowReplies((prevState) => !prevState)}
+                  style={replies.length > 0 ? {} : { display: 'none' }}
+                >
+                  Show Replies
+                </span>,
+                <span
+                  key="reply"
+                  onClick={() => {
+                    setReplyOpen(true);
+                  }}
+                  style={
+                    authState && props.depth < REPLY_LIMIT
+                      ? {}
+                      : { display: 'none' }
+                  }
+                >
+                  Reply to
+                </span>,
+              ]}
+              author={props.author}
+              content={props.content}
+              avatar={<Avatar />}
+              datetime={
+                <Tooltip title={postTime}>
+                  <span>{postTime}</span>
+                </Tooltip>
+
               }
-            >
-              Reply to
-            </span>,
-          ]}
-          author={props.author}
-          content={props.content}
-          avatar={<Avatar />}
-          datetime={
-            <Tooltip title={postTime}>
-              <span>{postTime}</span>
-            </Tooltip>
-          }
-        />
+            />
+          </List.Item>
+          <List.Item>
+            <TagList tags={SampleTags} /> {/* TODO: Replace SampleTags with PostResponse tags. */}
+          </List.Item>
+        </List>
         {replyOpen && (
           <div className={styles.replyMenu}>
             <ReplyPost parent={props.postId} author={'You!'} />
