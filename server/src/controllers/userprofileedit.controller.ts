@@ -60,9 +60,9 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @Patch('editname')
   @ApiResponse({ status: 200, description: 'Name is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @Patch('editname')
   async editName(@Req() req, @Body() reqBody: EditNameRequest) {
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
@@ -82,7 +82,7 @@ export class UserProfileEditController {
   @JwtAuth()
   @ApiResponse({ status: 200, description: 'Job is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Post('editjob')
+  @Patch('editjob')
   async editJob(
     @Body() reqBody: EditJobRequest,
     @Res({ passthrough: true }) res: Response,
