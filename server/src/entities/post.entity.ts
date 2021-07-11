@@ -3,7 +3,6 @@ export class Post {
   private _userID: number;
   private _content: string;
   private _timestamp: Date;
-  private _childs: Post[];
   // If no parent, _parent is undefined.
   private _parent: Post;
 
@@ -19,7 +18,6 @@ export class Post {
     this._content = content;
     this._timestamp = timestamp;
     this._parent = parent;
-    this._childs = [];
   }
 
   get id(): number {
@@ -34,19 +32,11 @@ export class Post {
     return this._content;
   }
 
-  get childs(): Post[] {
-    return this._childs;
-  }
-
   get parent(): Post {
     return this._parent;
   }
 
   get timestamp(): Date {
     return this._timestamp;
-  }
-
-  public addChild(child: Post): void {
-    this._childs.push(child);
   }
 }

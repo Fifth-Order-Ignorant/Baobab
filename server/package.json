@@ -41,6 +41,7 @@
     "swagger-ui-express": "^4.1.6",
     "yup": "^0.32.9",
     "mongoose": "^5.13.2",
+    "mongoose-autopopulate": "^0.14.0",
     "@nestjs/mongoose": "^7.2.4",
     "multer-gridfs-storage": "^5.0.0",
     "mime": "^2.5.2"
