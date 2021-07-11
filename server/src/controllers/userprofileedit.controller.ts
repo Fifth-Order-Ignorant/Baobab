@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Res,
   Req,
   UseInterceptors,
@@ -30,7 +31,7 @@ import {
 import { AuthService } from '../services/auth.service';
 import { JwtAuth } from './jwt.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as mime from 'mime-types';
+import * as mime from 'mime';
 
 @Controller('profile')
 export class UserProfileEditController {
@@ -59,9 +60,9 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @Post('editname')
-  @ApiResponse({ status: 201, description: 'Name is updated.' })
+  @ApiResponse({ status: 200, description: 'Name is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @Patch('editname')
   async editName(@Req() req, @Body() reqBody: EditNameRequest) {
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
@@ -79,9 +80,9 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @ApiResponse({ status: 201, description: 'Job is updated.' })
+  @ApiResponse({ status: 200, description: 'Job is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Post('editjob')
+  @Patch('editjob')
   async editJob(
     @Body() reqBody: EditJobRequest,
     @Res({ passthrough: true }) res: Response,
@@ -98,9 +99,9 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @ApiResponse({ status: 201, description: 'Bio is updated.' })
+  @ApiResponse({ status: 200, description: 'Bio is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Post('editbio')
+  @Patch('editbio')
   async editBio(
     @Body() reqBody: EditBioRequest,
     @Res({ passthrough: true }) res: Response,
@@ -121,7 +122,9 @@ export class UserProfileEditController {
   @UseInterceptors(
     FileInterceptor('picture', {
       fileFilter: (request, file, callback) => {
-        if ([mime.lookup('jpg'), mime.lookup('png')].includes(file.mimetype)) {
+        if (
+          [mime.getType('jpg'), mime.getType('png')].includes(file.mimetype)
+        ) {
           callback(null, true);
         } else {
           callback(null, false);

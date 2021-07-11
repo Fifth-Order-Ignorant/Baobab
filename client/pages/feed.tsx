@@ -30,7 +30,7 @@ export default function Feed(): JSX.Element {
           <Typography>
             <h2>Feed</h2>
           </Typography>
-          {authState && <CreatePost author={'You!'} />}
+          {authState && <CreatePost author={'You!'} authorId={authState.id} />}
           <PostFeed fetchPosts={fetchPosts} />
         </Col>
       </Row>

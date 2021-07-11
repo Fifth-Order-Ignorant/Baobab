@@ -72,13 +72,15 @@ export class PostService {
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
       if (typeof post !== 'undefined') {
+        const authorName = (
+          await this._userRepository.getProfileByID(post.author as number)
+        ).name;
         const newPost: PostResponse = {
-          author: (
-            await this._userRepository.getProfileByID(post.author as number)
-          ).name,
+          author: authorName,
           timestamp: post.timestamp as string,
           content: post.content as string,
           postId: post.postId as number,
+          authorId: post.author as number,
         };
         newPosts.push(newPost);
       }
