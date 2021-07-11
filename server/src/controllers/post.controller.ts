@@ -31,7 +31,7 @@ export class PostController {
   @Post('create')
   @ApiResponse({ status: 201, description: 'The post is created.' })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
-  createPost(
+  async createPost(
     @Body() reqBody: PostRequest,
     @Res({ passthrough: true }) res: Response,
     @Req() req,
@@ -41,7 +41,7 @@ export class PostController {
     if (reqBody.parentID == -1) {
       parent = undefined;
     } else {
-      parent = this._postService.getParentPost(reqBody.parentID);
+      parent = await this._postService.getParentPost(reqBody.parentID);
       if (!parent) {
         throw new BadRequestException({
           errors: [],
@@ -62,8 +62,10 @@ export class PostController {
   }
 
   @Get('pagination')
-  pagination(@Query() query: PostPaginationRequest): PostResponse[] {
-    const paginatedPosts = this._postService.getPaginatedPosts(
+  async pagination(
+    @Query() query: PostPaginationRequest,
+  ): Promise<PostResponse[]> {
+    const paginatedPosts = await this._postService.getPaginatedPosts(
       query.start,
       query.end,
     );
@@ -71,8 +73,10 @@ export class PostController {
   }
 
   @Get('replies')
-  replies(@Query() query: RepliesPaginationRequest): PostResponse[] {
-    const paginatedReplies = this._postService.getReplies(
+  async replies(
+    @Query() query: RepliesPaginationRequest,
+  ): Promise<PostResponse[]> {
+    const paginatedReplies = await this._postService.getReplies(
       query.id,
       query.start,
       query.end,
@@ -81,8 +85,10 @@ export class PostController {
   }
 
   @Get('userreplies')
-  userReplies(@Query() query: UserRepliesPaginationRequest): PostResponse[] {
-    const paginatedReplies = this._postService.getUserReplies(
+  async userReplies(
+    @Query() query: UserRepliesPaginationRequest,
+  ): Promise<PostResponse[]> {
+    const paginatedReplies = await this._postService.getUserReplies(
       query.id,
       query.start,
       query.end,
@@ -91,8 +97,10 @@ export class PostController {
   }
 
   @Get('userposts')
-  userPosts(@Query() query: UserPostsPaginationRequest): PostResponse[] {
-    const paginatedReplies = this._postService.getUserPosts(
+  async userPosts(
+    @Query() query: UserPostsPaginationRequest,
+  ): Promise<PostResponse[]> {
+    const paginatedReplies = await this._postService.getUserPosts(
       query.id,
       query.start,
       query.end,

@@ -1,5 +1,5 @@
-import { TeamInMemory } from '../src/dao/teams';
-import { UserProfileInMemory } from '../src/dao/userprofiles';
+import { TeamInMemory } from '../src/dao/memory/teams.mem';
+import { UserProfileInMemory } from '../src/dao/memory/userprofiles.mem';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
@@ -62,11 +62,11 @@ describe('Team Create API Test', () => {
 });
 
 describe('Team Creation Test', () => {
-  it('should create a post with valid id', () => {
+  it('should create a post with valid id', async () => {
     const teams = new TeamInMemory();
     const nowTime = new Date();
     const users = new UserProfileInMemory();
-    const userId = users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman',
       'michael092001@gmail.com',
