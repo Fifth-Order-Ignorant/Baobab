@@ -14,11 +14,11 @@ export class AssignmentInMemory implements AssignmentDAO {
     this.assignmentCount = 0;
   }
 
-  public createAssignment(
+  public async createAssignment(
     name: string,
     description: string,
     maxMark: number,
-  ): number {
+  ): Promise<number> {
     const assignment = new Assignment(
       this.highestID,
       name,
@@ -30,7 +30,7 @@ export class AssignmentInMemory implements AssignmentDAO {
     return this.highestID - 1;
   }
 
-  public getById(id: number): Assignment {
+  public async getById(id: number): Promise<Assignment> {
     let assignment: Assignment;
     this.assignments.forEach((element) => {
       if (element.id === id) {

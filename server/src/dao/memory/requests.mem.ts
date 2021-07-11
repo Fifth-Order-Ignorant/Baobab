@@ -15,12 +15,12 @@ export class RequestInMemory implements RequestDAO {
     this.requestCount = 0;
   }
 
-  public createRequest(
+  public async createRequest(
     userId: number,
     description: string,
     timestamp: Date,
     role: Role,
-  ): number {
+  ): Promise<number> {
     const request = new Request(
       this.highestId,
       userId,
@@ -33,7 +33,7 @@ export class RequestInMemory implements RequestDAO {
     return this.highestId - 1;
   }
 
-  public getById(id: number) {
+  public async getById(id: number): Promise<Request> {
     let request: Request;
     this.requests.forEach((element) => {
       if (element.id == id) {

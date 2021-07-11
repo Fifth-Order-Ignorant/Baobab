@@ -7,7 +7,10 @@ import { ProfileResponse } from 'baobab-common';
 import { GridFSBucket } from 'mongodb';
 import { Injectable } from '@nestjs/common';
 
-@Injectable()
+/**
+ * Save UserProfileEntities in a MongoDB Database
+ */
+@Injectable()  
 export class UserProfileMongoDAO implements UserProfileDAO {
   private _gridFS: GridFSBucket;
 
