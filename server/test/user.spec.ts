@@ -271,7 +271,7 @@ describe('Profile Pagination Basic Functionality', () => {
     profile1.changeRole(Role.INVESTOR_REP);
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
-    const userID2 = users.addUserProfile(
+    const userID2 = await users.addUserProfile(
       'Michael',
       'Sheinman (Clone)',
       'michael092002@gmail.com',
@@ -286,7 +286,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
         jobTitle: 'OP Programmer',
-        role: Role[Role.INVESTOR_REP],
+        role: Role.INVESTOR_REP,
       }),
     );
     expect(profiles).toContainEqual(
@@ -296,7 +296,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',
         jobTitle: '',
-        role: Role[Role.DEFAULT],
+        role: Role.DEFAULT,
       }),
     );
     expect(profiles).toEqual([
@@ -306,7 +306,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
         jobTitle: 'OP Programmer',
-        role: Role[Role.INVESTOR_REP],
+        role: Role.INVESTOR_REP,
       }),
       Object({
         id: userID2,
@@ -314,7 +314,7 @@ describe('Profile Pagination Basic Functionality', () => {
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',
         jobTitle: '',
-        role: Role[Role.DEFAULT],
+        role: Role.DEFAULT,
       }),
     ]);
   });
