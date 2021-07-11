@@ -3,7 +3,7 @@ import {
   Body,
   Controller,
   Get,
-  Post,
+  Patch,
   Res,
   Req,
 } from '@nestjs/common';
@@ -30,9 +30,9 @@ export class UserProfileEditController {
     description: 'The profile is correctly fetched.',
   })
   @ApiResponse({ status: 400, description: 'The request is invalid.' })
-  getProfile(@Req() req) {
+  async getProfile(@Req() req) {
     const id = req.user.id;
-    if (this._userProfileService.isValidProfile(id)) {
+    if (await this._userProfileService.isValidProfile(id)) {
       return this._userProfileService.getProfile(id);
     } else {
       throw new BadRequestException({
@@ -42,17 +42,13 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @Post('editname')
-  @ApiResponse({ status: 201, description: 'Name is updated.' })
+  @Patch('editname')
+  @ApiResponse({ status: 200, description: 'Name is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  editName(
-    @Body() reqBody: EditNameRequest,
-    @Res({ passthrough: true }) res: Response,
-    @Req() req,
-  ): void {
+  async editName(@Req() req, @Body() reqBody: EditNameRequest) {
     const id = req.user.id;
-    if (this._userProfileService.isValidProfile(id)) {
-      this._userProfileService.editName(
+    if (await this._userProfileService.isValidProfile(id)) {
+      await this._userProfileService.editName(
         id,
         reqBody.firstName,
         reqBody.lastName,
@@ -66,17 +62,17 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @ApiResponse({ status: 201, description: 'Job is updated.' })
+  @ApiResponse({ status: 200, description: 'Job is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Post('editjob')
-  editJob(
+  @Patch('editjob')
+  async editJob(
     @Body() reqBody: EditJobRequest,
     @Res({ passthrough: true }) res: Response,
     @Req() req,
-  ): void {
+  ) {
     const id = req.user.id;
-    if (this._userProfileService.isValidProfile(id)) {
-      this._userProfileService.editJob(id, reqBody.jobTitle);
+    if (await this._userProfileService.isValidProfile(id)) {
+      await this._userProfileService.editJob(id, reqBody.jobTitle);
     } else {
       throw new BadRequestException({
         errors: [],
@@ -85,17 +81,17 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @ApiResponse({ status: 201, description: 'Bio is updated.' })
+  @ApiResponse({ status: 200, description: 'Bio is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Post('editbio')
-  editBio(
+  @Patch('editbio')
+  async editBio(
     @Body() reqBody: EditBioRequest,
     @Res({ passthrough: true }) res: Response,
     @Req() req,
-  ): void {
+  ) {
     const id = req.user.id;
-    if (this._userProfileService.isValidProfile(id)) {
-      this._userProfileService.editBio(id, reqBody.bio);
+    if (await this._userProfileService.isValidProfile(id)) {
+      await this._userProfileService.editBio(id, reqBody.bio);
     } else {
       throw new BadRequestException({
         errors: [],

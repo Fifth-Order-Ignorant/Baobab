@@ -1,6 +1,6 @@
 export enum Role {
-  DEFAULT,
-  ENTREPRENEUR,
-  INVESTOR_REP,
-  SERVICE_PROVIDER_REP,
+  DEFAULT = 'Default',
+  ENTREPRENEUR = 'Entrepreneur',
+  INVESTOR_REP = 'Investor Representative',
+  SERVICE_PROVIDER_REP = 'Service Provider Representative',
 }

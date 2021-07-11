@@ -1,6 +1,18 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  Query,
+  Get,
+} from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
-import { RegisterRequest, ProfilePaginationRequest } from 'baobab-common';
+import {
+  RegisterRequest,
+  ProfilePaginationRequest,
+  ProfileViewRequest,
+  ProfileResponse,
+} from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponse } from '@nestjs/swagger';
@@ -15,11 +27,8 @@ export class UserProfileController {
   @Post('register')
   @ApiResponse({ status: 201, description: 'The user registered.' })
   @ApiResponse({ status: 400, description: 'The email is taken.' })
-  register(
-    @Body() reqBody: RegisterRequest,
-    // @Res({ passthrough: true }) res: Response,
-  ) {
-    const user = this._userProfileService.registerUser(
+  async register(@Body() reqBody: RegisterRequest) {
+    const user = await this._userProfileService.registerUser(
       reqBody.firstName,
       reqBody.lastName,
       reqBody.email,
@@ -36,14 +45,32 @@ export class UserProfileController {
     // res.redirect(307, 'http://localhost:3001/auth/login');
   }
 
-  @Post('pagination')
-  pagination(
-    @Body() reqBody: ProfilePaginationRequest,
-  ): Record<string, string>[] {
-    const paginatedProfiles = this._userProfileService.getPaginatedProfiles(
-      reqBody.start,
-      reqBody.end,
-    );
+  @Post('view')
+  @ApiResponse({
+    status: 201,
+    description: 'The profile is correctly fetched.',
+  })
+  @ApiResponse({ status: 400, description: 'The request is invalid.' })
+  async getProfile(@Body() reqBody: ProfileViewRequest) {
+    const id = reqBody.userId;
+    if (await this._userProfileService.isValidProfile(id)) {
+      return this._userProfileService.getProfile(id);
+    } else {
+      throw new BadRequestException({
+        errors: [],
+      });
+    }
+  }
+
+  @Get('pagination')
+  async pagination(
+    @Query() query: ProfilePaginationRequest,
+  ): Promise<ProfileResponse[]> {
+    const paginatedProfiles =
+      await this._userProfileService.getPaginatedProfiles(
+        query.start,
+        query.end,
+      );
     return paginatedProfiles;
   }
 }

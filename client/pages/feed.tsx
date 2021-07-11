@@ -4,6 +4,8 @@ import { Typography, Row, Col } from 'antd';
 
 import styles from '../styles/Post.module.css';
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../src/providers/AuthProvider';
 
 /**
  * Renders the feed page.
@@ -19,6 +21,8 @@ export default function Feed(): JSX.Element {
     return newPosts.data;
   };
 
+  const authState = useContext(AuthContext);
+
   return (
     <div className={styles.feed}>
       <Row justify="center" align="middle">
@@ -26,7 +30,7 @@ export default function Feed(): JSX.Element {
           <Typography>
             <h2>Feed</h2>
           </Typography>
-          <CreatePost author={'You!'} />
+          {authState && <CreatePost author={'You!'} />}
           <PostFeed fetchPosts={fetchPosts} />
         </Col>
       </Row>

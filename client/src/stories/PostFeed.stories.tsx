@@ -6,17 +6,23 @@ export default {
   component: PostFeed,
 } as Meta;
 
+let fetched = false;
+
 export const Basic = (): JSX.Element => (
   <PostFeed
     fetchPosts={async () => {
-      return [
-        {
-          author: 'John Deer',
-          timestamp: '2021-04-23T18:25:43.511Z',
-          postId: 0,
-          content: 'Hello world!',
-        },
-      ];
+      if (!fetched) {
+        fetched = true;
+        return [
+          {
+            author: 'John Deer',
+            timestamp: '2021-04-23T18:25:43.511Z',
+            postId: 0,
+            content: 'Hello world!',
+          },
+        ];
+      }
+      return [];
     }}
   />
 );

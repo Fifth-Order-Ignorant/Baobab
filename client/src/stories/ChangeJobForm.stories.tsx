@@ -7,4 +7,6 @@ export default {
 } as Meta;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const Basic = (): JSX.Element => <ChangeJobForm />;
+export const Basic = (): JSX.Element => (
+  <ChangeJobForm job="Backend Developer" canEdit={true} />
+);
