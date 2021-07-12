@@ -13,15 +13,15 @@ export class PostService {
   ) {}
 
   async createPost(
-    userID: number,
+    userId: number,
     content: string,
     timestamp: Date,
     parent: Post,
     tags: Tag[],
   ): Promise<Post> {
-    return await this._postRepository.getByID(
+    return await this._postRepository.getById(
       await this._postRepository.createPost(
-        userID,
+        userId,
         content,
         timestamp,
         parent,
@@ -30,8 +30,8 @@ export class PostService {
     );
   }
 
-  async getParentPost(parentID: number): Promise<Post> {
-    return this._postRepository.getByID(parentID);
+  async getParentPost(parentId: number): Promise<Post> {
+    return this._postRepository.getById(parentId);
   }
 
   async getPaginatedPosts(start: number, end: number): Promise<PostResponse[]> {
@@ -87,7 +87,7 @@ export class PostService {
       const post: Post = posts[i];
       if (typeof post !== 'undefined') {
         const authorName = (
-          await this._userRepository.getProfileByID(post.userId)
+          await this._userRepository.getProfileById(post.userId)
         ).name;
         const newPost: PostResponse = {
           author: authorName,

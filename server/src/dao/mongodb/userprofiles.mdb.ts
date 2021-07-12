@@ -65,7 +65,7 @@ export class UserProfileMongoDAO implements UserProfileDAO {
     return profiles;
   }
 
-  async getProfileByID(id: number): Promise<Profile> {
+  async getProfileById(id: number): Promise<Profile> {
     return this._profiles.findById(id);
   }
 
@@ -73,7 +73,7 @@ export class UserProfileMongoDAO implements UserProfileDAO {
     return this._users.findOne(this._users.translateAliases({ email }));
   }
 
-  async getUserByID(id: number): Promise<User> {
+  async getUserById(id: number): Promise<User> {
     return this._users.findById(id);
   }
 

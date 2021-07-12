@@ -11,14 +11,14 @@ export class Post {
 
   public constructor(
     id: number,
-    userID: number,
+    userId: number,
     content: string,
     timestamp: Date,
     parent: Post,
     tags: Tag[],
   ) {
     this._id = id;
-    this._userId = userID;
+    this._userId = userId;
     this._content = content;
     this._timestamp = timestamp;
     this._parent = parent;

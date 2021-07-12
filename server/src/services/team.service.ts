@@ -6,9 +6,9 @@ import { Team } from '../entities/team.entity';
 export class TeamService {
   constructor(@Inject('TeamDAO') private _teamRepository: TeamDAO) {}
 
-  createTeam(userID: number, timestamp: Date, teamName: string): Team {
+  createTeam(userId: number, timestamp: Date, teamName: string): Team {
     return this._teamRepository.getById(
-      this._teamRepository.createTeam(userID, timestamp, teamName),
+      this._teamRepository.createTeam(userId, timestamp, teamName),
     );
   }
 

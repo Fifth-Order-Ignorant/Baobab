@@ -39,10 +39,10 @@ export class PostController {
   ) {
     const today = new Date();
     let parent: PostEntity;
-    if (reqBody.parentID == -1) {
+    if (reqBody.parentId == -1) {
       parent = undefined;
     } else {
-      parent = await this._postService.getParentPost(reqBody.parentID);
+      parent = await this._postService.getParentPost(reqBody.parentId);
       if (!parent) {
         throw new BadRequestException({
           errors: [],

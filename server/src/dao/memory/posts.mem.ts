@@ -6,37 +6,37 @@ import { Tag } from '../../entities/tag.entity';
 @Injectable()
 export class PostInMemory implements PostDAO {
   posts: Post[];
-  highestID: number;
+  highestId: number;
   postCount: number;
 
   public constructor() {
     this.posts = [];
-    this.highestID = 0;
+    this.highestId = 0;
     this.postCount = 0;
   }
 
   public async createPost(
-    userID: number,
+    userId: number,
     content: string,
     timestamp: Date,
     parent: Post,
     tags: Tag[],
   ): Promise<number> {
     const post = new Post(
-      this.highestID,
-      userID,
+      this.highestId,
+      userId,
       content,
       timestamp,
       parent,
       tags,
     );
     this.posts.push(post);
-    this.highestID++;
+    this.highestId++;
 
-    return this.highestID - 1;
+    return this.highestId - 1;
   }
 
-  public async getByID(id: number): Promise<Post> {
+  public async getById(id: number): Promise<Post> {
     let post: Post;
     this.posts.forEach((element) => {
       if (element.id === id) {

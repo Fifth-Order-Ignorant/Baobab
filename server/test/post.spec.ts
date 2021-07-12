@@ -47,7 +47,7 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello1',
-        parentID: -1,
+        parentId: -1,
         tags: [],
       })
       .expect(HttpStatus.CREATED);
@@ -65,7 +65,7 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello2',
-        parentID: 0,
+        parentId: 0,
         tags: [],
       })
       .expect(HttpStatus.CREATED);
@@ -83,7 +83,7 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello3',
-        parentID: 3,
+        parentId: 3,
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
@@ -100,7 +100,7 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello2',
-        parentID: 0,
+        parentId: 0,
         tags: ['Fun'],
       })
       .expect(HttpStatus.CREATED);
@@ -118,7 +118,7 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello2',
-        parentID: 0,
+        parentId: 0,
         tags: ['Fun', 'Technology', 'Business'],
       })
       .expect(HttpStatus.CREATED);
@@ -135,7 +135,7 @@ describe('Post Basic Functionality', () => {
 
     const nowTime = new Date();
     const postId = await posts.createPost(1, 'hello', nowTime, undefined, []);
-    expect((await posts.getByID(postId)).id == postId);
+    expect((await posts.getById(postId)).id == postId);
   });
 
   it('should return a post given an id', async () => {
@@ -143,7 +143,7 @@ describe('Post Basic Functionality', () => {
 
     const nowTime = new Date();
     const postId = await posts.createPost(1, 'hello', nowTime, undefined, []);
-    const post = await posts.getByID(postId);
+    const post = await posts.getById(postId);
     expect(post.parent == undefined);
   });
 
@@ -152,9 +152,9 @@ describe('Post Basic Functionality', () => {
 
     const nowTime = new Date();
     const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
-    const parentPost = await posts.getByID(post1);
+    const parentPost = await posts.getById(post1);
     const post2 = await posts.createPost(1, 'hello2', nowTime, parentPost, []);
-    const post = await posts.getByID(post2);
+    const post = await posts.getById(post2);
     expect(post.parent == parentPost);
   });
 
@@ -165,7 +165,7 @@ describe('Post Basic Functionality', () => {
     const postId = await posts.createPost(1, 'hello', nowTime, undefined, [
       Tag.FUN,
     ]);
-    const post = await posts.getByID(postId);
+    const post = await posts.getById(postId);
     const expected: string[] = ['Fun'];
     expect(post.tags).toEqual(expected);
   });
@@ -179,7 +179,7 @@ describe('Post Basic Functionality', () => {
       Tag.BUSINESS,
       Tag.TECH,
     ]);
-    const post = await posts.getByID(postId);
+    const post = await posts.getById(postId);
     const expected: string[] = ['Fun', 'Business', 'Technology'];
     expect(post.tags).toEqual(expected);
   });
@@ -190,7 +190,7 @@ describe('Post Pagination Basic Functionality', () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
     const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
-    const parentPost = await posts.getByID(post1);
+    const parentPost = await posts.getById(post1);
     await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getParentPosts(0, 2);
     const expected: Post[] = [new Post(0, 1, 'hello', nowTime, undefined, [])];
@@ -201,7 +201,7 @@ describe('Post Pagination Basic Functionality', () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
     const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
-    const parentPost = await posts.getByID(post1);
+    const parentPost = await posts.getById(post1);
     await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getReplies(0, 0, 2);
     const expected: Post[] = [
@@ -214,7 +214,7 @@ describe('Post Pagination Basic Functionality', () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
     const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
-    const parentPost = await posts.getByID(post1);
+    const parentPost = await posts.getById(post1);
     await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getRepliesOfUser(1, 0, 2);
     const expected: Post[] = [
@@ -227,7 +227,7 @@ describe('Post Pagination Basic Functionality', () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
     const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
-    const parentPost = await posts.getByID(post1);
+    const parentPost = await posts.getById(post1);
     await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getPostsOfUser(1, 0, 2);
     const expected: Post[] = [new Post(0, 1, 'hello', nowTime, undefined, [])];
