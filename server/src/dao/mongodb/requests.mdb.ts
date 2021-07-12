@@ -1,4 +1,4 @@
-import { RequestDAO } from '../request';
+import { RequestDAO } from '../requests';
 import { InjectModel } from '@nestjs/mongoose';
 import { Request } from '../../entities/request.entity';
 import { Role } from '../../entities/role.entity';
