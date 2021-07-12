@@ -9,5 +9,5 @@ export class PostRequest {
 export const PostRequestSchema: SchemaOf<PostRequest> = object({
   content: string().required(),
   parentID: number().required(),
-  tags: array().of(string().required())
+  tags: array().of(string().required()),
 });

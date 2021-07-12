@@ -17,10 +17,16 @@ export class PostService {
     content: string,
     timestamp: Date,
     parent: Post,
-    tags: Tag[]
+    tags: Tag[],
   ): Promise<Post> {
     return await this._postRepository.getByID(
-      await this._postRepository.createPost(userID, content, timestamp, parent, tags),
+      await this._postRepository.createPost(
+        userID,
+        content,
+        timestamp,
+        parent,
+        tags,
+      ),
     );
   }
 
@@ -29,8 +35,7 @@ export class PostService {
   }
 
   async getPaginatedPosts(start: number, end: number): Promise<PostResponse[]> {
-    const posts: Post[] =
-      await this._postRepository.getParentPosts(start, end);
+    const posts: Post[] = await this._postRepository.getParentPosts(start, end);
     return this.changeIdToAuthor(posts);
   }
 
@@ -39,8 +44,11 @@ export class PostService {
     start: number,
     end: number,
   ): Promise<PostResponse[]> {
-    const posts: Post[] =
-      await this._postRepository.getReplies(postId, start, end);
+    const posts: Post[] = await this._postRepository.getReplies(
+      postId,
+      start,
+      end,
+    );
     return this.changeIdToAuthor(posts);
   }
 
@@ -49,8 +57,11 @@ export class PostService {
     start: number,
     end: number,
   ): Promise<PostResponse[]> {
-    const posts: Post[] =
-      await this._postRepository.getRepliesOfUser(userId, start, end);
+    const posts: Post[] = await this._postRepository.getRepliesOfUser(
+      userId,
+      start,
+      end,
+    );
     return this.changeIdToAuthor(posts);
   }
 
@@ -59,14 +70,15 @@ export class PostService {
     start: number,
     end: number,
   ): Promise<PostResponse[]> {
-    const posts: Post[] =
-      await this._postRepository.getPostsOfUser(userId, start, end);
+    const posts: Post[] = await this._postRepository.getPostsOfUser(
+      userId,
+      start,
+      end,
+    );
     return this.changeIdToAuthor(posts);
   }
 
-  async changeIdToAuthor(
-    lst: Post[],
-  ): Promise<PostResponse[]> {
+  async changeIdToAuthor(lst: Post[]): Promise<PostResponse[]> {
     const posts: Post[] = lst;
     const newPosts: PostResponse[] = [];
     const n: number = posts.length;

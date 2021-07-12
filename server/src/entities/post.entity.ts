@@ -15,14 +15,14 @@ export class Post {
     content: string,
     timestamp: Date,
     parent: Post,
-    tags: Tag[]
+    tags: Tag[],
   ) {
     this._id = id;
     this._userId = userID;
     this._content = content;
     this._timestamp = timestamp;
     this._parent = parent;
-    this._tags = tags
+    this._tags = tags;
   }
 
   get id(): number {
@@ -46,9 +46,9 @@ export class Post {
   }
 
   get tags(): string[] {
-    let ans: string[] = [];
+    const ans: string[] = [];
     this.tags.forEach((element) => {
-      ans.push(element as string)
+      ans.push(element as string);
     });
     return ans;
   }

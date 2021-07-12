@@ -15,7 +15,9 @@ export class PostMongoDAO implements PostDAO {
     tags: Tag[],
   ): Promise<number> {
     const id = await this._posts.countDocuments();
-    await this._posts.create(new Post(id, userID, content, timestamp, parent, tags));
+    await this._posts.create(
+      new Post(id, userID, content, timestamp, parent, tags),
+    );
     return id;
   }
 
@@ -26,10 +28,7 @@ export class PostMongoDAO implements PostDAO {
     return this._posts.findById(id);
   }
 
-  async getParentPosts(
-    start: number,
-    end: number,
-  ): Promise<Post[]> {
+  async getParentPosts(start: number, end: number): Promise<Post[]> {
     const posts: Post[] = await this._posts
       .find(await this._posts.translateAliases({ parent: null }))
       .sort(await this._posts.translateAliases({ timestamp: 'asc' }))

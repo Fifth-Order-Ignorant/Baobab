@@ -22,7 +22,14 @@ export class PostInMemory implements PostDAO {
     parent: Post,
     tags: Tag[],
   ): Promise<number> {
-    const post = new Post(this.highestID, userID, content, timestamp, parent, tags);
+    const post = new Post(
+      this.highestID,
+      userID,
+      content,
+      timestamp,
+      parent,
+      tags,
+    );
     this.posts.push(post);
     this.highestID++;
 
@@ -49,10 +56,7 @@ export class PostInMemory implements PostDAO {
     return children;
   }
 
-  public async getParentPosts(
-    start: number,
-    end: number,
-  ): Promise<Post[]> {
+  public async getParentPosts(start: number, end: number): Promise<Post[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];

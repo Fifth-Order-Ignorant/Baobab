@@ -11,23 +11,8 @@ export interface PostDAO {
   ): Promise<number>;
   getChilds(id: number): Promise<Post[]>;
   getByID(id: number): Promise<Post>;
-  getParentPosts(
-    start: number,
-    end: number,
-  ): Promise<Post[]>;
-  getReplies(
-    postId: number,
-    start: number,
-    end: number,
-  ): Promise<Post[]>;
-  getRepliesOfUser(
-    userId: number,
-    start: number,
-    end: number,
-  ): Promise<Post[]>;
-  getPostsOfUser(
-    userId: number,
-    start: number,
-    end: number,
-  ): Promise<Post[]>;
+  getParentPosts(start: number, end: number): Promise<Post[]>;
+  getReplies(postId: number, start: number, end: number): Promise<Post[]>;
+  getRepliesOfUser(userId: number, start: number, end: number): Promise<Post[]>;
+  getPostsOfUser(userId: number, start: number, end: number): Promise<Post[]>;
 }

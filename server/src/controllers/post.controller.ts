@@ -50,9 +50,9 @@ export class PostController {
       }
     }
 
-    let tags: Tag[] = [];
+    const tags: Tag[] = [];
     reqBody.tags.forEach((element) => {
-      tags.push(element as Tag)
+      tags.push(element as Tag);
     });
 
     const post = this._postService.createPost(
