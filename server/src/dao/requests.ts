@@ -9,4 +9,5 @@ export interface RequestDAO {
     role: Role,
   ): Promise<number>;
   getById(id: number): Promise<Request>;
+  getPaginatedRequests(start: number, end: number): Promise<Request[]>;
 }
