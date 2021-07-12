@@ -22,4 +22,8 @@ export class RequestService {
       ),
     );
   }
+
+  async getRequests(start: number, end: number): Promise<Request[]> {
+    return this._requestRepository.getPaginatedRequests(start, end);
+  }
 }
