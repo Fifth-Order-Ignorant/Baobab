@@ -4,7 +4,7 @@ import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '../src/modules/configuration';
 import { FileInfo } from '../src/entities/fileinfo.entity';
-import * as mime from 'mime-types';
+import * as mime from 'mime';
 
 describe('MongoDB User Profile DAO Tests', () => {
   let moduleRef: TestingModule;
@@ -78,7 +78,7 @@ describe('MongoDB User Profile DAO Tests', () => {
 
     oldProfile.picture = new FileInfo(
       'akutan.jpg',
-      mime.lookup('jpg') as string,
+      mime.getType('jpg'),
       1024,
       'akutan',
     );
