@@ -10,9 +10,9 @@ export interface UserProfileDAO {
     password: string,
   ): Promise<number>;
   getUserProfileCount(): Promise<number>;
-  getUserByID(id: number): Promise<User>;
+  getUserById(id: number): Promise<User>;
   getUserByEmail(email: string): Promise<User>;
-  getProfileByID(id: number): Promise<Profile>;
+  getProfileById(id: number): Promise<Profile>;
   getPaginatedProfiles(start: number, end: number): Promise<ProfileResponse[]>;
   updateProfile(profile: Profile): Promise<Profile>;
 }
