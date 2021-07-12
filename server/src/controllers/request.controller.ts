@@ -55,10 +55,8 @@ export class RequestController {
   async pagination(
     @Body() reqBody: RequestPaginationRequest,
   ): Promise<Request[]> {
-    const paginatedRequests: Promise<Request[]> = this._requestService.getRequests(
-      reqBody.start,
-      reqBody.end,
-    );
+    const paginatedRequests: Promise<Request[]> =
+      this._requestService.getRequests(reqBody.start, reqBody.end);
     return paginatedRequests;
   }
 }

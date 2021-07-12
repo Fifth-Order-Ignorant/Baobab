@@ -185,5 +185,4 @@ describe('Post Pagination Basic Functionality', () => {
     expect(postPagination).toEqual(expected);
   });
 
-
 });

@@ -45,10 +45,7 @@ export class RequestService {
     return role;
   }
 
-  async getRequests(
-    start: number,
-    end: number,
-  ): Promise<Request[]> {
+  async getRequests(start: number, end: number): Promise<Request[]> {
     return this._requestRepository.getPaginatedRequests(start, end);
   }
 }

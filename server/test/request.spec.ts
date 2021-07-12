@@ -118,6 +118,8 @@ describe('Request Pagination Basic Functionality', () => {
     );
     const requestPagination = await requests.getPaginatedRequests(0, 1);
 
-    return expect(requestPagination).toContain(await requests.getById(requestID));
+    return expect(requestPagination).toContain(
+      await requests.getById(requestID),
+    );
   });
 });

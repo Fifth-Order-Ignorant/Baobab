@@ -15,6 +15,27 @@ type Biography={
  * Renders the textbox for editing the bio, and displays it.
  */
 function ChangeBioForm(bio: Biography): JSX.Element {
+  const [state, setState] = useState('default');
+  const [info, setInfo] = useState('');
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<EditBioRequest>({
+    resolver: yupResolver(EditBioRequestSchema),
+  });
+
+  const onSubmit = async (data: EditBioRequest) => {
+    data.bio = (document.getElementById('bio') as HTMLInputElement).value;
+    setInfo(data.bio);
+    try {
+      await axios.patch('/api/profile/editbio', data);
+      changeState();
+      GetInfo();
+    } catch (error) {
+      const { errors } = error.response.data as ErrorResponse;
 
     const [state, setState] = useState('default');
     const [info, setInfo] = useState('');
@@ -75,29 +96,33 @@ function ChangeBioForm(bio: Biography): JSX.Element {
         }
     }
 
-
-    return(
-        <Form onFinish={handleSubmit(onSubmit)}>
-            <Form.Item>
-                <p onClick={()=>changeState()}>
-                {
-                    state === 'default' && <Card>{<div>{bio.bio}</div>}</Card>
-                }
-                </p>
-                {
-                    state === 'done' && <Card>{<div>{info + " (reload to edit again.)"}</div>}</Card>
-                }
-                {
-                    state === 'edit' && <Form.Item name="bio" validateStatus={errors.bio ? 'error' : ''} help={errors.bio?.message}>
-                        <Input size="large" defaultValue={ bio.bio } {...register('bio')}/>
-                        </Form.Item>
-                }
-                {
-                    state === 'edit' && <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                        Change Bio
-                    </Button>
-                }
-            </Form.Item>
-        </Form>
-    )
-} export default ChangeBioForm;
+  return (
+    <Form onFinish={handleSubmit(onSubmit)}>
+      <Form.Item>
+        <p onClick={() => changeState()}>
+          {state === 'default' && <Card>{<div>{info}</div>}</Card>}
+        </p>
+        {state === 'edit' && (
+          <Form.Item
+            name="bio"
+            validateStatus={errors.bio ? 'error' : ''}
+            help={errors.bio?.message}
+          >
+            <Input.TextArea
+              size="large"
+              id={'bio'}
+              defaultValue={info}
+              {...register('bio')}
+            />
+          </Form.Item>
+        )}
+        {state === 'edit' && (
+          <Button type="primary" htmlType="submit" loading={isSubmitting}>
+            Change Bio
+          </Button>
+        )}
+      </Form.Item>
+    </Form>
+  );
+}
+export default ChangeBioForm;

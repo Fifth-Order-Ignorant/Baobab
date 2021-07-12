@@ -54,54 +54,21 @@ export function About(id: Id): JSX.Element {
         })
         .catch((error)=>{
 
-        }
-        )
-      };
-
-      const getBio = () => {
-        axios.post('/api/user/view', {"userId": id.id})
-        .then((response) => {
-            var returned = response.data[3];
-            if (returned == "") {
-                returned += "no bio available"
-            }
-            setBio(returned);
-        })
-        .catch((error)=>{
-
-        }
-        )
-      };
-
-      const authState = useContext(AuthContext);
-
-      const canEdit=()=> {
-        try {
-            return (id.id == (authState as SessionPayload).id);
-        }
-        catch (error) {
-            return(false);
-        }
-      }
-
-      useEffect(() => {
-        getFirstName();
-        getLastName();
-        getJob();
-        getBio();
-      }, [getBio(), firstName, lastName, job, bio, canEdit()]);
-
-    return (
-        <div>
-            <div className={styles.name}>
-                <Typography.Text>
-                    <ChangeNameForm firstName={firstName} lastName={lastName} canEdit={canEdit()}/>
-                </Typography.Text>
-            </div>
-            <span className={styles.name}>
-                <ChangeJobForm job={job} canEdit={canEdit()}/>
-            </span>
-            <ChangeBioForm bio={bio} canEdit = {canEdit()}/>
-        </div>
-    );
+  return (
+    <div>
+      <div className={styles.name}>
+        <Typography.Text onClick={() => getInfo()}>
+          <ChangeNameForm
+            firstName={firstName}
+            lastName={lastName}
+            canEdit={canEdit()}
+          />
+        </Typography.Text>
+      </div>
+      <span className={styles.name}>
+        <ChangeJobForm job={job} canEdit={canEdit()} />
+      </span>
+      <ChangeBioForm bio={bio} canEdit={canEdit()} />
+    </div>
+  );
 }

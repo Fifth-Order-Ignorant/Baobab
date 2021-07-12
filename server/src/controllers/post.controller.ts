@@ -95,4 +95,15 @@ export class PostController {
     return paginatedReplies;
   }
 
+  @Get('userposts')
+  async userPosts(
+    @Query() query: UserPostsPaginationRequest,
+  ): Promise<PostResponse[]> {
+    const paginatedReplies = await this._postService.getUserPosts(
+      query.id,
+      query.start,
+      query.end,
+    );
+    return paginatedReplies;
+  }
 }
