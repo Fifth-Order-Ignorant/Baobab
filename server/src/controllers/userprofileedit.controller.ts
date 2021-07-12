@@ -10,12 +10,16 @@ import {
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import { EditNameRequest, EditJobRequest, EditBioRequest, EditRoleRequest } from 'baobab-common';
+import {
+  EditNameRequest,
+  EditJobRequest,
+  EditBioRequest,
+  EditRoleRequest,
+} from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponse } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { JwtAuth } from './jwt.decorator';
-
 
 @Controller('profile')
 export class UserProfileEditController {
@@ -110,18 +114,15 @@ export class UserProfileEditController {
     @Res({ passthrough: true }) res: Response,
     @Req() req,
   ) {
-    
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
       if (this._userProfileService.isValidRole(reqBody.role)) {
         await this._userProfileService.editRole(id, reqBody.role);
-      }
-      else {
+      } else {
         throw new BadRequestException({
           errors: [new NotFoundException('Role is not found', reqBody.role)],
         });
       }
-      
     } else {
       throw new BadRequestException({
         errors: [],

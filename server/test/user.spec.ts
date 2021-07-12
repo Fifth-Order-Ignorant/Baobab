@@ -153,12 +153,12 @@ describe('End to end profile editing tests', () => {
 
   it(`lets you change your role`, async () => {
     const agent = request.agent(app.getHttpServer());
-  
+
     await agent.post('/auth/login').send({
       email: 'ethan@mail.com',
       password: 'mcs',
     });
-  
+
     return agent
       .patch('/profile/editrole')
       .send({
@@ -166,17 +166,17 @@ describe('End to end profile editing tests', () => {
       })
       .expect(HttpStatus.OK);
   });
-  
+
   it(`changes your role correctly`, async (done) => {
     const agent = request.agent(app.getHttpServer());
-  
+
     await agent.post('/auth/login').send({
       email: 'ethan@mail.com',
       password: 'mcs',
     });
-  
+
     const response = await agent.get('/profile/myprofile').send({});
-  
+
     expect(response.body[0]).toBe('ethan2');
     expect(response.body[1]).toBe('lam2');
     expect(response.body[2]).toBe('marketing vp');

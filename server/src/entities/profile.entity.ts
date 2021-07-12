@@ -64,16 +64,16 @@ export class Profile {
     return this._role;
   }
 
+  set role(role: Role) {
+    this._role = role;
+  }
+
   get jobTitle(): string {
     return this._jobTitle;
   }
 
   set jobTitle(newTitle: string) {
     this._jobTitle = newTitle;
-  }
-
-  set role(newRole: Role) {
-    this._role = newRole;
   }
 
   addExternalLink(link: string): void {
