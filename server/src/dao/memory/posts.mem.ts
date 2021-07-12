@@ -52,7 +52,7 @@ export class PostInMemory implements PostDAO {
   public async getParentPosts(
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
@@ -65,17 +65,11 @@ export class PostInMemory implements PostDAO {
       i++;
     }
     let count: number = start;
-    const lst: Record<string, string | number>[] = [];
+    const lst: Post[] = [];
     const m: number = templst.length;
     while (count < end && count < m) {
       const post: Post = templst[count];
-      const newPost: Record<string, string | number> = Object({
-        author: post.userID,
-        timestamp: post.timestamp.toISOString(),
-        content: post.content,
-        postId: post.id,
-      });
-      lst.push(newPost);
+      lst.push(post);
       count++;
     }
     return lst;
@@ -85,7 +79,7 @@ export class PostInMemory implements PostDAO {
     postId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
@@ -98,17 +92,11 @@ export class PostInMemory implements PostDAO {
       i++;
     }
     let count: number = start;
-    const lst: Record<string, string | number>[] = [];
+    const lst: Post[] = [];
     const m: number = templst.length;
     while (count < end && count < m) {
       const post: Post = templst[count];
-      const newPost: Record<string, string | number> = Object({
-        author: post.userID,
-        timestamp: post.timestamp.toISOString(),
-        content: post.content,
-        postId: post.id,
-      });
-      lst.push(newPost);
+      lst.push(post);
       count++;
     }
     return lst;
@@ -118,31 +106,25 @@ export class PostInMemory implements PostDAO {
     userId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
     const n: number = posts.length;
     while (i < n) {
       const post: Post = posts[i];
-      if (post.userID == userId && typeof post.parent !== 'undefined') {
+      if (post.userId == userId && typeof post.parent !== 'undefined') {
         templst.push(post);
       }
       i++;
     }
 
     let count: number = start;
-    const lst: Record<string, string | number>[] = [];
+    const lst: Post[] = [];
     const m: number = templst.length;
     while (count < end && count < m) {
       const post: Post = templst[count];
-      const newPost: Record<string, string | number> = Object({
-        author: post.userID,
-        timestamp: post.timestamp.toISOString(),
-        content: post.content,
-        postId: post.id,
-      });
-      lst.push(newPost);
+      lst.push(post);
       count++;
     }
     return lst;
@@ -152,31 +134,25 @@ export class PostInMemory implements PostDAO {
     userId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = this.posts;
     let i = 0;
     const templst: Post[] = [];
     const n: number = posts.length;
     while (i < n) {
       const post: Post = posts[i];
-      if (post.userID == userId && typeof post.parent === 'undefined') {
+      if (post.userId == userId && typeof post.parent === 'undefined') {
         templst.push(post);
       }
       i++;
     }
 
     let count: number = start;
-    const lst: Record<string, string | number>[] = [];
+    const lst: Post[] = [];
     const m: number = templst.length;
     while (count < end && count < m) {
       const post: Post = templst[count];
-      const newPost: Record<string, string | number> = Object({
-        author: post.userID,
-        timestamp: post.timestamp.toISOString(),
-        content: post.content,
-        postId: post.id,
-      });
-      lst.push(newPost);
+      lst.push(post);
       count++;
     }
     return lst;

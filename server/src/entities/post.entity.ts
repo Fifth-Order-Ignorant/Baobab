@@ -2,7 +2,7 @@ import { Tag } from './tag.entity';
 
 export class Post {
   private _id: number;
-  private _userID: number;
+  private _userId: number;
   private _content: string;
   private _timestamp: Date;
   // If no parent, _parent is undefined.
@@ -18,7 +18,7 @@ export class Post {
     tags: Tag[]
   ) {
     this._id = id;
-    this._userID = userID;
+    this._userId = userID;
     this._content = content;
     this._timestamp = timestamp;
     this._parent = parent;
@@ -29,8 +29,8 @@ export class Post {
     return this._id;
   }
 
-  get userID(): number {
-    return this._userID;
+  get userId(): number {
+    return this._userId;
   }
 
   get content(): string {
@@ -45,7 +45,11 @@ export class Post {
     return this._timestamp;
   }
 
-  get tags(): Tag[] {
-    return this._tags;
+  get tags(): string[] {
+    let ans: string[] = [];
+    this.tags.forEach((element) => {
+      ans.push(element as string)
+    });
+    return ans;
   }
 }

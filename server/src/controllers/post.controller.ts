@@ -21,6 +21,7 @@ import {
   PostResponse,
 } from 'baobab-common';
 import { Post as PostEntity } from '../entities/post.entity';
+import { Tag } from '../entities/tag.entity';
 import { JwtAuth } from './jwt.decorator';
 
 @Controller('post')
@@ -48,11 +49,18 @@ export class PostController {
         });
       }
     }
+
+    let tags: Tag[] = [];
+    reqBody.tags.forEach((element) => {
+      tags.push(element as Tag)
+    });
+
     const post = this._postService.createPost(
       req.user.id,
       reqBody.content,
       today,
       parent,
+      tags,
     );
     if (!post) {
       throw new InternalServerErrorException({

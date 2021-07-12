@@ -29,7 +29,7 @@ export class PostService {
   }
 
   async getPaginatedPosts(start: number, end: number): Promise<PostResponse[]> {
-    const posts: Record<string, string | number>[] =
+    const posts: Post[] =
       await this._postRepository.getParentPosts(start, end);
     return this.changeIdToAuthor(posts);
   }
@@ -39,7 +39,7 @@ export class PostService {
     start: number,
     end: number,
   ): Promise<PostResponse[]> {
-    const posts: Record<string, string | number>[] =
+    const posts: Post[] =
       await this._postRepository.getReplies(postId, start, end);
     return this.changeIdToAuthor(posts);
   }
@@ -49,7 +49,7 @@ export class PostService {
     start: number,
     end: number,
   ): Promise<PostResponse[]> {
-    const posts: Record<string, string | number>[] =
+    const posts: Post[] =
       await this._postRepository.getRepliesOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
@@ -59,30 +59,31 @@ export class PostService {
     start: number,
     end: number,
   ): Promise<PostResponse[]> {
-    const posts: Record<string, string | number>[] =
+    const posts: Post[] =
       await this._postRepository.getPostsOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
   async changeIdToAuthor(
-    lst: Record<string, string | number>[],
+    lst: Post[],
   ): Promise<PostResponse[]> {
-    const posts: Record<string, string | number>[] = lst;
+    const posts: Post[] = lst;
     const newPosts: PostResponse[] = [];
     const n: number = posts.length;
     let i = 0;
     while (i < n) {
-      const post: Record<string, string | number> = posts[i];
+      const post: Post = posts[i];
       if (typeof post !== 'undefined') {
         const authorName = (
-          await this._userRepository.getProfileByID(post.author as number)
+          await this._userRepository.getProfileByID(post.userId)
         ).name;
         const newPost: PostResponse = {
           author: authorName,
-          timestamp: post.timestamp as string,
-          content: post.content as string,
-          postId: post.postId as number,
-          authorId: post.author as number,
+          timestamp: post.timestamp.toString(),
+          content: post.content,
+          postId: post.id,
+          authorId: post.userId,
+          tags: post.tags,
         };
         newPosts.push(newPost);
       }

@@ -29,33 +29,33 @@ export class PostMongoDAO implements PostDAO {
   async getParentPosts(
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = await this._posts
       .find(await this._posts.translateAliases({ parent: null }))
       .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
-    return this.postsToRecords(posts);
+    return posts;
   }
 
   async getReplies(
     postId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = await this._posts
       .find(await this._posts.translateAliases({ parent: postId }))
       .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
-    return this.postsToRecords(posts);
+    return posts;
   }
 
   async getRepliesOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = await this._posts
       .find(await this._posts.translateAliases({ userID: userId }))
       .where('_parent')
@@ -63,20 +63,20 @@ export class PostMongoDAO implements PostDAO {
       .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
-    return this.postsToRecords(posts);
+    return posts;
   }
 
   async getPostsOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]> {
+  ): Promise<Post[]> {
     const posts: Post[] = await this._posts
       .find(await this._posts.translateAliases({ userID: userId }))
       .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
-    return this.postsToRecords(posts);
+    return posts;
   }
 
   // TODO: Records should be refactored into the controller.
@@ -85,7 +85,7 @@ export class PostMongoDAO implements PostDAO {
     for (let i = 0; i < posts.length; i++) {
       records.push(
         Object({
-          author: posts[i].userID,
+          author: posts[i].userId,
           timestamp: posts[i].timestamp.toISOString(),
           content: posts[i].content,
           postId: posts[i].id,

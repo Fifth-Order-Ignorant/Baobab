@@ -26,7 +26,7 @@ describe('MongoDB User Profile DAO Tests', () => {
     const timestamp = new Date();
     const id = await dao.createPost(0, 'Hello world!', timestamp, null);
     const post = await dao.getByID(id);
-    expect(post.userID).toEqual(0);
+    expect(post.userId).toEqual(0);
     expect(post.content).toEqual('Hello world!');
     expect(post.timestamp).toEqual(timestamp);
   });

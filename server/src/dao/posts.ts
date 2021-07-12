@@ -14,20 +14,20 @@ export interface PostDAO {
   getParentPosts(
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]>;
+  ): Promise<Post[]>;
   getReplies(
     postId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]>;
+  ): Promise<Post[]>;
   getRepliesOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]>;
+  ): Promise<Post[]>;
   getPostsOfUser(
     userId: number,
     start: number,
     end: number,
-  ): Promise<Record<string, string | number>[]>;
+  ): Promise<Post[]>;
 }
