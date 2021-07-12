@@ -5,6 +5,7 @@ import { User } from '../entities/user.entity';
 import { Profile } from '../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { FileInfo } from '../entities/fileinfo.entity';
+import { stringToRole } from '../entities/role.entity';
 
 @Injectable()
 export class UserProfileService {
@@ -65,9 +66,27 @@ export class UserProfileService {
     await this._userProfileRepository.updateProfile(profile);
   }
 
-  async getProfile(id: number): Promise<[string, string, string, string]> {
+  async editRole(id: number, role: string): Promise<void> {
     const profile = await this._userProfileRepository.getProfileByID(id);
-    return [profile.firstName, profile.lastName, profile.jobTitle, profile.bio];
+    profile.role = stringToRole(role);
+    await this._userProfileRepository.updateProfile(profile);
+  }
+
+  isValidRole(requestRole: string): boolean {
+    return stringToRole(requestRole) != null;
+  }
+
+  async getProfile(
+    id: number,
+  ): Promise<[string, string, string, string, string]> {
+    const profile = await this._userProfileRepository.getProfileByID(id);
+    return [
+      profile.firstName,
+      profile.lastName,
+      profile.jobTitle,
+      profile.bio,
+      profile.role.toString(),
+    ];
   }
 
   async getPaginatedProfiles(

@@ -151,6 +151,40 @@ describe('End to end profile editing tests', () => {
     done();
   });
 
+  it(`lets you change your role`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .patch('/profile/editrole')
+      .send({
+        role: 'Entrepreneur',
+      })
+      .expect(HttpStatus.OK);
+  });
+
+  it(`changes your role correctly`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    const response = await agent.get('/profile/myprofile').send({});
+
+    expect(response.body[0]).toBe('ethan2');
+    expect(response.body[1]).toBe('lam2');
+    expect(response.body[2]).toBe('marketing vp');
+    expect(response.body[3]).toBe('haha!');
+    expect(response.body[4]).toBe('Entrepreneur');
+    done();
+  });
+
   afterAll(async () => {
     await app.close();
   });
@@ -268,7 +302,7 @@ describe('Profile Pagination Basic Functionality', () => {
     );
 
     const profile1 = await users.getProfileByID(userID);
-    profile1.changeRole(Role.INVESTOR_REP);
+    profile1.role = Role.INVESTOR_REP;
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
     const userID2 = await users.addUserProfile(
