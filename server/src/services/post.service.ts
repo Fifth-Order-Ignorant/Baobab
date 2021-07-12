@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PostDAO } from '../dao/posts';
 import { Post } from '../entities/post.entity';
+import { Tag } from '../entities/tag.entity';
 import { UserProfileDAO } from '../dao/userprofiles';
 import { PostResponse } from 'baobab-common';
 
@@ -16,9 +17,10 @@ export class PostService {
     content: string,
     timestamp: Date,
     parent: Post,
+    tags: Tag[]
   ): Promise<Post> {
     return await this._postRepository.getByID(
-      await this._postRepository.createPost(userID, content, timestamp, parent),
+      await this._postRepository.createPost(userID, content, timestamp, parent, tags),
     );
   }
 
