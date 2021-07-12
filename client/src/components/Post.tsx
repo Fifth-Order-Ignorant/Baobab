@@ -10,6 +10,7 @@ import { AuthContext } from '../providers/AuthProvider';
 import TagList from './TagList';
 import SampleTags from '../constants/SampleTags';
 // <TagList tags={SampleTags} />
+import { UserOutlined } from '@ant-design/icons';
 
 /**
  * Required props for rendering a post.
@@ -108,20 +109,24 @@ export function Post(props: PostProps): JSX.Element {
                       ? {}
                       : { display: 'none' }
                   }
-                >
-                  Reply to
-                </span>,
-              ]}
-              author={props.author}
-              content={props.content}
-              avatar={<Avatar />}
-              datetime={
-                <Tooltip title={postTime}>
-                  <span>{postTime}</span>
-                </Tooltip>
-
-              }
+            >
+              Reply to
+            </span>,
+          ]}
+          author={props.author}
+          content={props.content}
+          avatar={
+            <Avatar
+              src={`/api/user/picture/${props.authorId.toString()}`}
+              icon={<UserOutlined />}
             />
+          }
+          datetime={
+            <Tooltip title={postTime}>
+              <span>{postTime}</span>
+            </Tooltip>
+          }
+        />
           </List.Item>
           <List.Item>
             <TagList tags={SampleTags} /> {/* TODO: Replace SampleTags with PostResponse tags. */}
@@ -129,7 +134,11 @@ export function Post(props: PostProps): JSX.Element {
         </List>
         {replyOpen && (
           <div className={styles.replyMenu}>
-            <ReplyPost parent={props.postId} author={'You!'} />
+            <ReplyPost
+              parent={props.postId}
+              author={'You!'}
+              authorId={authState?.id as number}
+            />
           </div>
         )}
         {showReplies && (

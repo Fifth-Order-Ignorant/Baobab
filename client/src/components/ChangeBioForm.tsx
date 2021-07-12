@@ -38,7 +38,7 @@ function ChangeBioForm(bio: Biography): JSX.Element {
   });
 
   const onSubmit = async (data: EditBioRequest) => {
-    data.bio = (document.getElementById("bio") as HTMLInputElement).value;
+    data.bio = (document.getElementById('bio') as HTMLInputElement).value;
     setInfo(data.bio);
     try {
       await axios.patch('/api/profile/editbio', data);
@@ -100,7 +100,12 @@ function ChangeBioForm(bio: Biography): JSX.Element {
             validateStatus={errors.bio ? 'error' : ''}
             help={errors.bio?.message}
           >
-            <Input.TextArea size="large" id={"bio"} defaultValue={info} {...register('bio')} />
+            <Input.TextArea
+              size="large"
+              id={'bio'}
+              defaultValue={info}
+              {...register('bio')}
+            />
           </Form.Item>
         )}
         {state === 'edit' && (
