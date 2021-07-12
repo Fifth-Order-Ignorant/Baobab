@@ -6,4 +6,6 @@ export default {
   component: CreatePost,
 } as Meta;
 
-export const Basic = (): JSX.Element => <CreatePost author={'John Deer'} />;
+export const Basic = (): JSX.Element => (
+  <CreatePost author={'John Deer'} authorId={0} />
+);
