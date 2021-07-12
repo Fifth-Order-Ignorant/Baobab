@@ -5,6 +5,9 @@ import {
   Post,
   Query,
   Get,
+  Param,
+  Res,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import {
@@ -12,10 +15,16 @@ import {
   ProfilePaginationRequest,
   ProfileViewRequest,
   ProfileResponse,
+  ProfilePictureRequest,
 } from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { Response } from 'express';
 
 @Controller('user')
 export class UserProfileController {
@@ -72,5 +81,21 @@ export class UserProfileController {
         query.end,
       );
     return paginatedProfiles;
+  }
+
+  @ApiOkResponse({ description: 'Profile picture download successful.' })
+  @ApiNotFoundResponse({ description: 'Profile picture not found.' })
+  @Get('picture/:id')
+  async getPicture(
+    @Param() params: ProfilePictureRequest,
+    @Res() res: Response,
+  ) {
+    const picture = await this._userProfileService.getPicture(params.id);
+    if (picture) {
+      res.header('Content-Type', picture.info.mimetype);
+      picture.data.pipe(res);
+    } else {
+      throw new NotFoundException();
+    }
   }
 }

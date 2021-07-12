@@ -5,7 +5,6 @@ import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from '../controllers/jwt.strategy';
-import { InMemoryDAOModule } from './memory.module';
 
 @Module({
   imports: [
@@ -17,7 +16,6 @@ import { InMemoryDAOModule } from './memory.module';
         signOptions: { expiresIn: '60m' },
       }),
     }),
-    InMemoryDAOModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

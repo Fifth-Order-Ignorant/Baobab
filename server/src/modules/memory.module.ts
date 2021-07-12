@@ -6,6 +6,7 @@ import { TeamInMemory } from '../dao/memory/teams.mem';
 import { UserProfileInMemory } from '../dao/memory/userprofiles.mem';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { MulterLocalDAO } from '../dao/memory/files.mem';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { diskStorage } from 'multer';
     }),
   ],
   providers: [
+    { provide: 'MulterDAO', useClass: MulterLocalDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentInMemory },
     { provide: 'PostDAO', useClass: PostInMemory },
     { provide: 'RequestDAO', useClass: RequestInMemory },
@@ -23,6 +25,7 @@ import { diskStorage } from 'multer';
   ],
   exports: [
     MulterModule,
+    { provide: 'MulterDAO', useClass: MulterLocalDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentInMemory },
     { provide: 'PostDAO', useClass: PostInMemory },
     { provide: 'RequestDAO', useClass: RequestInMemory },
