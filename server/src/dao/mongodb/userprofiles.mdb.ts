@@ -10,7 +10,7 @@ import { Injectable } from '@nestjs/common';
 /**
  * Save UserProfileEntities in a MongoDB Database
  */
-@Injectable()  
+@Injectable()
 export class UserProfileMongoDAO implements UserProfileDAO {
   private _gridFS: GridFSBucket;
 
