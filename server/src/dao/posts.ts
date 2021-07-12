@@ -1,4 +1,5 @@
 import { Post } from '../entities/post.entity';
+import { Tag } from '../entities/tag.entity';
 
 export interface PostDAO {
   createPost(
@@ -6,6 +7,7 @@ export interface PostDAO {
     content: string,
     timestamp: Date,
     parent: Post,
+    tags: Tag[],
   ): Promise<number>;
   getChilds(id: number): Promise<Post[]>;
   getByID(id: number): Promise<Post>;
