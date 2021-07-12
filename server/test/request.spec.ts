@@ -105,3 +105,19 @@ describe('Request Basic Functionality', () => {
     return expect(request.role).toEqual(Role.INVESTOR_REP);
   });
 });
+
+describe('Request Pagination Basic Functionality', () => {
+  it('should create a request with valid id', async () => {
+    const requests = new RequestInMemory();
+
+    const requestID = await requests.createRequest(
+      1,
+      'gimme permissions',
+      new Date(),
+      Role.INVESTOR_REP,
+    );
+    const requestPagination = await requests.getPaginatedRequests(0, 1);
+
+    return expect(requestPagination).toContain(await requests.getById(requestID));
+  });
+});

@@ -23,7 +23,7 @@ export class RequestService {
     );
   }
 
-  stringToRole(roleString: string): Role {
+  async stringToRole(roleString: string): Promise<Role> {
     let role: Role;
     switch (roleString) {
       case 'default':
@@ -45,10 +45,10 @@ export class RequestService {
     return role;
   }
 
-  getRequests(
+  async getRequests(
     start: number,
     end: number,
-  ): Request[] {
+  ): Promise<Request[]> {
     return this._requestRepository.getPaginatedRequests(start, end);
   }
 }

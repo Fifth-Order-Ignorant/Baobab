@@ -52,10 +52,10 @@ export class RequestController {
   }
 
   @Post('pagination')
-  pagination(
+  async pagination(
     @Body() reqBody: RequestPaginationRequest,
-  ): Request[] {
-    const paginatedRequests: Request[] = this._requestService.getRequests(
+  ): Promise<Request[]> {
+    const paginatedRequests: Promise<Request[]> = this._requestService.getRequests(
       reqBody.start,
       reqBody.end,
     );
