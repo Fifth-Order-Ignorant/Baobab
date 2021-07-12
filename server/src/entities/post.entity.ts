@@ -47,7 +47,7 @@ export class Post {
 
   get tags(): string[] {
     const ans: string[] = [];
-    this.tags.forEach((element) => {
+    this._tags.forEach((element) => {
       ans.push(element as string);
     });
     return ans;
