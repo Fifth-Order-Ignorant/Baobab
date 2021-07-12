@@ -14,7 +14,11 @@ export class AssignmentService {
     maxMark = -1,
   ): Promise<Assignment> {
     return await this._assignmentRepository.getById(
-      await this._assignmentRepository.createAssignment(name, description, maxMark),
+      await this._assignmentRepository.createAssignment(
+        name,
+        description,
+        maxMark,
+      ),
     );
   }
 }

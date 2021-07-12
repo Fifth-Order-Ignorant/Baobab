@@ -23,4 +23,8 @@ export class RequestMongoDAO implements RequestDAO {
   async getById(id: number): Promise<Request> {
     return await this._requests.findById(id);
   }
+
+  async getPaginatedRequests(start: number, end: number): Promise<Request[]> {
+    return null;
+  }
 }
