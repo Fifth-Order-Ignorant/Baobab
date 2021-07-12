@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Post } from '../../entities/post.entity';
 import { PostDAO } from '../posts';
+import { Tag } from '../../entities/tag.entity';
 
 @Injectable()
 export class PostInMemory implements PostDAO {
@@ -19,8 +20,9 @@ export class PostInMemory implements PostDAO {
     content: string,
     timestamp: Date,
     parent: Post,
+    tags: Tag[],
   ): Promise<number> {
-    const post = new Post(this.highestID, userID, content, timestamp, parent);
+    const post = new Post(this.highestID, userID, content, timestamp, parent, tags);
     this.posts.push(post);
     this.highestID++;
 

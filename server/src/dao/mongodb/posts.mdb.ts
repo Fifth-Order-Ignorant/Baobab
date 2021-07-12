@@ -2,6 +2,7 @@ import { PostDAO } from '../posts';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Post } from '../../entities/post.entity';
+import { Tag } from '../../entities/tag.entity';
 
 export class PostMongoDAO implements PostDAO {
   constructor(@InjectModel(Post.name) private _posts: Model<Post>) {}
@@ -11,9 +12,10 @@ export class PostMongoDAO implements PostDAO {
     content: string,
     timestamp: Date,
     parent: Post,
+    tags: Tag[],
   ): Promise<number> {
     const id = await this._posts.countDocuments();
-    await this._posts.create(new Post(id, userID, content, timestamp, parent));
+    await this._posts.create(new Post(id, userID, content, timestamp, parent, tags));
     return id;
   }
 

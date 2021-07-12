@@ -3,9 +3,6 @@ import { User } from '../../entities/user.entity';
 import { Profile } from '../../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { UserProfileDAO } from '../userprofiles';
-import * as os from 'os';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class UserProfileInMemory implements UserProfileDAO {
