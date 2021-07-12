@@ -145,10 +145,7 @@ describe('Request Pagination Basic Functionality', () => {
       Role.SERVICE_PROVIDER_REP,
     );
 
-    const reqs = [
-      requests.getById(requestID),
-      requests.getById(requestID2)
-    ]
+    const reqs = [requests.getById(requestID), requests.getById(requestID2)];
 
     const answers = await requests.getPaginatedRequests(0, 2);
     return expect(answers).toEqual(answers);

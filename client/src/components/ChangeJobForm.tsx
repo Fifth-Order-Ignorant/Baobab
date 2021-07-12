@@ -33,7 +33,7 @@ function ChangeJobForm(job: Job): JSX.Element {
   });
 
   const onSubmit = async (data: EditJobRequest) => {
-    data.jobTitle = (document.getElementById("job") as HTMLInputElement).value;
+    data.jobTitle = (document.getElementById('job') as HTMLInputElement).value;
     setInfo(data.jobTitle);
     try {
       await axios.patch('/api/profile/editjob', data);

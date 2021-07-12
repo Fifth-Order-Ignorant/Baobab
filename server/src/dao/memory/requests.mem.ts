@@ -43,12 +43,15 @@ export class RequestInMemory implements RequestDAO {
     return request;
   }
 
-  public async getPaginatedRequests(start: number, end: number): Promise<Request[]> {
+  public async getPaginatedRequests(
+    start: number,
+    end: number,
+  ): Promise<Request[]> {
     const requests: Request[] = this.requests;
     const n: number = requests.length;
     const lst: Request[] = [];
     let count = start;
-    while (count < end && count < n){
+    while (count < end && count < n) {
       const post: Request = requests[count];
       lst.push(post);
       count++;

@@ -42,8 +42,12 @@ function ChangeNameForm(name: Name): JSX.Element {
   });
 
   const onSubmit = async (data: EditNameRequest) => {
-    data.firstName = (document.getElementById("firstName") as HTMLInputElement).value;
-    data.lastName = (document.getElementById("lastName") as HTMLInputElement).value;
+    data.firstName = (
+      document.getElementById('firstName') as HTMLInputElement
+    ).value;
+    data.lastName = (
+      document.getElementById('lastName') as HTMLInputElement
+    ).value;
     console.log(data);
     setFirstName(data.firstName);
     setLastName(data.lastName);
@@ -112,9 +116,7 @@ function ChangeNameForm(name: Name): JSX.Element {
     <Form onFinish={handleSubmit(onSubmit)}>
       <Form.Item>
         <p onClick={() => changeState()}>
-          {state === 'default' && (
-            <h3>{firstName + ' ' + lastName}</h3>
-          )}
+          {state === 'default' && <h3>{firstName + ' ' + lastName}</h3>}
         </p>
         {state === 'edit' && (
           <Form.Item
@@ -126,7 +128,7 @@ function ChangeNameForm(name: Name): JSX.Element {
             <Input
               size="large"
               placeholder={firstName}
-              id={"firstName"}
+              id={'firstName'}
               {...register('firstName')}
             />
           </Form.Item>
@@ -141,7 +143,7 @@ function ChangeNameForm(name: Name): JSX.Element {
             <Input
               size="large"
               placeholder={lastName}
-              id={"lastName"}
+              id={'lastName'}
               {...register('lastName')}
             />
           </Form.Item>
