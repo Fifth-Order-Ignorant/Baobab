@@ -8,6 +8,7 @@ export * from "./requests/EditBioRequest.dto";
 export * from "./requests/EditJobRequest.dto";
 export * from "./requests/EditNameRequest.dto";
 export * from "./requests/EditProfileRequest.dto";
+export * from "./requests/EditRoleRequest.dto";
 export * from "./requests/LoginRequest.dto";
 export * from "./requests/PostPaginationRequest.dto";
 export * from "./requests/PostRequest.dto";
