@@ -83,9 +83,27 @@ describe('MongoDB User Profile DAO Tests', () => {
     const parentId = await dao.createPost(2, '!', new Date(), null, []);
     const parentId2 = await dao.createPost(3, '!', new Date(), null, []);
     await dao.createPost(2, '!!', new Date(), await dao.getByID(parentId), []);
-    await dao.createPost(3, '!!!', new Date(), await dao.getByID(parentId2), []);
-    await dao.createPost(3, '!!!!', new Date(), await dao.getByID(parentId), []);
-    await dao.createPost(3, '!!!!!', new Date(), await dao.getByID(parentId2), []);
+    await dao.createPost(
+      3,
+      '!!!',
+      new Date(),
+      await dao.getByID(parentId2),
+      [],
+    );
+    await dao.createPost(
+      3,
+      '!!!!',
+      new Date(),
+      await dao.getByID(parentId),
+      [],
+    );
+    await dao.createPost(
+      3,
+      '!!!!!',
+      new Date(),
+      await dao.getByID(parentId2),
+      [],
+    );
 
     const [firstPost] = await dao.getRepliesOfUser(2, 0, 1);
 
@@ -104,7 +122,13 @@ describe('MongoDB User Profile DAO Tests', () => {
 
   it("Paginate Users' Posts", async () => {
     await dao.createPost(4, 'hello', new Date(), null, []);
-    const parentId = await dao.createPost(4, 'whoever is', new Date(), null, []);
+    const parentId = await dao.createPost(
+      4,
+      'whoever is',
+      new Date(),
+      null,
+      [],
+    );
     await dao.createPost(
       4,
       'reading this',
@@ -112,7 +136,13 @@ describe('MongoDB User Profile DAO Tests', () => {
       await dao.getByID(parentId),
       [],
     );
-    await dao.createPost(4, 'yes this includes replies too', new Date(), null, []);
+    await dao.createPost(
+      4,
+      'yes this includes replies too',
+      new Date(),
+      null,
+      [],
+    );
     const [firstPost] = await dao.getPostsOfUser(4, 0, 1);
     expect(firstPost.content).toEqual('hello');
     const [secondPost] = await dao.getPostsOfUser(4, 1, 2);
