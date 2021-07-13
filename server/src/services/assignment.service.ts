@@ -9,17 +9,41 @@ export class AssignmentService {
     @Inject('AssignmentDAO') private _assignmentRepository: AssignmentDAO,
   ) {}
 
-  createAssignment(
+  async createAssignment(
     name: string,
     description: string,
     maxMark = -1,
-  ): Assignment {
-    return this._assignmentRepository.getById(
-      this._assignmentRepository.createAssignment(name, description, maxMark),
+  ): Promise<Assignment> {
+    return await this._assignmentRepository.getById(
+      await this._assignmentRepository.createAssignment(
+        name,
+        description,
+        maxMark,
+      ),
     );
   }
 
-  getPaginatedAssignments(start: number, end: number): AssignmentResponse[] {
-    return this._assignmentRepository.getPaginatedAssignments(start, end);
+  async getPaginatedAssignments(start: number, end: number): Promise<AssignmentResponse[]> {
+
+    return this._assignmentRepository.getAssignments(start, end);
+  }
+
+  async convertToResponse(assignments: Assignment[]): Promise<AssignmentResponse[]>  {
+    const newAssignments: AssignmentResponse[] = [];
+    const n: number = assignments.length;
+    let i = 0;
+    while (i < n) {
+      const assignment: Assignment = assignments[i];
+
+      const newAssignment: AssignmentResponse = {
+        id: assignment.id,
+        name: assignment.name,
+        description: assignment.description,
+        maxMark: assignment.maxMark
+      }
+      newAssignments.push(newAssignment);
+      i++;
+    }
+    return newAssignments;
   }
 }

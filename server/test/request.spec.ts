@@ -1,5 +1,5 @@
 import { Role } from '../src/entities/role.entity';
-import { RequestInMemory } from '../src/dao/requests';
+import { RequestInMemory } from '../src/dao/memory/requests.mem';
 
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
@@ -52,7 +52,7 @@ describe('Role Request Tests', () => {
       .post('/request/role')
       .send({
         description: 'i want role',
-        role: 'entrepreneur',
+        role: 'Entrepreneur',
       })
       .expect(HttpStatus.CREATED);
   });
@@ -80,28 +80,28 @@ describe('Role Request Tests', () => {
 });
 
 describe('Request Basic Functionality', () => {
-  it('should create a request with valid id', () => {
+  it('should create a request with valid id', async () => {
     const requests = new RequestInMemory();
 
-    const requestID = requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
-    return expect(requests.getById(requestID).id).toEqual(requestID);
+    return expect((await requests.getById(requestId)).id).toEqual(requestId);
   });
 
-  it('should return a request with requested Role', () => {
+  it('should return a request with requested Role', async () => {
     const requests = new RequestInMemory();
-    const requestID = requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
 
-    const request = requests.getById(requestID);
+    const request = await requests.getById(requestId);
     return expect(request.role).toEqual(Role.INVESTOR_REP);
   });
 });

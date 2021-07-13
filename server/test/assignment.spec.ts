@@ -7,7 +7,7 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
-import { AssignmentInMemory } from '../src/dao/assignments';
+import { AssignmentInMemory } from '../src/dao/memory/assignments.mem';
 
 describe('Assignment Create API Test', () => {
   let app: INestApplication;
@@ -64,7 +64,7 @@ describe('Assignment Create API Test', () => {
 
 
 describe('Assignment Pagination Basic Functionality', () => {
-  it('should return the paginated data in the right format', () => {
+  it('should return the paginated data in the right format', async () => {
     const assignmentDAO = new AssignmentInMemory();
     assignmentDAO.createAssignment(
       'CSC209: A1 Simulated File system',
@@ -78,7 +78,7 @@ describe('Assignment Pagination Basic Functionality', () => {
       100
     );
 
-    const assignments = assignmentDAO.getPaginatedAssignments(0, 2);
+    const assignments = await assignmentDAO.getAssignments(0, 2);
     expect(assignments.length == 3);
   });
 });
