@@ -3,6 +3,10 @@ import { Col, Row, Button, AutoComplete, Tag } from 'antd';
 import TagToColor from '../constants/TagToColor';
 import Tags from '../constants/Tags';
 
+/**
+ * Renders the list of tags for the send post component.
+ * @param props Contains a function that passes in the current tags.
+ */
 export default function SetTagList(props: { onTagChange: (tags: string[]) => void }) {
     const [tags, setTags] = useState<string[]>([]);
     const [inputTag, setInputTag] = useState('');
