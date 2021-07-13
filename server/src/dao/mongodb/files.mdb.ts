@@ -17,9 +17,13 @@ export class MulterConfigService implements MulterOptionsFactory {
     return {
       storage: new GridFsStorage({
         db: this._connection,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         file: (request, file) => {
+          const id = new ObjectId();
+
           return {
-            filename: file.id.toString(),
+            id: id,
+            filename: id.toString(),
           };
         },
       }),

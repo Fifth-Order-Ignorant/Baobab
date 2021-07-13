@@ -9,6 +9,8 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('Team Create API Test', () => {
   let app: INestApplication;
@@ -57,6 +59,13 @@ describe('Team Create API Test', () => {
   });
 
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
@@ -74,6 +83,6 @@ describe('Team Creation Test', () => {
     );
 
     const teamId = teams.createTeam(userId, nowTime, 'FIF');
-    expect((await teams.getById(await teamId)).id == await teamId);
+    expect((await teams.getById(await teamId)).id == (await teamId));
   });
 });

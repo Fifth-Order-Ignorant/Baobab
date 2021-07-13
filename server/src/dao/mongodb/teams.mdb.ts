@@ -12,23 +12,21 @@ export class TeamMongoDAO implements TeamDAO {
     teamName: string,
   ): Promise<number> {
     const id = await this._teams.countDocuments();
-    await this._teams.create(
-      new Team(id, userId, teamName, timestamp),
-    );
+    await this._teams.create(new Team(id, userId, teamName, timestamp));
     return id;
   }
 
   async teamExists(name: string): Promise<boolean> {
     let found: boolean;
     found = false;
-    if (this._teams.findOne(this._teams.translateAliases({ name }))) {
+    if (await this._teams.findOne(this._teams.translateAliases({ name }))) {
       found = true;
     }
     return found;
   }
 
   async getById(id: number): Promise<Team> {
-    return await this._teams.findById(id);
+    return this._teams.findById(id);
   }
 
   async getTeams(
@@ -46,7 +44,7 @@ export class TeamMongoDAO implements TeamDAO {
       const newTeam: Record<string, string | number> = Object({
         author: team.creatorId,
         timestamp: team.timestamp.toISOString(),
-      })
+      });
       teams.push(newTeam);
     }
     return teams;
