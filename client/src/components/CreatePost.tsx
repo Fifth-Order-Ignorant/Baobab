@@ -160,7 +160,6 @@ interface ReplyPostProps extends CreatePostProps {
    * ID of parent post.
    */
   parent: number;
-  tags: string[];
 }
 
 /**
