@@ -1,8 +1,7 @@
 const TagToColor: { [key: string]: string } = {
-  Finance: 'lime',
-  Blockchain: 'gold',
-  Management: 'cyan',
-  'Machine Learning': 'geekblue',
+  Business: 'lime',
+  Fun: 'gold',
+  Opportunity: 'cyan',
+  Tech: 'geekblue',
 };
-
 export default TagToColor;

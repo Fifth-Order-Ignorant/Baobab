@@ -1,5 +1,5 @@
 import PostFeed from '../src/components/PostFeed';
-import { CreatePost } from '../src/components/SendPost';
+import { CreatePost } from '../src/components/CreatePost';
 import { Typography, Row, Col } from 'antd';
 
 import styles from '../styles/Post.module.css';
