@@ -8,8 +8,4 @@ export default {
 } as Meta;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const Basic = (): JSX.Element => (
-  <TagList
-    tags={Tags}
-  />
-);
+export const Basic = (): JSX.Element => <TagList tags={Tags} />;

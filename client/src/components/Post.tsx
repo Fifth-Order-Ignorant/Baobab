@@ -109,24 +109,24 @@ export function Post(props: PostProps): JSX.Element {
                       ? {}
                       : { display: 'none' }
                   }
-            >
-              Reply to
-            </span>,
-          ]}
-          author={props.author}
-          content={props.content}
-          avatar={
-            <Avatar
-              src={`/api/user/picture/${props.authorId.toString()}`}
-              icon={<UserOutlined />}
+                >
+                  Reply to
+                </span>,
+              ]}
+              author={props.author}
+              content={props.content}
+              avatar={
+                <Avatar
+                  src={`/api/user/picture/${props.authorId.toString()}`}
+                  icon={<UserOutlined />}
+                />
+              }
+              datetime={
+                <Tooltip title={postTime}>
+                  <span>{postTime}</span>
+                </Tooltip>
+              }
             />
-          }
-          datetime={
-            <Tooltip title={postTime}>
-              <span>{postTime}</span>
-            </Tooltip>
-          }
-        />
           </List.Item>
           <List.Item>
             <TagList tags={props.tags} />
