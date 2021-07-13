@@ -51,7 +51,7 @@ describe('Team Create API Test', () => {
     return agent
       .post('/team/create')
       .send({
-        teamName: 'Fifth Order Ignorant',
+        teamName: 'xi Order Ignorant',
       })
       .expect(HttpStatus.CREATED);
   });
@@ -74,6 +74,6 @@ describe('Team Creation Test', () => {
     );
 
     const teamId = teams.createTeam(userId, nowTime, 'FIF');
-    expect(teams.getById(teamId).id == teamId);
+    expect((await teams.getById(await teamId)).id == await teamId);
   });
 });

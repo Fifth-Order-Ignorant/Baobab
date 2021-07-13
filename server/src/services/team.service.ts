@@ -13,6 +13,6 @@ export class TeamService {
   }
 
   async teamExists(teamName: string): Promise<boolean> {
-    return await this._teamRepository.teamExists(teamName);
+    return this._teamRepository.teamExists(teamName);
   }
 }
