@@ -7,6 +7,7 @@ import { ReplyPost } from './SendPost';
 import { PostList } from './PostList';
 import { PostResponse, REPLY_LIMIT } from 'baobab-common';
 import { AuthContext } from '../providers/AuthProvider';
+import { UserOutlined } from '@ant-design/icons';
 
 /**
  * Required props for rendering a post.
@@ -109,7 +110,12 @@ export function Post(props: PostProps): JSX.Element {
           ]}
           author={props.author}
           content={props.content}
-          avatar={<Avatar />}
+          avatar={
+            <Avatar
+              src={`/api/user/picture/${props.authorId.toString()}`}
+              icon={<UserOutlined />}
+            />
+          }
           datetime={
             <Tooltip title={postTime}>
               <span>{postTime}</span>
@@ -118,7 +124,11 @@ export function Post(props: PostProps): JSX.Element {
         />
         {replyOpen && (
           <div className={styles.replyMenu}>
-            <ReplyPost parent={props.postId} author={'You!'} />
+            <ReplyPost
+              parent={props.postId}
+              author={'You!'}
+              authorId={authState?.id as number}
+            />
           </div>
         )}
         {showReplies && (

@@ -1,10 +1,11 @@
 import { About } from '../../src/components/About';
 import PostFeed from '../../src/components/PostFeed';
-import { Avatar, Row, Col, Typography, Tabs } from 'antd';
+import { Row, Col, Typography, Tabs } from 'antd';
 import styles from '../../styles/Profile.module.css';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { PostResponse } from 'baobab-common';
+import AvatarComponent from '../../src/components/AvatarComponent';
 
 /**
  * Renders the profile page for that given user.
@@ -29,7 +30,7 @@ export default function Profile(): JSX.Element {
         <Row>
           <Col span={2} />
           <Col span={4}>
-            <Avatar className={styles.avatar} />
+            {id && <AvatarComponent id={parseInt(id as string, 10)} />}
           </Col>
           <Col span={1} />
           <Col className={styles.tabContents} span={13}>

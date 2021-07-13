@@ -28,11 +28,22 @@ function AuthProvider({
   useEffect(() => {
     axios.interceptors.response.use(
       (value) => {
-        updateToken();
+        // js-cookie can sometimes return deleted cookies (despite the cookies
+        // being gone from devtools), this will take care of that case for now
+        if (value.config.url === '/api/auth/logout') {
+          setToken(undefined);
+        } else {
+          updateToken();
+        }
         return value;
       },
       (error) => {
-        updateToken();
+        // 401 = outdated token, 403 = stale info
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          setToken(undefined);
+        } else {
+          updateToken();
+        }
         return Promise.reject(error);
       },
     );
