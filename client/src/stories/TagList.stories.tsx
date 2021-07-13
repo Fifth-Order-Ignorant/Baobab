@@ -1,5 +1,6 @@
 import TagList from '../components/TagList';
 import { Meta } from '@storybook/react';
+import Tags from '../constants/Tags';
 
 export default {
   title: 'TagList',
@@ -9,6 +10,6 @@ export default {
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Basic = (): JSX.Element => (
   <TagList
-    tags={['Blockchain', 'Machine Learning', 'Finance', 'Management']}
+    tags={Tags}
   />
 );

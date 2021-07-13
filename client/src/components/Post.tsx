@@ -129,7 +129,7 @@ export function Post(props: PostProps): JSX.Element {
         />
           </List.Item>
           <List.Item>
-            <TagList tags={SampleTags} /> {/* TODO: Replace SampleTags with PostResponse tags. */}
+            <TagList tags={props.tags} />
           </List.Item>
         </List>
         {replyOpen && (
