@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { FileInfo } from '../../entities/fileinfo.entity';
 import { Assignment } from '../../entities/assignment.entity';
 import { AssignmentDAO } from '../assignments';
 
@@ -31,12 +32,31 @@ export class AssignmentInMemory implements AssignmentDAO {
   }
 
   public async getById(id: number): Promise<Assignment> {
-    let assignment: Assignment;
+    let assignment: Assignment = null;
     this.assignments.forEach((element) => {
       if (element.id === id) {
         assignment = element;
       }
     });
     return assignment;
+  }
+
+  public async uploadFile(id: number, file: FileInfo): Promise<boolean> {
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
+      assignment.file = file;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public async getFile(id: number): Promise<FileInfo> {
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
+      return assignment.file;
+    } else {
+      return null;
+    }
   }
 }
