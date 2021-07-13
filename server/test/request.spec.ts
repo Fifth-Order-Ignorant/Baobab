@@ -110,7 +110,7 @@ describe('Request Pagination Basic Functionality', () => {
   it('should paginate the correct request', async () => {
     const requests = new RequestInMemory();
 
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
@@ -119,33 +119,33 @@ describe('Request Pagination Basic Functionality', () => {
 
     const answers = await requests.getPaginatedRequests(0, 1);
 
-    return expect(await answers[0].id).toEqual(requestID);
+    return expect(await answers[0].id).toEqual(requestId);
   });
 
   it('should return the correct slice for pagination', async () => {
     const requests = new RequestInMemory();
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
 
-    const requestID2 = await requests.createRequest(
+    const requestId2 = await requests.createRequest(
       2,
       'gimme permissions',
       new Date(),
       Role.ENTREPRENEUR,
     );
 
-    const requestID3 = await requests.createRequest(
+    const requestId3 = await requests.createRequest(
       3,
       'gimme permissions',
       new Date(),
       Role.SERVICE_PROVIDER_REP,
     );
 
-    const reqs = [requests.getById(requestID), requests.getById(requestID2)];
+    const reqs = [requests.getById(requestId), requests.getById(requestId2)];
 
     const answers = await requests.getPaginatedRequests(0, 2);
     return expect(answers).toEqual(answers);
