@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from '../../entities/request.entity';
 import { Role } from '../../entities/role.entity';
-import { RequestDAO } from '../request';
+import { RequestDAO } from '../requests';
 
 @Injectable()
 export class RequestInMemory implements RequestDAO {
