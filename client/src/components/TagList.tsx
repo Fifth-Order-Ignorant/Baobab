@@ -9,7 +9,9 @@ export default function TagList(props: { tags: string[] }) {
   return (
     <div>
       {props.tags.map((tag) => (
-        <Tag color={TagToColor[tag]} key={tag}>{tag}</Tag>
+        <Tag color={TagToColor[tag]} key={tag}>
+          {tag}
+        </Tag>
       ))}
     </div>
   );
