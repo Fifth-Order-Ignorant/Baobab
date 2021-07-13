@@ -1,6 +1,16 @@
 import Card from './Card';
 import React, { useState, ChangeEvent } from 'react';
-import { Avatar, Form, Input, Comment, Button, List, message, Row, Col } from 'antd';
+import {
+  Avatar,
+  Form,
+  Input,
+  Comment,
+  Button,
+  List,
+  message,
+  Row,
+  Col,
+} from 'antd';
 import styles from '../../styles/Post.module.css';
 import { PostRequest } from 'baobab-common';
 import axios from 'axios';
@@ -64,7 +74,11 @@ function SendPost(props: SendPostProps): JSX.Element {
                     }
                     content={
                       <Form.Item>
-                        <Input.TextArea rows={4} onChange={onPostChange} value={post} />
+                        <Input.TextArea
+                          rows={4}
+                          onChange={onPostChange}
+                          value={post}
+                        />
                       </Form.Item>
                     }
                     actions={[
@@ -108,9 +122,13 @@ interface CreatePostProps {
 const sendPost = async (
   content: string,
   parentPostId: number,
-  tags: string[]
+  tags: string[],
 ): Promise<void> => {
-  const pr: PostRequest = { content: content, parentId: parentPostId, tags: tags };
+  const pr: PostRequest = {
+    content: content,
+    parentId: parentPostId,
+    tags: tags,
+  };
   try {
     await axios.post('/api/post/create', pr);
   } catch (e) {
