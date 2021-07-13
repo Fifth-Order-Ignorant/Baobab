@@ -29,8 +29,8 @@ export class UserProfileService {
         hashedPassword,
       );
       return [
-        await this._userProfileRepository.getUserByID(id),
-        await this._userProfileRepository.getProfileByID(id),
+        await this._userProfileRepository.getUserById(id),
+        await this._userProfileRepository.getProfileById(id),
       ];
     }
 
@@ -38,14 +38,14 @@ export class UserProfileService {
   }
 
   async isValidProfile(id: number): Promise<boolean> {
-    if (!(await this._userProfileRepository.getProfileByID(id))) {
+    if (!(await this._userProfileRepository.getProfileById(id))) {
       return false;
     }
     return true;
   }
 
   async editJob(id: number, jobTitle: string): Promise<void> {
-    const profile = await this._userProfileRepository.getProfileByID(id);
+    const profile = await this._userProfileRepository.getProfileById(id);
     profile.jobTitle = jobTitle;
     await this._userProfileRepository.updateProfile(profile);
   }
@@ -55,20 +55,20 @@ export class UserProfileService {
     firstName: string,
     lastName: string,
   ): Promise<void> {
-    const profile = await this._userProfileRepository.getProfileByID(id);
+    const profile = await this._userProfileRepository.getProfileById(id);
     profile.firstName = firstName;
     profile.lastName = lastName;
     await this._userProfileRepository.updateProfile(profile);
   }
 
   async editBio(id: number, bio: string): Promise<void> {
-    const profile = await this._userProfileRepository.getProfileByID(id);
+    const profile = await this._userProfileRepository.getProfileById(id);
     profile.bio = bio;
     await this._userProfileRepository.updateProfile(profile);
   }
 
   async getProfile(id: number): Promise<[string, string, string, string]> {
-    const profile = await this._userProfileRepository.getProfileByID(id);
+    const profile = await this._userProfileRepository.getProfileById(id);
     return [profile.firstName, profile.lastName, profile.jobTitle, profile.bio];
   }
 
@@ -86,7 +86,7 @@ export class UserProfileService {
     size: number,
     storedName: string,
   ) {
-    const profile = await this._userProfileRepository.getProfileByID(id);
+    const profile = await this._userProfileRepository.getProfileById(id);
     if (profile.picture) {
       await this._files.deleteFile(profile.picture.storedName);
     }
@@ -97,7 +97,7 @@ export class UserProfileService {
   async getPicture(
     id: number,
   ): Promise<{ info: FileInfo; data: NodeJS.ReadableStream }> {
-    const profile = await this._userProfileRepository.getProfileByID(id);
+    const profile = await this._userProfileRepository.getProfileById(id);
     if (profile.picture) {
       return {
         info: profile.picture,

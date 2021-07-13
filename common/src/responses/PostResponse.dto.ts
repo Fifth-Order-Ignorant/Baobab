@@ -19,4 +19,8 @@ export class PostResponse {
    * ID of the author.
    */
   authorId!: number;
+  /**
+   * Tags for this post.
+   */
+  tags!: string[];
 }

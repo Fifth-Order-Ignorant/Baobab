@@ -1,12 +1,15 @@
-import { Comment, Tooltip, Avatar, Button } from 'antd';
+import { Comment, Tooltip, Avatar, Button, List } from 'antd';
 import Card from './Card';
 import React, { useContext, useEffect, useState } from 'react';
 import styles from '../../styles/Post.module.css';
 import moment from 'moment';
-import { ReplyPost } from './SendPost';
+import { ReplyPost } from './CreatePost';
 import { PostList } from './PostList';
 import { PostResponse, REPLY_LIMIT } from 'baobab-common';
 import { AuthContext } from '../providers/AuthProvider';
+import TagList from './TagList';
+import SampleTags from '../constants/SampleTags';
+// <TagList tags={SampleTags} />
 import { UserOutlined } from '@ant-design/icons';
 
 /**
@@ -84,44 +87,51 @@ export function Post(props: PostProps): JSX.Element {
   return (
     <Card>
       <div>
-        <Comment
-          className={styles.postComment}
-          actions={[
-            <span
-              key="showReplies"
-              onClick={() => setShowReplies((prevState) => !prevState)}
-              style={replies.length > 0 ? {} : { display: 'none' }}
-            >
-              Show Replies
-            </span>,
-            <span
-              key="reply"
-              onClick={() => {
-                setReplyOpen(true);
-              }}
-              style={
-                authState && props.depth < REPLY_LIMIT
-                  ? {}
-                  : { display: 'none' }
+        <List>
+          <List.Item>
+            <Comment
+              className={styles.postComment}
+              actions={[
+                <span
+                  key="showReplies"
+                  onClick={() => setShowReplies((prevState) => !prevState)}
+                  style={replies.length > 0 ? {} : { display: 'none' }}
+                >
+                  Show Replies
+                </span>,
+                <span
+                  key="reply"
+                  onClick={() => {
+                    setReplyOpen(true);
+                  }}
+                  style={
+                    authState && props.depth < REPLY_LIMIT
+                      ? {}
+                      : { display: 'none' }
+                  }
+                >
+                  Reply to
+                </span>,
+              ]}
+              author={props.author}
+              content={props.content}
+              avatar={
+                <Avatar
+                  src={`/api/user/picture/${props.authorId.toString()}`}
+                  icon={<UserOutlined />}
+                />
               }
-            >
-              Reply to
-            </span>,
-          ]}
-          author={props.author}
-          content={props.content}
-          avatar={
-            <Avatar
-              src={`/api/user/picture/${props.authorId.toString()}`}
-              icon={<UserOutlined />}
+              datetime={
+                <Tooltip title={postTime}>
+                  <span>{postTime}</span>
+                </Tooltip>
+              }
             />
-          }
-          datetime={
-            <Tooltip title={postTime}>
-              <span>{postTime}</span>
-            </Tooltip>
-          }
-        />
+          </List.Item>
+          <List.Item>
+            <TagList tags={props.tags} />
+          </List.Item>
+        </List>
         {replyOpen && (
           <div className={styles.replyMenu}>
             <ReplyPost

@@ -83,25 +83,25 @@ describe('Request Basic Functionality', () => {
   it('should create a request with valid id', async () => {
     const requests = new RequestInMemory();
 
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
-    return expect((await requests.getById(requestID)).id).toEqual(requestID);
+    return expect((await requests.getById(requestId)).id).toEqual(requestId);
   });
 
   it('should return a request with requested Role', async () => {
     const requests = new RequestInMemory();
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
 
-    const request = await requests.getById(requestID);
+    const request = await requests.getById(requestId);
     return expect(request.role).toEqual(Role.INVESTOR_REP);
   });
 });
