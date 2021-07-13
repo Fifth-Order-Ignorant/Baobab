@@ -3,7 +3,7 @@ import Card from './Card';
 import React, { useContext, useEffect, useState } from 'react';
 import styles from '../../styles/Post.module.css';
 import moment from 'moment';
-import { ReplyPost } from './SendPost';
+import { ReplyPost } from './CreatePost';
 import { PostList } from './PostList';
 import { PostResponse, REPLY_LIMIT } from 'baobab-common';
 import { AuthContext } from '../providers/AuthProvider';
