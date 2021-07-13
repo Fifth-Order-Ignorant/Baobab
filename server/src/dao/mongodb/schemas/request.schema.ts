@@ -10,9 +10,9 @@ export const RequestSchema = new Schema<Request>(
       alias: 'id',
       required: true,
     },
-    _userID: {
+    _userId: {
       type: Number,
-      alias: 'userID',
+      alias: 'userId',
       required: true,
     },
     _status: {

@@ -9,6 +9,9 @@ import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import { Role } from '../src/entities/role.entity';
+import * as superagent from 'superagent';
+import * as crypto from 'crypto';
+import * as fs from 'fs';
 
 describe('End to end profile editing tests', () => {
   let app: INestApplication;
@@ -25,6 +28,10 @@ describe('End to end profile editing tests', () => {
     app.useGlobalPipes(new YupValidationPipe());
     app.use(cookieParser());
     await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 
   it(`lets you get your profile`, async () => {
@@ -151,8 +158,37 @@ describe('End to end profile editing tests', () => {
     done();
   });
 
-  afterAll(async () => {
-    await app.close();
+  it('Profile Picture Upload', async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    await agent
+      .post('/profile/picture')
+      .attach('picture', './test/pfp.png')
+      .expect(HttpStatus.CREATED);
+
+    const pfpDownload = await agent
+      .get('/user/picture/0')
+      .expect(HttpStatus.OK)
+      .buffer(true)
+      // eslint-disable-next-line import/namespace
+      .parse(superagent.parse.image);
+
+    const localChecksum = crypto
+      .createHash('md5')
+      .update(fs.readFileSync('./test/pfp.png'))
+      .digest('hex');
+
+    const downloadChecksum = crypto
+      .createHash('md5')
+      .update(pfpDownload.body)
+      .digest('hex');
+
+    expect(downloadChecksum).toEqual(localChecksum);
   });
 });
 
@@ -234,25 +270,25 @@ describe('User tests', () => {
 
   it('should return a valid user given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = await users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const user = await users.getUserByID(userID);
+    const user = await users.getUserById(userId);
     expect(user.email == 'michael092001@gmail.com');
   });
 
   it('should return a valid profile given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = await users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const profile = await users.getProfileByID(userID);
+    const profile = await users.getProfileById(userId);
     expect(profile.name == 'Michael Sheinman Orenstrakh');
   });
 });
@@ -260,18 +296,18 @@ describe('User tests', () => {
 describe('Profile Pagination Basic Functionality', () => {
   it('should return the paginated data in the right format', async () => {
     const users = new UserProfileInMemory();
-    const userID = await users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
 
-    const profile1 = await users.getProfileByID(userID);
+    const profile1 = await users.getProfileById(userId);
     profile1.changeRole(Role.INVESTOR_REP);
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
-    const userID2 = await users.addUserProfile(
+    const userId2 = await users.addUserProfile(
       'Michael',
       'Sheinman (Clone)',
       'michael092002@gmail.com',
@@ -279,29 +315,9 @@ describe('Profile Pagination Basic Functionality', () => {
     );
     const profiles = await users.getPaginatedProfiles(0, 2);
 
-    expect(profiles).toContainEqual(
-      Object({
-        id: userID,
-        bio: 'I love chihuahuas.',
-        firstName: 'Michael',
-        lastName: 'Sheinman Orenstrakh',
-        jobTitle: 'OP Programmer',
-        role: Role.INVESTOR_REP,
-      }),
-    );
-    expect(profiles).toContainEqual(
-      Object({
-        id: userID2,
-        bio: '',
-        firstName: 'Michael',
-        lastName: 'Sheinman (Clone)',
-        jobTitle: '',
-        role: Role.DEFAULT,
-      }),
-    );
     expect(profiles).toEqual([
       Object({
-        id: userID,
+        id: userId,
         bio: 'I love chihuahuas.',
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
@@ -309,7 +325,7 @@ describe('Profile Pagination Basic Functionality', () => {
         role: Role.INVESTOR_REP,
       }),
       Object({
-        id: userID2,
+        id: userId2,
         bio: '',
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',

@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import { Post } from '../../../entities/post.entity';
+import { Tag } from '../../../entities/tag.entity';
 
 export const PostSchema = new Schema<Post>(
   {
@@ -7,9 +8,9 @@ export const PostSchema = new Schema<Post>(
       type: Number,
       alias: 'id',
     },
-    _userID: {
+    _userId: {
       type: Number,
-      alias: 'userID',
+      alias: 'userId',
     },
     _content: {
       type: String,
@@ -25,6 +26,12 @@ export const PostSchema = new Schema<Post>(
       type: Date,
       required: true,
       alias: 'timestamp',
+    },
+    _tags: {
+      type: [String],
+      alias: 'tags',
+      enum: Object.values(Tag),
+      required: true,
     },
   },
   { id: false },

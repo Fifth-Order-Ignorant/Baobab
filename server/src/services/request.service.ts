@@ -8,14 +8,14 @@ export class RequestService {
   constructor(@Inject('RequestDAO') private _requestRepository: RequestDAO) {}
 
   async createRequest(
-    userID: number,
+    userId: number,
     description: string,
     timestamp: Date,
     role: Role,
   ): Promise<Request> {
     return await this._requestRepository.getById(
       await this._requestRepository.createRequest(
-        userID,
+        userId,
         description,
         timestamp,
         role,
