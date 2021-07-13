@@ -5,10 +5,12 @@ import { User } from '../entities/user.entity';
 import { Profile } from '../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { FileInfo } from '../entities/fileinfo.entity';
+import { MulterDAO } from '../dao/files';
 
 @Injectable()
 export class UserProfileService {
   constructor(
+    @Inject('MulterDAO') private _files: MulterDAO,
     @Inject('UserProfileDAO') private _userProfileRepository: UserProfileDAO,
   ) {}
 
@@ -85,16 +87,23 @@ export class UserProfileService {
     storedName: string,
   ) {
     const profile = await this._userProfileRepository.getProfileByID(id);
+    if (profile.picture) {
+      await this._files.deleteFile(profile.picture.storedName);
+    }
     profile.picture = new FileInfo(originalName, mimetype, size, storedName);
     await this._userProfileRepository.updateProfile(profile);
   }
 
-  async getPicture(id: number): Promise<NodeJS.ReadableStream> {
-    return this._userProfileRepository.getProfilePicture(id);
-  }
-
-  async getPictureInfo(id: number): Promise<FileInfo> {
+  async getPicture(
+    id: number,
+  ): Promise<{ info: FileInfo; data: NodeJS.ReadableStream }> {
     const profile = await this._userProfileRepository.getProfileByID(id);
-    return profile.picture;
+    if (profile.picture) {
+      return {
+        info: profile.picture,
+        data: await this._files.getFile(profile.picture.storedName),
+      };
+    }
+    return null;
   }
 }

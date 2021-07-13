@@ -15,12 +15,14 @@ export const Basic = (): JSX.Element => (
         timestamp: '2021-04-23T18:25:43.511Z',
         postId: 0,
         content: 'Hello world!',
+        authorId: 0,
       },
       {
         author: 'John Deer',
         timestamp: '2021-04-23T18:25:43.511Z',
         postId: 0,
         content: 'Hello world!',
+        authorId: 0,
       },
     ]}
     isLoading={false}

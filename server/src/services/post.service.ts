@@ -11,24 +11,24 @@ export class PostService {
     @Inject('PostDAO') private _postRepository: PostDAO,
   ) {}
 
-  createPost(
+  async createPost(
     userID: number,
     content: string,
     timestamp: Date,
     parent: Post,
-  ): Post {
-    return this._postRepository.getByID(
-      this._postRepository.createPost(userID, content, timestamp, parent),
+  ): Promise<Post> {
+    return await this._postRepository.getByID(
+      await this._postRepository.createPost(userID, content, timestamp, parent),
     );
   }
 
-  getParentPost(parentID: number): Post {
+  async getParentPost(parentID: number): Promise<Post> {
     return this._postRepository.getByID(parentID);
   }
 
   async getPaginatedPosts(start: number, end: number): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
-      this._postRepository.getParentPosts(start, end);
+      await this._postRepository.getParentPosts(start, end);
     return this.changeIdToAuthor(posts);
   }
 
@@ -38,7 +38,7 @@ export class PostService {
     end: number,
   ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
-      this._postRepository.getReplies(postId, start, end);
+      await this._postRepository.getReplies(postId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
@@ -48,7 +48,7 @@ export class PostService {
     end: number,
   ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
-      this._postRepository.getRepliesOfUser(userId, start, end);
+      await this._postRepository.getRepliesOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
@@ -58,7 +58,7 @@ export class PostService {
     end: number,
   ): Promise<PostResponse[]> {
     const posts: Record<string, string | number>[] =
-      this._postRepository.getPostsOfUser(userId, start, end);
+      await this._postRepository.getPostsOfUser(userId, start, end);
     return this.changeIdToAuthor(posts);
   }
 
@@ -72,13 +72,15 @@ export class PostService {
     while (i < n) {
       const post: Record<string, string | number> = posts[i];
       if (typeof post !== 'undefined') {
+        const authorName = (
+          await this._userRepository.getProfileByID(post.author as number)
+        ).name;
         const newPost: PostResponse = {
-          author: (
-            await this._userRepository.getProfileByID(post.author as number)
-          ).name,
+          author: authorName,
           timestamp: post.timestamp as string,
           content: post.content as string,
           postId: post.postId as number,
+          authorId: post.author as number,
         };
         newPosts.push(newPost);
       }

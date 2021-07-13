@@ -96,17 +96,6 @@ export class UserProfileInMemory implements UserProfileDAO {
     return newProfiles;
   }
 
-  async getProfilePicture(id: number): Promise<NodeJS.ReadableStream> {
-    const profile = await this.getProfileByID(id);
-    if (profile.picture) {
-      return fs.createReadStream(
-        path.join(os.tmpdir(), profile.picture.storedName),
-      );
-    } else {
-      return null;
-    }
-  }
-
   async updateProfile(profile: Profile): Promise<Profile> {
     for (let i = 0; i < this.profiles.length; i++) {
       if (this.profiles[i].id === profile.id) {

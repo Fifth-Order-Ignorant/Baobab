@@ -22,33 +22,20 @@ export function About(id: Id): JSX.Element {
   const [job, setJob] = useState('');
   const [bio, setBio] = useState('');
 
-  const getFirstName = () => {
+  const getInfo = () => {
     axios.post('/api/user/view', { userId: id.id }).then((response) => {
       setFirstName(response.data[0]);
-    });
-  };
-  const getLastName = () => {
-    axios.post('/api/user/view', { userId: id.id }).then((response) => {
       setLastName(response.data[1]);
-    });
-  };
-  const getJob = () => {
-    axios.post('/api/user/view', { userId: id.id }).then((response) => {
-      let returned = response.data[2];
-      if (returned == '') {
-        returned += 'no job listed';
+      let tempJob = response.data[2];
+      if (tempJob == '') {
+        tempJob += 'no job listed';
       }
-      setJob(returned);
-    });
-  };
-
-  const getBio = () => {
-    axios.post('/api/user/view', { userId: id.id }).then((response) => {
-      let returned = response.data[3];
-      if (returned == '') {
-        returned += 'no bio available';
+      setJob(tempJob);
+      let tempBio = response.data[3];
+      if (tempBio == '') {
+        tempBio += 'no bio available';
       }
-      setBio(returned);
+      setBio(tempBio);
     });
   };
 
@@ -63,16 +50,13 @@ export function About(id: Id): JSX.Element {
   };
 
   useEffect(() => {
-    getFirstName();
-    getLastName();
-    getJob();
-    getBio();
-  }, [getBio(), firstName, lastName, job, bio, canEdit()]);
+    getInfo();
+  }, [getInfo()]);
 
   return (
     <div>
       <div className={styles.name}>
-        <Typography.Text>
+        <Typography.Text onClick={()=>getInfo()}>
           <ChangeNameForm
             firstName={firstName}
             lastName={lastName}
