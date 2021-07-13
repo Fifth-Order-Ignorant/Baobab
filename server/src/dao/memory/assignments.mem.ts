@@ -41,10 +41,9 @@ export class AssignmentInMemory implements AssignmentDAO {
     return assignment;
   }
 
-  public async uploadFile(id: number, file: FileInfo): Promise<Boolean> {
-    let assignment: Assignment;
-    assignment = await this.getById(id);
-    if (assignment !== null){
+  public async uploadFile(id: number, file: FileInfo): Promise<boolean> {
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
       assignment.file = file;
       return true;
     } else {
@@ -53,9 +52,8 @@ export class AssignmentInMemory implements AssignmentDAO {
   }
 
   public async getFile(id: number): Promise<FileInfo> {
-    let assignment: Assignment;
-    assignment = await this.getById(id);
-    if (assignment !== null){
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
       return assignment.file;
     } else {
       return null;
