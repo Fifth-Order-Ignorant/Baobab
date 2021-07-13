@@ -3,6 +3,7 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { Assignment } from '../../entities/assignment.entity';
 import { GridFSBucket } from 'mongodb';
+import { FileInfo } from "../../entities/fileinfo.entity";
 
 
 /**
@@ -31,5 +32,13 @@ export class AssignmentMongoDAO implements AssignmentDAO {
 
     async getById(id: number): Promise<Assignment> {
         return this._assignments.findById(id);
+    }
+
+    async uploadFile(id: number, file: FileInfo): Promise<Boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    async getFile(id: number): Promise<FileInfo> {
+        throw new Error("Method not implemented.");
     }
 }

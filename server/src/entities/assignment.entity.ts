@@ -17,6 +17,7 @@ export class Assignment {
     this._name = name;
     this._description = description;
     this._maxMark = maxMark;
+    this._file = null;
   }
 
   get id(): number {
