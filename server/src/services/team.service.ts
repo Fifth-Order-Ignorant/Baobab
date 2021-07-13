@@ -9,6 +9,7 @@ export class TeamService {
   async createTeam(userID: number, timestamp: Date, teamName: string): Promise<Team> {
     return this._teamRepository.getById(
       await this._teamRepository.createTeam(userID, timestamp, teamName),
+
     );
   }
 

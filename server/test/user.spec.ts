@@ -270,25 +270,25 @@ describe('User tests', () => {
 
   it('should return a valid user given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = await users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const user = await users.getUserByID(userID);
+    const user = await users.getUserById(userId);
     expect(user.email == 'michael092001@gmail.com');
   });
 
   it('should return a valid profile given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = await users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const profile = await users.getProfileByID(userID);
+    const profile = await users.getProfileById(userId);
     expect(profile.name == 'Michael Sheinman Orenstrakh');
   });
 });
@@ -296,18 +296,18 @@ describe('User tests', () => {
 describe('Profile Pagination Basic Functionality', () => {
   it('should return the paginated data in the right format', async () => {
     const users = new UserProfileInMemory();
-    const userID = await users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
 
-    const profile1 = await users.getProfileByID(userID);
+    const profile1 = await users.getProfileById(userId);
     profile1.changeRole(Role.INVESTOR_REP);
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
-    const userID2 = await users.addUserProfile(
+    const userId2 = await users.addUserProfile(
       'Michael',
       'Sheinman (Clone)',
       'michael092002@gmail.com',
@@ -317,7 +317,7 @@ describe('Profile Pagination Basic Functionality', () => {
 
     expect(profiles).toEqual([
       Object({
-        id: userID,
+        id: userId,
         bio: 'I love chihuahuas.',
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
@@ -325,7 +325,7 @@ describe('Profile Pagination Basic Functionality', () => {
         role: Role.INVESTOR_REP,
       }),
       Object({
-        id: userID2,
+        id: userId2,
         bio: '',
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',
