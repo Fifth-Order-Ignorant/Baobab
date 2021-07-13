@@ -1,4 +1,4 @@
-import { ReplyPost } from '../components/SendPost';
+import { ReplyPost } from '../components/CreatePost';
 import { Meta } from '@storybook/react';
 
 export default {

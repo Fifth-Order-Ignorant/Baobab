@@ -3,7 +3,7 @@ import { Role } from './role.entity';
 
 export class Request {
   private _id: number;
-  private _userID: number;
+  private _userId: number;
   private _status: RequestStatus;
   private _timestamp: Date;
   private _role: Role;
@@ -11,13 +11,13 @@ export class Request {
 
   public constructor(
     id: number,
-    userID: number,
+    userId: number,
     timestamp: Date,
     description: string,
     role: Role,
   ) {
     this._id = id;
-    this._userID = userID;
+    this._userId = userId;
     this._status = RequestStatus.PENDING;
     this._timestamp = timestamp;
     this._description = description;
@@ -28,8 +28,8 @@ export class Request {
     return this._id;
   }
 
-  get userID(): number {
-    return this._userID;
+  get userId(): number {
+    return this._userId;
   }
 
   get status(): RequestStatus {

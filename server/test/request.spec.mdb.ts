@@ -35,7 +35,7 @@ describe('MongoDB Request DAO Tests', () => {
     );
     const request = await requestDao.getById(id);
     expect(request.id).toEqual(id);
-    expect(request.userID).toEqual(userId);
+    expect(request.userId).toEqual(userId);
     expect(request.timestamp).toEqual(currentDate);
     expect(request.description).toEqual(description);
     expect(request.role).toEqual(role);

@@ -27,7 +27,7 @@ describe('MongoDB Assignment DAO Tests', () => {
       'Load Trips',
       'Shoutout to michael liut',
       100,
-    )
+    );
     const assignment = await dao.getById(id);
     expect(assignment.id).toEqual(0);
   });
@@ -35,5 +35,4 @@ describe('MongoDB Assignment DAO Tests', () => {
   afterAll(async () => {
     await moduleRef.close();
   });
-
 });

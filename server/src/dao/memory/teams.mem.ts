@@ -5,18 +5,18 @@ import { TeamDAO } from '../teams';
 @Injectable()
 export class TeamInMemory implements TeamDAO {
   teams: Team[];
-  highestID: number;
+  highestId: number;
 
   public constructor() {
     this.teams = [];
-    this.highestID = 0;
+    this.highestId = 0;
   }
 
-  public createTeam(userID: number, timestamp: Date, teamName: string): number {
-    const team = new Team(this.highestID, userID, teamName, timestamp);
+  public createTeam(userId: number, timestamp: Date, teamName: string): number {
+    const team = new Team(this.highestId, userId, teamName, timestamp);
     this.teams.push(team);
-    this.highestID++;
-    return this.highestID - 1;
+    this.highestId++;
+    return this.highestId - 1;
   }
 
   public teamExists(teamName: string): boolean {
