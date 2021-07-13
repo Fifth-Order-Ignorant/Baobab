@@ -3,21 +3,18 @@ import { User } from '../../entities/user.entity';
 import { Profile } from '../../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { UserProfileDAO } from '../userprofiles';
-import * as os from 'os';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class UserProfileInMemory implements UserProfileDAO {
   users: User[];
   profiles: Profile[];
-  highestID: number;
+  highestId: number;
   userProfileCount: number;
 
   public constructor() {
     this.users = [];
     this.profiles = [];
-    this.highestID = 0;
+    this.highestId = 0;
     this.userProfileCount = 0;
   }
 
@@ -27,20 +24,20 @@ export class UserProfileInMemory implements UserProfileDAO {
     email: string,
     password: string,
   ): Promise<number> {
-    const newUser = new User(this.highestID, email, password);
+    const newUser = new User(this.highestId, email, password);
     this.users.push(newUser);
-    const newProfile = new Profile(this.highestID, firstName, lastName);
+    const newProfile = new Profile(this.highestId, firstName, lastName);
     this.profiles.push(newProfile);
-    this.highestID++;
+    this.highestId++;
     this.userProfileCount++;
-    return this.highestID - 1;
+    return this.highestId - 1;
   }
 
   async getUserProfileCount(): Promise<number> {
     return this.userProfileCount;
   }
 
-  async getUserByID(id: number): Promise<User> {
+  async getUserById(id: number): Promise<User> {
     let user: User;
 
     this.users.forEach((element) => {
@@ -62,7 +59,7 @@ export class UserProfileInMemory implements UserProfileDAO {
     return user;
   }
 
-  async getProfileByID(id: number): Promise<Profile> {
+  async getProfileById(id: number): Promise<Profile> {
     let profile: Profile;
 
     this.profiles.forEach((element) => {
@@ -94,17 +91,6 @@ export class UserProfileInMemory implements UserProfileDAO {
       i++;
     }
     return newProfiles;
-  }
-
-  async getProfilePicture(id: number): Promise<NodeJS.ReadableStream> {
-    const profile = await this.getProfileByID(id);
-    if (profile.picture) {
-      return fs.createReadStream(
-        path.join(os.tmpdir(), profile.picture.storedName),
-      );
-    } else {
-      return null;
-    }
   }
 
   async updateProfile(profile: Profile): Promise<Profile> {

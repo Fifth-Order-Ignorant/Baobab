@@ -8,6 +8,8 @@ import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import { PostResponse } from 'baobab-common';
+import { Post } from '../src/entities/post.entity';
+import { Tag } from '../src/entities/tag.entity';
 
 describe('Post Creation Tests', () => {
   let app: INestApplication;
@@ -46,7 +48,8 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello1',
-        parentID: -1,
+        parentId: -1,
+        tags: [],
       })
       .expect(HttpStatus.CREATED);
   });
@@ -63,7 +66,8 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello2',
-        parentID: 0,
+        parentId: 0,
+        tags: [],
       })
       .expect(HttpStatus.CREATED);
   });
@@ -80,10 +84,47 @@ describe('Post Creation Tests', () => {
       .post('/post/create')
       .send({
         content: 'hello3',
-        parentID: 3,
+        parentId: 3,
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
+
+  it(`lets you create a post with one tag`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .post('/post/create')
+      .send({
+        content: 'hello2',
+        parentId: 0,
+        tags: ['Fun'],
+      })
+      .expect(HttpStatus.CREATED);
+  });
+
+  it(`lets you create a post with three tags`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .post('/post/create')
+      .send({
+        content: 'hello2',
+        parentId: 0,
+        tags: ['Fun', 'Technology', 'Business'],
+      })
+      .expect(HttpStatus.CREATED);
+  });
+
   afterAll(async () => {
     await app.close();
   });
@@ -94,16 +135,16 @@ describe('Post Basic Functionality', () => {
     const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const postId = await posts.createPost(1, 'hello', nowTime, undefined);
-    expect((await posts.getByID(postId)).id == postId);
+    const postId = await posts.createPost(1, 'hello', nowTime, undefined, []);
+    expect((await posts.getById(postId)).id == postId);
   });
 
   it('should return a post given an id', async () => {
     const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const postId = await posts.createPost(1, 'hello', nowTime, undefined);
-    const post = await posts.getByID(postId);
+    const postId = await posts.createPost(1, 'hello', nowTime, undefined, []);
+    const post = await posts.getById(postId);
     expect(post.parent == undefined);
   });
 
@@ -111,11 +152,37 @@ describe('Post Basic Functionality', () => {
     const posts = new PostInMemory();
 
     const nowTime = new Date();
-    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = await posts.getByID(post1);
-    const post2 = await posts.createPost(1, 'hello2', nowTime, parentPost);
-    const post = await posts.getByID(post2);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
+    const parentPost = await posts.getById(post1);
+    const post2 = await posts.createPost(1, 'hello2', nowTime, parentPost, []);
+    const post = await posts.getById(post2);
     expect(post.parent == parentPost);
+  });
+
+  it('lets you create a post with one tag', async () => {
+    const posts = new PostInMemory();
+
+    const nowTime = new Date();
+    const postId = await posts.createPost(1, 'hello', nowTime, undefined, [
+      Tag.FUN,
+    ]);
+    const post = await posts.getById(postId);
+    const expected: string[] = ['Fun'];
+    expect(post.tags).toEqual(expected);
+  });
+
+  it('lets you create a post with three tags', async () => {
+    const posts = new PostInMemory();
+
+    const nowTime = new Date();
+    const postId = await posts.createPost(1, 'hello', nowTime, undefined, [
+      Tag.FUN,
+      Tag.BUSINESS,
+      Tag.TECH,
+    ]);
+    const post = await posts.getById(postId);
+    const expected: string[] = ['Fun', 'Business', 'Technology'];
+    expect(post.tags).toEqual(expected);
   });
 });
 
@@ -123,35 +190,23 @@ describe('Post Pagination Basic Functionality', () => {
   it('should return the parent posts paginated data in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = await posts.getByID(post1);
-    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
+    const parentPost = await posts.getById(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getParentPosts(0, 2);
-    const expected: Record<string, string | number>[] = [
-      Object({
-        author: 1,
-        timestamp: nowTime.toISOString(),
-        content: 'hello',
-        postId: 0,
-      }),
-    ];
+    const expected: Post[] = [new Post(0, 1, 'hello', nowTime, undefined, [])];
     expect(postPagination).toEqual(expected);
   });
 
   it('should return the replies paginated data in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = await posts.getByID(post1);
-    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
+    const parentPost = await posts.getById(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getReplies(0, 0, 2);
-    const expected: Record<string, string | number>[] = [
-      Object({
-        author: 1,
-        timestamp: nowTime.toISOString(),
-        content: 'hello2',
-        postId: 1,
-      }),
+    const expected: Post[] = [
+      new Post(1, 1, 'hello2', nowTime, parentPost, []),
     ];
     expect(postPagination).toEqual(expected);
   });
@@ -159,17 +214,12 @@ describe('Post Pagination Basic Functionality', () => {
   it('should return the paginated data in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = await posts.getByID(post1);
-    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
+    const parentPost = await posts.getById(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getRepliesOfUser(1, 0, 2);
-    const expected: Record<string, string | number>[] = [
-      Object({
-        author: 1,
-        timestamp: nowTime.toISOString(),
-        content: 'hello2',
-        postId: 1,
-      }),
+    const expected: Post[] = [
+      new Post(1, 1, 'hello2', nowTime, parentPost, []),
     ];
     expect(postPagination).toEqual(expected);
   });
@@ -177,18 +227,11 @@ describe('Post Pagination Basic Functionality', () => {
   it('should return the paginated data of one user posts in the right format', async () => {
     const posts = new PostInMemory();
     const nowTime = new Date();
-    const post1 = await posts.createPost(1, 'hello', nowTime, undefined);
-    const parentPost = await posts.getByID(post1);
-    await posts.createPost(1, 'hello2', nowTime, parentPost);
+    const post1 = await posts.createPost(1, 'hello', nowTime, undefined, []);
+    const parentPost = await posts.getById(post1);
+    await posts.createPost(1, 'hello2', nowTime, parentPost, []);
     const postPagination = await posts.getPostsOfUser(1, 0, 2);
-    const expected: Record<string, string | number>[] = [
-      Object({
-        author: 1,
-        timestamp: nowTime.toISOString(),
-        content: 'hello',
-        postId: 0,
-      }),
-    ];
+    const expected: Post[] = [new Post(0, 1, 'hello', nowTime, undefined, [])];
     expect(postPagination).toEqual(expected);
   });
 });

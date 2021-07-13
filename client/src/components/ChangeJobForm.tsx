@@ -1,4 +1,4 @@
-import { Form, Button, Input, Typography } from 'antd';
+import { Form, Button, Input } from 'antd';
 import { useEffect, useState } from 'react';
 import {
   ErrorResponse,
@@ -47,27 +47,6 @@ function ChangeJobForm(job: Job): JSX.Element {
         });
       }
     }
-  };
-
-  const GetInfo = () => {
-    axios
-      .get('/api/profile/myprofile')
-      .then((response) => {
-        let string = response.data[2];
-        if (string == '') {
-          string = 'no job listed';
-        }
-        setInfo(string);
-      })
-      .catch((error) => {
-        const { errors } = error.response.data as ErrorResponse;
-
-        for (const error of errors) {
-          setError(error.path as keyof EditJobRequest, {
-            message: error.message,
-          });
-        }
-      });
   };
 
   const [state, setState] = useState('default');

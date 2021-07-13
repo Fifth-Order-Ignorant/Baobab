@@ -3,10 +3,13 @@ import {
   Body,
   Controller,
   Get,
+  Post,
   Patch,
   Res,
   Req,
   NotFoundException,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
@@ -17,9 +20,15 @@ import {
   EditRoleRequest,
 } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
-import { ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { JwtAuth } from './jwt.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as mime from 'mime';
 
 @Controller('profile')
 export class UserProfileEditController {
@@ -48,9 +57,9 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
-  @Patch('editname')
   @ApiResponse({ status: 200, description: 'Name is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @Patch('editname')
   async editName(@Req() req, @Body() reqBody: EditNameRequest) {
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
@@ -128,5 +137,39 @@ export class UserProfileEditController {
         errors: [],
       });
     }
+  }
+
+  @JwtAuth()
+  @Post('picture')
+  @UseInterceptors(
+    FileInterceptor('picture', {
+      fileFilter: (request, file, callback) => {
+        if (
+          [mime.getType('jpg'), mime.getType('png')].includes(file.mimetype)
+        ) {
+          callback(null, true);
+        } else {
+          callback(null, false);
+        }
+      },
+    }),
+  )
+  @ApiCreatedResponse({ description: 'Profile picture update successful.' })
+  @ApiBadRequestResponse({
+    description: 'Uploaded file is not a JPG or PNG image.',
+  })
+  async editPicture(@Req() req, @UploadedFile() file: Express.Multer.File) {
+    // when the callback above is rejected
+    if (!file) {
+      throw new BadRequestException();
+    }
+
+    await this._userProfileService.editPicture(
+      req.user.id,
+      file.originalname,
+      file.mimetype,
+      file.size,
+      file.filename,
+    );
   }
 }

@@ -65,44 +65,10 @@ function ChangeNameForm(name: Name): JSX.Element {
     }
   };
 
-  const GetFirstName = () => {
-    axios
-      .get('/api/profile/myprofile')
-      .then((response) => {
-        setFirstName(response.data[0]);
-      })
-      .catch((error) => {
-        const { errors } = error.response.data as ErrorResponse;
-
-        for (const error of errors) {
-          setError(error.path as keyof EditNameRequest, {
-            message: error.message,
-          });
-        }
-      });
-  };
-
   useEffect(() => {
     setFirstName(name.firstName);
     setLastName(name.lastName);
   }, [name]);
-
-  const GetLastName = () => {
-    axios
-      .get('/api/profile/myprofile')
-      .then((response) => {
-        setLastName(response.data[1]);
-      })
-      .catch((error) => {
-        const { errors } = error.response.data as ErrorResponse;
-
-        for (const error of errors) {
-          setError(error.path as keyof EditNameRequest, {
-            message: error.message,
-          });
-        }
-      });
-  };
 
   const changeState = () => {
     if (state == 'default' && name.canEdit) {
