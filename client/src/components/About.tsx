@@ -56,7 +56,7 @@ export function About(id: Id): JSX.Element {
   return (
     <div>
       <div className={styles.name}>
-        <Typography.Text onClick={()=>getInfo()}>
+        <Typography.Text onClick={() => getInfo()}>
           <ChangeNameForm
             firstName={firstName}
             lastName={lastName}

@@ -9,23 +9,14 @@ import {
   Req,
   UseInterceptors,
   UploadedFile,
-  Param,
-  NotFoundException,
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import {
-  EditNameRequest,
-  EditJobRequest,
-  EditBioRequest,
-  ProfilePictureRequest,
-} from 'baobab-common';
+import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
-  ApiNotFoundResponse,
-  ApiOkResponse,
   ApiResponse,
 } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
