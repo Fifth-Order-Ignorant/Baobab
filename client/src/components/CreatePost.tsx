@@ -50,9 +50,9 @@ function SendPost(props: SendPostProps): JSX.Element {
     setLoading(true);
 
     await props.sendPost(post, tags);
-
-    setLoading(false);
     setPost('');
+    setLoading(false);
+    setTags([]);
   };
 
   return (
@@ -96,7 +96,7 @@ function SendPost(props: SendPostProps): JSX.Element {
               </List.Item>
               <List.Item>
                 <Col span={24}>
-                  <SetTagList onTagChange={setTags} />
+                  <SetTagList tags={tags} onTagChange={setTags} />
                 </Col>
               </List.Item>
             </List>
