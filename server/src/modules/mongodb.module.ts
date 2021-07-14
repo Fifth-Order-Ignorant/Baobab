@@ -12,6 +12,9 @@ import { MulterConfigService, MulterMongoDAO } from '../dao/mongodb/files.mdb';
 import { Post } from '../entities/post.entity';
 import { PostSchema } from '../dao/mongodb/schemas/post.schema';
 import { PostMongoDAO } from '../dao/mongodb/posts.mdb';
+import { Team } from '../entities/team.entity';
+import { TeamSchema } from '../dao/mongodb/schemas/team.schema';
+import { TeamMongoDAO } from '../dao/mongodb/teams.mdb';
 import { Request } from '../entities/request.entity';
 import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
 import { RequestMongoDAO } from '../dao/mongodb/requests.mdb';
@@ -34,6 +37,7 @@ import { MulterModule } from '@nestjs/platform-express';
       { name: Post.name, schema: PostSchema },
       { name: Request.name, schema: RequestSchema },
       { name: Assignment.name, schema: AssignmentSchema },
+      { name: Team.name, schema: TeamSchema },
     ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
@@ -45,6 +49,7 @@ import { MulterModule } from '@nestjs/platform-express';
     { provide: 'PostDAO', useClass: PostMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
+    { provide: 'TeamDAO', useClass: TeamMongoDAO },
   ],
   exports: [
     MulterModule,
@@ -53,6 +58,7 @@ import { MulterModule } from '@nestjs/platform-express';
     { provide: 'PostDAO', useClass: PostMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
+    { provide: 'TeamDAO', useClass: TeamMongoDAO },
   ],
 })
 export class MongoDBDAOModule {}
