@@ -6,10 +6,13 @@ import { Team } from '../entities/team.entity';
 export class TeamService {
   constructor(@Inject('TeamDAO') private _teamRepository: TeamDAO) {}
 
-  async createTeam(userID: number, timestamp: Date, teamName: string): Promise<Team> {
+  async createTeam(
+    userId: number,
+    timestamp: Date,
+    teamName: string,
+  ): Promise<Team> {
     return this._teamRepository.getById(
-      await this._teamRepository.createTeam(userID, timestamp, teamName),
-
+      await this._teamRepository.createTeam(userId, timestamp, teamName),
     );
   }
 

@@ -12,8 +12,12 @@ export class TeamInMemory implements TeamDAO {
     this.highestId = 0;
   }
 
-  public async createTeam(userID: number, timestamp: Date, teamName: string): Promise<number> {
-    const team = new Team(this.highestId, userID, teamName, timestamp);
+  public async createTeam(
+    userId: number,
+    timestamp: Date,
+    teamName: string,
+  ): Promise<number> {
+    const team = new Team(this.highestId, userId, teamName, timestamp);
     this.teams.push(team);
     this.highestId++;
     return this.highestId - 1;
@@ -41,7 +45,7 @@ export class TeamInMemory implements TeamDAO {
   }
 
   public async getTeams(
-  start: number,
+    start: number,
     end: number,
   ): Promise<Record<string, string | number>[]> {
     const teams: Team[] = this.teams;
