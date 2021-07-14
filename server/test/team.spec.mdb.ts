@@ -23,11 +23,7 @@ describe('MongoDB Team DAO Tests', () => {
   });
 
   it('lets you create a new team', async () => {
-    const id = await dao.createTeam(
-      0,
-      new Date(),
-      "Sixth Order Ignorant",
-    )
+    const id = await dao.createTeam(0, new Date(), 'Sixth Order Ignorant');
     const team = await dao.getById(id);
     expect(team.id).toEqual(0);
   });
@@ -38,12 +34,10 @@ describe('MongoDB Team DAO Tests', () => {
 
   it('gets a list of teams correctly', async () => {
     const teams = await dao.getTeams(0, 1);
-    const expected = await dao.getById(0)
     expect(teams.length).toEqual(1);
   });
 
   afterAll(async () => {
     await moduleRef.close();
   });
-
 });
