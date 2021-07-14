@@ -21,6 +21,7 @@ export default function SetTagList(props: {
   const handleClose = (removedTag: string) => {
     const newTags: string[] = props.tags.filter((tag) => tag !== removedTag);
     props.onTagChange(newTags);
+    setInputTag('');
   };
 
   const addTag = () => {
