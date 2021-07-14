@@ -104,29 +104,4 @@ export class UserProfileEditController {
       });
     }
   }
-
-  @JwtAuth()
-  @ApiResponse({ status: 200, description: 'Role is updated.' })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Patch('editrole')
-  async editRole(
-    @Body() reqBody: EditRoleRequest,
-    @Res({ passthrough: true }) res: Response,
-    @Req() req,
-  ) {
-    const id = req.user.id;
-    if (await this._userProfileService.isValidProfile(id)) {
-      if (this._userProfileService.isValidRole(reqBody.role)) {
-        await this._userProfileService.editRole(id, reqBody.role);
-      } else {
-        throw new BadRequestException({
-          errors: [new NotFoundException('Role is not found', reqBody.role)],
-        });
-      }
-    } else {
-      throw new BadRequestException({
-        errors: [],
-      });
-    }
-  }
 }
