@@ -4,6 +4,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '../src/modules/configuration';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('MongoDB Request DAO Tests', () => {
   let moduleRef: TestingModule;
@@ -60,6 +62,13 @@ describe('MongoDB Request DAO Tests', () => {
   });
   // close mongoose connection to prevent Jest from hanging
   afterAll(async () => {
+    const conn = moduleRef.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await moduleRef.close();
   });
 });

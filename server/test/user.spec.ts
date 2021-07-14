@@ -12,6 +12,8 @@ import { Role } from '../src/entities/role.entity';
 import * as superagent from 'superagent';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('End to end profile editing tests', () => {
   let app: INestApplication;
@@ -28,10 +30,6 @@ describe('End to end profile editing tests', () => {
     app.useGlobalPipes(new YupValidationPipe());
     app.use(cookieParser());
     await app.init();
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 
   it(`lets you get your profile`, async () => {
@@ -190,6 +188,17 @@ describe('End to end profile editing tests', () => {
 
     expect(downloadChecksum).toEqual(localChecksum);
   });
+
+  afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
+    await app.close();
+  });
 });
 
 describe('End to end profile viewing tests', () => {
@@ -251,6 +260,13 @@ describe('End to end profile viewing tests', () => {
   });
 
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
