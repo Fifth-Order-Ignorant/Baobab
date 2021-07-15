@@ -35,11 +35,24 @@ export class AssignmentMongoDAO implements AssignmentDAO {
     return this._assignments.findById(id);
   }
 
-  async uploadFile(id: number, file: FileInfo): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async uploadFile(id: number, file: FileInfo): Promise<Boolean> {
+    let assignment: Assignment = await this.getById(id);
+    if (assignment !== null){
+      assignment.file = file;
+      this._assignments.findByIdAndUpdate(id, assignment);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async getFile(id: number): Promise<FileInfo> {
-    throw new Error('Method not implemented.');
+    let assignment: Assignment = await this.getById(id);
+    if (assignment !== null){
+      let file: FileInfo = assignment.file;
+      return file;
+    } else {
+      return null;
+    }
   }
 }
