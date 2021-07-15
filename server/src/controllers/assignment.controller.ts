@@ -13,7 +13,11 @@ import {
 import { AssignmentService } from '../services/assignment.service';
 import { CreateAssignmentRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as mime from 'mime';
 
@@ -52,7 +56,13 @@ export class AssignmentController {
     FileInterceptor('fileup', {
       fileFilter: (request, file, callback) => {
         if (
-          [mime.getType('jpg'), mime.getType('png'), mime.getType('pdf'), mime.getType('mp3'), mime.getType('mp4')].includes(file.mimetype)
+          [
+            mime.getType('jpg'),
+            mime.getType('png'),
+            mime.getType('pdf'),
+            mime.getType('mp3'),
+            mime.getType('mp4'),
+          ].includes(file.mimetype)
         ) {
           callback(null, true);
         } else {

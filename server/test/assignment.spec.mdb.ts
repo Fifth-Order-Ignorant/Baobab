@@ -33,19 +33,22 @@ describe('MongoDB Assignment DAO Tests', () => {
     expect(assignment.id).toEqual(0);
   });
 
-
   it('should return the correct file info', async () => {
-
     const assignmentId = await dao.createAssignment(
       'DATABASE DATABASE JUST MAKIN A DATABASE WO OH',
       'make a database',
       69420,
     );
-    
-    const file: FileInfo = new FileInfo('chillin', 'text/plain', 64, 'flameo hotman');
-    dao.uploadFile(assignmentId, file);
+
+    const file: FileInfo = new FileInfo(
+      'chillin',
+      'text/plain',
+      64,
+      'flameo hotman',
+    );
+    await dao.uploadFile(assignmentId, file);
     const file2: FileInfo = await dao.getFile(assignmentId);
-    return expect(file).toEqual(file2);
+    return expect(file2.originalName).toEqual(file.originalName);
   });
 
   afterAll(async () => {

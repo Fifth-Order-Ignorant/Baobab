@@ -35,11 +35,11 @@ export class AssignmentMongoDAO implements AssignmentDAO {
     return this._assignments.findById(id);
   }
 
-  async uploadFile(id: number, file: FileInfo): Promise<Boolean> {
-    let assignment: Assignment = await this.getById(id);
-    if (assignment !== null){
-      assignment.file = file;
-      this._assignments.findByIdAndUpdate(id, assignment);
+  async uploadFile(id: number, inputFile: FileInfo): Promise<boolean> {
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
+      assignment.file = inputFile;
+      await this._assignments.findByIdAndUpdate(id, assignment, { new: true });
       return true;
     } else {
       return false;
@@ -47,9 +47,9 @@ export class AssignmentMongoDAO implements AssignmentDAO {
   }
 
   async getFile(id: number): Promise<FileInfo> {
-    let assignment: Assignment = await this.getById(id);
-    if (assignment !== null){
-      let file: FileInfo = assignment.file;
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
+      const file: FileInfo = assignment.file;
       return file;
     } else {
       return null;

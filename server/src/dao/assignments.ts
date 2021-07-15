@@ -8,6 +8,6 @@ export interface AssignmentDAO {
     maxMark: number,
   ): Promise<number>;
   getById(id: number): Promise<Assignment>;
-  uploadFile(id: number, file: FileInfo): Promise<Boolean>;
+  uploadFile(id: number, file: FileInfo): Promise<boolean>;
   getFile(id: number): Promise<FileInfo>;
 }

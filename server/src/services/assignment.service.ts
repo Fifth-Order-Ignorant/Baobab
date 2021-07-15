@@ -28,8 +28,11 @@ export class AssignmentService {
     fileName: string,
     mimetype: string,
     size: number,
-    storedName: string
-  ): Promise<Boolean> {
-    return this._assignmentRepository.uploadFile(assignmentId, new FileInfo(fileName, mimetype, size, storedName));
+    storedName: string,
+  ): Promise<boolean> {
+    return this._assignmentRepository.uploadFile(
+      assignmentId,
+      new FileInfo(fileName, mimetype, size, storedName),
+    );
   }
 }

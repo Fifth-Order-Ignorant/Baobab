@@ -72,8 +72,13 @@ describe('Assignment Upload File API Tests', () => {
       'make a database',
       69420,
     );
-    
-    const file: FileInfo = new FileInfo('chillin', 'text/plain', 64, 'flameo hotman');
+
+    const file: FileInfo = new FileInfo(
+      'chillin',
+      'text/plain',
+      64,
+      'flameo hotman',
+    );
     assignments.uploadFile(assignmentId, file);
     const file2: FileInfo = await assignments.getFile(assignmentId);
     return expect(file).toEqual(file2);

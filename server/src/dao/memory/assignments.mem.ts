@@ -41,7 +41,7 @@ export class AssignmentInMemory implements AssignmentDAO {
     return assignment;
   }
 
-  public async uploadFile(id: number, file: FileInfo): Promise<Boolean> {
+  public async uploadFile(id: number, file: FileInfo): Promise<boolean> {
     const assignment: Assignment = await this.getById(id);
     if (assignment !== null) {
       assignment.file = file;
