@@ -7,6 +7,8 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
+import { AssignmentInMemory } from '../src/dao/memory/assignments.mem';
+import { FileInfo } from '../src/entities/fileinfo.entity';
 import { Connection } from 'mongoose';
 import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
@@ -67,5 +69,27 @@ describe('Assignment Create API Test', () => {
       }
     }
     await app.close();
+  });
+});
+
+describe('Assignment Upload File API Tests', () => {
+  it('should return the correct file info', async () => {
+    const assignments = new AssignmentInMemory();
+
+    const assignmentId = await assignments.createAssignment(
+      'DATABASE DATABASE JUST MAKIN A DATABASE WO OH',
+      'make a database',
+      69420,
+    );
+
+    const file: FileInfo = new FileInfo(
+      'chillin',
+      'text/plain',
+      64,
+      'flameo hotman',
+    );
+    assignments.uploadFile(assignmentId, file);
+    const file2: FileInfo = await assignments.getFile(assignmentId);
+    return expect(file).toEqual(file2);
   });
 });
