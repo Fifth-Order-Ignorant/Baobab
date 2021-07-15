@@ -1,10 +1,8 @@
-import { Row, Col, Typography, List, Avatar } from 'antd';
+import { Row, Col, Typography, List } from 'antd';
 import React, { useState } from 'react';
-import Link from 'next/link';
 import styles from '../styles/ProfileList.module.css';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
-import { UserOutlined } from '@ant-design/icons';
 /**
  * Interface for the props that are required for each assignment preview
  */
@@ -21,7 +19,9 @@ interface AssignmentPreviewProps {
 const Assignments = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [assignmentList, setAssignmentList] = useState<AssignmentPreviewProps[]>([]);
+  const [assignmentList, setAssignmentList] = useState<
+    AssignmentPreviewProps[]
+  >([]);
   const fetchAssignments = async (page: number) => {
     const newAssignments = await axios.get('/api/assignment/pagination', {
       params: {
@@ -71,12 +71,13 @@ const Assignments = (): JSX.Element => {
                   style={{
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
-                        }}> 
-                    <List.Item.Meta
+                  }}
+                >
+                  <List.Item.Meta
                     title={item.name}
                     description={item.description}
-                    />
-                    {"Pending/" + item.maxMark}
+                  />
+                  {'Pending/' + item.maxMark}
                 </List.Item>
               )}
             />

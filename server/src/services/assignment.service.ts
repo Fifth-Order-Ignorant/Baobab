@@ -23,12 +23,16 @@ export class AssignmentService {
     );
   }
 
-  async getPaginatedAssignments(start: number, end: number): Promise<AssignmentResponse[]> {
-
+  async getPaginatedAssignments(
+    start: number,
+    end: number,
+  ): Promise<AssignmentResponse[]> {
     return this._assignmentRepository.getAssignments(start, end);
   }
 
-  async convertToResponse(assignments: Assignment[]): Promise<AssignmentResponse[]>  {
+  async convertToResponse(
+    assignments: Assignment[],
+  ): Promise<AssignmentResponse[]> {
     const newAssignments: AssignmentResponse[] = [];
     const n: number = assignments.length;
     let i = 0;
@@ -39,8 +43,8 @@ export class AssignmentService {
         id: assignment.id,
         name: assignment.name,
         description: assignment.description,
-        maxMark: assignment.maxMark
-      }
+        maxMark: assignment.maxMark,
+      };
       newAssignments.push(newAssignment);
       i++;
     }

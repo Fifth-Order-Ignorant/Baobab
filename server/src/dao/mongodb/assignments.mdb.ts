@@ -34,15 +34,12 @@ export class AssignmentMongoDAO implements AssignmentDAO {
     return this._assignments.findById(id);
   }
 
-  async getAssignments(
-    start: number,
-    end: number,
-  ): Promise<Assignment[]> {
+  async getAssignments(start: number, end: number): Promise<Assignment[]> {
     const newAssignments: Assignment[] = await this._assignments
-    .find(await this._assignments.translateAliases({}))
-    .sort(await this._assignments.translateAliases({ name: 'asc' }))
-    .skip(start)
-    .limit(end - start);
+      .find(await this._assignments.translateAliases({}))
+      .sort(await this._assignments.translateAliases({ name: 'asc' }))
+      .skip(start)
+      .limit(end - start);
     return newAssignments;
   }
 }

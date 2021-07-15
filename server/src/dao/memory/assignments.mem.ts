@@ -3,7 +3,6 @@ import { Assignment } from '../../entities/assignment.entity';
 import { AssignmentDAO } from '../assignments';
 import { AssignmentResponse } from 'baobab-common';
 
-
 @Injectable()
 export class AssignmentInMemory implements AssignmentDAO {
   assignments: Assignment[];
