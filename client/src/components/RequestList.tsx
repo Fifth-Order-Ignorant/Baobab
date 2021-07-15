@@ -3,13 +3,14 @@ import { List, Spin } from 'antd';
 import { PostResponse } from 'baobab-common';
 import axios from 'axios';
 import React from 'react';
-import { Request } from '../../../server/src/entities/request.entity';
+import { RoleRequestResponse } from 'baobab-common';
+import { RequestComponent } from './RequestComponent';
 
 export interface PostListProps {
   /**
    *  List of posts
    */
-  postPropsList: Request[];
+  postPropsList: RoleRequestResponse[];
   /**
    * Whether more posts are loading.
    */
@@ -25,7 +26,7 @@ export function RequestList(props: PostListProps): JSX.Element {
       dataSource={props.postPropsList}
       renderItem={(item) => (
         <li style={{marginTop: '24px', marginBottom: '24px' }}>
-            <RequestComponent id={item.userId} description={item.description} role={item.role} status={item.status}/>
+            <RequestComponent id={item.userId} description={item.description} role={item.role} requestId={item.requestId}/>
         </li>
       )}
     >

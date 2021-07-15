@@ -1,14 +1,14 @@
 import { RequestList } from './RequestList';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Request } from '../../../server/src/entities/request.entity';
+import {RoleRequestResponse} from 'baobab-common';
 
 type RequestFeedProps = {
   /**
    * Function used to fetch posts in batches.
    * @param page Batch number.
    */
-  fetchRequests: (page: number) => Promise<Request[]>;
+  fetchRequests: (page: number) => Promise<RoleRequestResponse[]>;
 };
 
 /**
