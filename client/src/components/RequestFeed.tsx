@@ -1,18 +1,18 @@
 import { RequestList } from './RequestList';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import {RoleRequestResponse} from 'baobab-common';
 
 type RequestFeedProps = {
   /**
-   * Function used to fetch posts in batches.
+   * Function used to fetch Requests in batches.
    * @param page Batch number.
    */
   fetchRequests: (page: number) => Promise<RoleRequestResponse[]>;
 };
 
 /**
- * Renders the infinite scrolling post feed.
+ * Renders the infinite scrolling request feed.
  */
 export default function RequestFeed(props: RequestFeedProps): JSX.Element {
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ export default function RequestFeed(props: RequestFeedProps): JSX.Element {
       loadMore={loadMore}
       hasMore={!loading && hasMore}
     >
-      <RequestList postPropsList={postList} isLoading={loading} />
+      <RequestList requestPropsList={postList} isLoading={loading} />
     </InfiniteScroll>
   );
 }

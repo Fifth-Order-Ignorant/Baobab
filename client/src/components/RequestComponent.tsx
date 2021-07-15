@@ -3,7 +3,6 @@ import Card from './Card';
 import React, { useContext, useEffect, useState } from 'react';
 import styles from '../../styles/Post.module.css';
 import { AuthContext } from '../providers/AuthProvider';
-// <TagList tags={SampleTags} />
 import { UserOutlined } from '@ant-design/icons';
 import { Role } from '../../../server/src/entities/role.entity';
 import axios from 'axios';
@@ -16,17 +15,29 @@ import {
 import { useForm } from 'react-hook-form';
 
 /**
- * Required props for rendering a post.
+ * Required props for rendering a request.
  */
 type RequestProps = {
+  /**
+   * Id of the user
+   */
   id: number;
+  /**
+   * Description of why they want the role
+   */
   description: string;
+  /**
+   * The new role they want
+   */
   role: Role;
+  /**
+   * The id of the request
+   */
   requestId: number;
 }
 
 /**
- * Renders the post component.
+ * Renders the request component.
  */
 export function RequestComponent(props: RequestProps): JSX.Element {
 
@@ -36,7 +47,6 @@ export function RequestComponent(props: RequestProps): JSX.Element {
   const [visible, setVisible] = useState(true);
 
   const {
-    register,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<EditRoleRequest>({
@@ -45,7 +55,6 @@ export function RequestComponent(props: RequestProps): JSX.Element {
 
   const submit = async (approved: boolean) => {
     const data = {"requestId": props.requestId, "isApproved": approved} as EditRoleRequest;
-    console.log(data);
     try {
       await axios.patch('/api/request/approve', data);
       setVisible(false);
@@ -75,7 +84,7 @@ export function RequestComponent(props: RequestProps): JSX.Element {
   return (
     <Card>
       <div>
-        {visible && <List>
+        {authState && visible && <List>
           <List.Item>
             <Comment
               className={styles.postComment}
