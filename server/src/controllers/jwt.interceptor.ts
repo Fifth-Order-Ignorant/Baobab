@@ -39,9 +39,8 @@ export class JwtInterceptor implements NestInterceptor {
             secure: this._configService.get<boolean>('production'),
             sameSite: 'lax',
           });
-
-          return data;
         }
+        return data;
       }),
     );
   }

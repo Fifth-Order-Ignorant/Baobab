@@ -1,9 +1,11 @@
-import { object, SchemaOf, string } from 'yup';
+import { object, SchemaOf, number, boolean } from 'yup';
 
 export class EditRoleRequest {
-  role!: string;
+  requestId!: number;
+  isApproved!: boolean;
 }
 
 export const EditRoleRequestSchema: SchemaOf<EditRoleRequest> = object({
-  role: string().required(),
+  requestId: number().required(),
+  isApproved: boolean().required(),
 });
