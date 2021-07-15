@@ -8,5 +8,4 @@ export interface AssignmentDAO {
   ): Promise<number>;
   getById(id: number): Promise<Assignment>;
   getAssignments(start: number, end: number): Promise<Assignment[]>;
-
 }

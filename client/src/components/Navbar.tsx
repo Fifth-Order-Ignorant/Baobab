@@ -20,7 +20,9 @@ function Navbar(): JSX.Element {
           <Menu.Item key="social">
             <Link href="/feed/">Social</Link>
           </Menu.Item>
-          <Menu.Item key="education">Education</Menu.Item>
+          <Menu.Item key="education">
+            <Link href="/assignments/">Education</Link>
+          </Menu.Item>
           <Menu.Item key="discussionBoard">Discussion Board</Menu.Item>
           <Menu.Item key="posts">Posts</Menu.Item>
           <Menu.Item key="profiles">

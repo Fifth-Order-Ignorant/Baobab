@@ -51,10 +51,11 @@ export class AssignmentController {
   async pagination(
     @Query() query: AssignmentPaginationRequest,
   ): Promise<AssignmentResponse[]> {
-    const paginatedProfiles = await this._assignmentService.getPaginatedAssignments(
-      query.start,
-      query.end,
-    );
+    const paginatedProfiles =
+      await this._assignmentService.getPaginatedAssignments(
+        query.start,
+        query.end,
+      );
     return paginatedProfiles;
   }
 }
