@@ -89,7 +89,7 @@ export function RequestComponent(props: RequestProps): JSX.Element {
             <Comment
               className={styles.postComment}
               actions={[
-                <span>
+                <span key="role">
                   <b>{props.role}</b>
                 </span>,
                 <span
