@@ -29,7 +29,7 @@ describe('MongoDB Assignment DAO Tests', () => {
       100,
     );
     const assignment = await dao.getById(id);
-    expect(assignment.id).toEqual(0);
+    expect(assignment.name).toEqual("Load Trips");
   });
 
   afterAll(async () => {
