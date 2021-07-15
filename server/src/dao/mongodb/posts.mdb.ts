@@ -22,7 +22,7 @@ export class PostMongoDAO implements PostDAO {
   }
 
   async getChilds(id: number): Promise<Post[]> {
-    return this._posts.find(await this._posts.translateAliases({ parent: id }));
+    return this._posts.find(this._posts.translateAliases({ parent: id }));
   }
   async getById(id: number): Promise<Post> {
     return this._posts.findById(id);
@@ -30,8 +30,8 @@ export class PostMongoDAO implements PostDAO {
 
   async getParentPosts(start: number, end: number): Promise<Post[]> {
     const posts: Post[] = await this._posts
-      .find(await this._posts.translateAliases({ parent: null }))
-      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
+      .find(this._posts.translateAliases({ parent: null }))
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return posts;
@@ -43,8 +43,8 @@ export class PostMongoDAO implements PostDAO {
     end: number,
   ): Promise<Post[]> {
     const posts: Post[] = await this._posts
-      .find(await this._posts.translateAliases({ parent: postId }))
-      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
+      .find(this._posts.translateAliases({ parent: postId }))
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return posts;
@@ -56,10 +56,10 @@ export class PostMongoDAO implements PostDAO {
     end: number,
   ): Promise<Post[]> {
     const posts: Post[] = await this._posts
-      .find(await this._posts.translateAliases({ userId: userId }))
+      .find(this._posts.translateAliases({ userId: userId }))
       .where('_parent')
       .ne(null)
-      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return posts;
@@ -71,8 +71,8 @@ export class PostMongoDAO implements PostDAO {
     end: number,
   ): Promise<Post[]> {
     const posts: Post[] = await this._posts
-      .find(await this._posts.translateAliases({ userId: userId }))
-      .sort(await this._posts.translateAliases({ timestamp: 'asc' }))
+      .find(this._posts.translateAliases({ userId: userId }))
+      .sort(this._posts.translateAliases({ timestamp: 'asc' }))
       .skip(start)
       .limit(end - start);
     return posts;
