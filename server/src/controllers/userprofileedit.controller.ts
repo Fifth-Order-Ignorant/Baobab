@@ -12,11 +12,7 @@ import {
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import {
-  EditNameRequest,
-  EditJobRequest,
-  EditBioRequest,
-} from 'baobab-common';
+import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import {
   ApiBadRequestResponse,
@@ -43,7 +39,7 @@ export class UserProfileEditController {
     description: 'The profile is correctly fetched.',
   })
   @ApiResponse({ status: 400, description: 'The request is invalid.' })
-  async getProfile(@Req() req, @Res({passthrough: true}) res) {
+  async getProfile(@Req() req, @Res({ passthrough: true }) res) {
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
       return this._userProfileService.getProfile(id);

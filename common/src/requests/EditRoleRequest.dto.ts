@@ -7,5 +7,5 @@ export class EditRoleRequest {
 
 export const EditRoleRequestSchema: SchemaOf<EditRoleRequest> = object({
   requestId: number().required(),
-  isApproved: boolean().required()
+  isApproved: boolean().required(),
 });

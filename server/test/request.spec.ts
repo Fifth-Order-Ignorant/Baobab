@@ -120,12 +120,12 @@ describe('Role Request Tests', () => {
     });
 
     await agent
-    .post('/request/role')
-    .send({
-      description: 'i want roleeeee',
-      role: 'Investor Representative',
-    })
-    .expect(HttpStatus.CREATED);
+      .post('/request/role')
+      .send({
+        description: 'i want roleeeee',
+        role: 'Investor Representative',
+      })
+      .expect(HttpStatus.CREATED);
 
     return agent
       .patch('/request/approve')

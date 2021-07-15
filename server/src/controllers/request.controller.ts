@@ -9,21 +9,29 @@ import {
   Req,
   Patch,
   BadRequestException,
-  NotFoundException
+  NotFoundException,
 } from '@nestjs/common';
 import { RequestService } from '../services/request.service';
 import { request, Response } from 'express';
-import { RoleRequest, RequestPaginationRequest, RoleRequestResponse } from 'baobab-common';
+import {
+  RoleRequest,
+  RequestPaginationRequest,
+  RoleRequestResponse,
+  EditRoleRequest,
+} from 'baobab-common';
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuth } from './jwt.decorator';
 import { Role } from '../entities/role.entity';
 import { Request } from '../entities/request.entity';
-import { EditRoleRequest } from 'baobab-common';
+
 import { UserProfileService } from '../services/userprofile.service';
 
 @Controller('request')
 export class RequestController {
-  constructor(private _requestService: RequestService, private _userProfileService: UserProfileService) {}
+  constructor(
+    private _requestService: RequestService,
+    private _userProfileService: UserProfileService,
+  ) {}
 
   @JwtAuth()
   @Post('role')
@@ -60,10 +68,8 @@ export class RequestController {
   async pagination(
     @Query() query: RequestPaginationRequest,
   ): Promise<RoleRequestResponse[]> {
-    const paginatedRequests: RoleRequestResponse[] = await this._requestService.getRequests(
-      query.start,
-      query.end,
-    );
+    const paginatedRequests: RoleRequestResponse[] =
+      await this._requestService.getRequests(query.start, query.end);
     return paginatedRequests;
   }
 
@@ -76,14 +82,14 @@ export class RequestController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const requestId = reqBody.requestId;
-    if (!await this._requestService.isPendingRequest(requestId)) {
+    if (!(await this._requestService.isPendingRequest(requestId))) {
       throw new BadRequestException({
         errors: [],
       });
-    }
-    else {
+    } else {
       if (reqBody.isApproved) {
-        const details: [number, string] = await this._requestService.approveRequest(requestId);
+        const details: [number, string] =
+          await this._requestService.approveRequest(requestId);
         if (await this._userProfileService.isValidProfile(details[0])) {
           if (this._userProfileService.isValidRole(details[1])) {
             await this._userProfileService.editRole(details[0], details[1]);
@@ -97,8 +103,7 @@ export class RequestController {
             errors: [],
           });
         }
-      }
-      else {
+      } else {
         await this._requestService.rejectRequest(requestId);
       }
     }

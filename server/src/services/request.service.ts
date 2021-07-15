@@ -25,8 +25,12 @@ export class RequestService {
     );
   }
 
-  async getRequests(start: number, end: number): Promise<RoleRequestResponse[]> {
-    const requests: Request[] = await this._requestRepository.getPaginatedRequests(start, end);
+  async getRequests(
+    start: number,
+    end: number,
+  ): Promise<RoleRequestResponse[]> {
+    const requests: Request[] =
+      await this._requestRepository.getPaginatedRequests(start, end);
     const ans: RoleRequestResponse[] = [];
 
     for (const request of requests) {
