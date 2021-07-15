@@ -1,4 +1,4 @@
-import { AssignmentDAO } from 'src/dao/assignments';
+import { AssignmentDAO } from '../src/dao/assignments';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';

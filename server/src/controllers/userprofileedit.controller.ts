@@ -7,18 +7,12 @@ import {
   Patch,
   Res,
   Req,
-  NotFoundException,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import {
-  EditNameRequest,
-  EditJobRequest,
-  EditBioRequest,
-  EditRoleRequest,
-} from 'baobab-common';
+import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
 import { ConfigService } from '@nestjs/config';
 import {
   ApiBadRequestResponse,
@@ -45,7 +39,7 @@ export class UserProfileEditController {
     description: 'The profile is correctly fetched.',
   })
   @ApiResponse({ status: 400, description: 'The request is invalid.' })
-  async getProfile(@Req() req) {
+  async getProfile(@Req() req, @Res({ passthrough: true }) res) {
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
       return this._userProfileService.getProfile(id);
@@ -107,31 +101,6 @@ export class UserProfileEditController {
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
       await this._userProfileService.editBio(id, reqBody.bio);
-    } else {
-      throw new BadRequestException({
-        errors: [],
-      });
-    }
-  }
-
-  @JwtAuth()
-  @ApiResponse({ status: 200, description: 'Role is updated.' })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @Patch('editrole')
-  async editRole(
-    @Body() reqBody: EditRoleRequest,
-    @Res({ passthrough: true }) res: Response,
-    @Req() req,
-  ) {
-    const id = req.user.id;
-    if (await this._userProfileService.isValidProfile(id)) {
-      if (this._userProfileService.isValidRole(reqBody.role)) {
-        await this._userProfileService.editRole(id, reqBody.role);
-      } else {
-        throw new BadRequestException({
-          errors: [new NotFoundException('Role is not found', reqBody.role)],
-        });
-      }
     } else {
       throw new BadRequestException({
         errors: [],

@@ -3,21 +3,35 @@ import {
   Body,
   Controller,
   Post,
+  Get,
+  Query,
   Res,
   Req,
+  Patch,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { RequestService } from '../services/request.service';
-import { Response } from 'express';
-import { RoleRequest, RequestPaginationRequest } from 'baobab-common';
+import { request, Response } from 'express';
+import {
+  RoleRequest,
+  RequestPaginationRequest,
+  RoleRequestResponse,
+  EditRoleRequest,
+} from 'baobab-common';
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuth } from './jwt.decorator';
 import { Role } from '../entities/role.entity';
 import { Request } from '../entities/request.entity';
 
+import { UserProfileService } from '../services/userprofile.service';
+
 @Controller('request')
 export class RequestController {
-  constructor(private _requestService: RequestService) {}
+  constructor(
+    private _requestService: RequestService,
+    private _userProfileService: UserProfileService,
+  ) {}
 
   @JwtAuth()
   @Post('role')
@@ -50,14 +64,47 @@ export class RequestController {
     }
   }
 
-  @Post('pagination')
+  @Get('pagination')
   async pagination(
-    @Body() reqBody: RequestPaginationRequest,
-  ): Promise<Request[]> {
-    const paginatedRequests: Request[] = await this._requestService.getRequests(
-      reqBody.start,
-      reqBody.end,
-    );
+    @Query() query: RequestPaginationRequest,
+  ): Promise<RoleRequestResponse[]> {
+    const paginatedRequests: RoleRequestResponse[] =
+      await this._requestService.getRequests(query.start, query.end);
     return paginatedRequests;
+  }
+
+  @ApiResponse({ status: 200, description: 'Role is updated.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @Patch('approve')
+  async editRole(
+    @Body() reqBody: EditRoleRequest,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const requestId = reqBody.requestId;
+    if (!(await this._requestService.isPendingRequest(requestId))) {
+      throw new BadRequestException({
+        errors: [],
+      });
+    } else {
+      if (reqBody.isApproved) {
+        const details: [number, string] =
+          await this._requestService.approveRequest(requestId);
+        if (await this._userProfileService.isValidProfile(details[0])) {
+          if (this._userProfileService.isValidRole(details[1])) {
+            await this._userProfileService.editRole(details[0], details[1]);
+          } else {
+            throw new BadRequestException({
+              errors: [new NotFoundException('Role is not found', details[1])],
+            });
+          }
+        } else {
+          throw new BadRequestException({
+            errors: [],
+          });
+        }
+      } else {
+        await this._requestService.rejectRequest(requestId);
+      }
+    }
   }
 }

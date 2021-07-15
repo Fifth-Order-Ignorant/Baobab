@@ -25,4 +25,5 @@ export * from './requests/UserRepliesPaginationRequest.dto';
 export * from './responses/ErrorResponse.dto';
 export * from './responses/PostResponse.dto';
 export * from './responses/ProfileResponse.dto';
+export * from './responses/RoleRequestResponse.dto';
 export * from './responses/SessionPayload';

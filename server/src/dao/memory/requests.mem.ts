@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { RequestStatus } from '../../entities/requeststatus.entity';
 import { Request } from '../../entities/request.entity';
 import { Role } from '../../entities/role.entity';
 import { RequestDAO } from '../requests';
@@ -52,10 +53,21 @@ export class RequestInMemory implements RequestDAO {
     const lst: Request[] = [];
     let count = start;
     while (count < end && count < n) {
-      const post: Request = requests[count];
-      lst.push(post);
+      const request: Request = requests[count];
+      if (request.status == RequestStatus.PENDING) {
+        lst.push(request);
+      }
       count++;
     }
     return lst;
+  }
+
+  async updateRequest(request: Request): Promise<Request> {
+    for (let i = 0; i < this.requests.length; i++) {
+      if (this.requests[i].id === request.id) {
+        this.requests[i] = request;
+        return this.requests[i];
+      }
+    }
   }
 }
