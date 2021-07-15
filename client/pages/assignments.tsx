@@ -77,7 +77,7 @@ const Assignments = (): JSX.Element => {
                     title={item.name}
                     description={item.description}
                   />
-                  {'Pending/' + item.maxMark}
+                  {'-/' + item.maxMark}
                 </List.Item>
               )}
             />
