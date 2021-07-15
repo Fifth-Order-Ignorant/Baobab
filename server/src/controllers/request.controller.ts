@@ -75,7 +75,6 @@ export class RequestController {
 
   @ApiResponse({ status: 200, description: 'Role is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @ApiResponse({ status: 404, description: 'Role not found.' })
   @Patch('approve')
   async editRole(
     @Body() reqBody: EditRoleRequest,
