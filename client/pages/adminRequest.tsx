@@ -20,8 +20,6 @@ export default function adminRequest(): JSX.Element {
     return newRequests.data;
   };
 
-  const authState = useContext(AuthContext);
-
   return (
     <div className={styles.feed}>
       <Row justify="center" align="middle">

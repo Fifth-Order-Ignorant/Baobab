@@ -47,7 +47,6 @@ export function RequestComponent(props: RequestProps): JSX.Element {
   const [visible, setVisible] = useState(true);
 
   const {
-    formState: { errors, isSubmitting },
     setError,
   } = useForm<EditRoleRequest>({
     resolver: yupResolver(EditRoleRequestSchema),
