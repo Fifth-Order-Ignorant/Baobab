@@ -5,12 +5,12 @@ import { AssignmentDAO } from '../assignments';
 @Injectable()
 export class AssignmentInMemory implements AssignmentDAO {
   assignments: Assignment[];
-  highestID: number;
+  highestId: number;
   assignmentCount: number;
 
   public constructor() {
     this.assignments = [];
-    this.highestID = 0;
+    this.highestId = 0;
     this.assignmentCount = 0;
   }
 
@@ -20,14 +20,14 @@ export class AssignmentInMemory implements AssignmentDAO {
     maxMark: number,
   ): Promise<number> {
     const assignment = new Assignment(
-      this.highestID,
+      this.highestId,
       name,
       description,
       maxMark,
     );
     this.assignments.push(assignment);
-    this.highestID++;
-    return this.highestID - 1;
+    this.highestId++;
+    return this.highestId - 1;
   }
 
   public async getById(id: number): Promise<Assignment> {

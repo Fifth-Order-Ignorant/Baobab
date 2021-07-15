@@ -5,21 +5,25 @@ import { TeamDAO } from '../teams';
 @Injectable()
 export class TeamInMemory implements TeamDAO {
   teams: Team[];
-  highestID: number;
+  highestId: number;
 
   public constructor() {
     this.teams = [];
-    this.highestID = 0;
+    this.highestId = 0;
   }
 
-  public createTeam(userID: number, timestamp: Date, teamName: string): number {
-    const team = new Team(this.highestID, userID, teamName, timestamp);
+  public async createTeam(
+    userId: number,
+    timestamp: Date,
+    teamName: string,
+  ): Promise<number> {
+    const team = new Team(this.highestId, userId, teamName, timestamp);
     this.teams.push(team);
-    this.highestID++;
-    return this.highestID - 1;
+    this.highestId++;
+    return this.highestId - 1;
   }
 
-  public teamExists(teamName: string): boolean {
+  public async teamExists(teamName: string): Promise<boolean> {
     let found: boolean;
     found = false;
     this.teams.forEach((element) => {
@@ -30,7 +34,7 @@ export class TeamInMemory implements TeamDAO {
     return found;
   }
 
-  public getById(id: number): Team {
+  public async getById(id: number): Promise<Team> {
     let team: Team;
     this.teams.forEach((element) => {
       if (element.id === id) {
@@ -40,10 +44,10 @@ export class TeamInMemory implements TeamDAO {
     return team;
   }
 
-  public getTeams(
+  public async getTeams(
     start: number,
     end: number,
-  ): Record<string, string | number>[] {
+  ): Promise<Record<string, string | number>[]> {
     const teams: Team[] = this.teams;
     let i: number = start;
     const lst: Record<string, string | number>[] = [];

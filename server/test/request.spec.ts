@@ -9,6 +9,8 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('Role Request Tests', () => {
   let app: INestApplication;
@@ -74,7 +76,109 @@ describe('Role Request Tests', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
+  it(`lets you approve a role change`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .patch('/request/approve')
+      .send({
+        requestId: 0,
+        isApproved: true,
+      })
+      .expect(HttpStatus.OK);
+  });
+
+  it(`changes the role correctly`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    const response = await agent.get('/profile/myprofile').send({});
+
+    expect(response.body[0]).toBe('ethan');
+    expect(response.body[1]).toBe('lam');
+    expect(response.body[2]).toBe('');
+    expect(response.body[3]).toBe('');
+    expect(response.body[4]).toBe('Entrepreneur');
+    done();
+  });
+
+  it(`lets you reject a role change`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    await agent
+    .post('/request/role')
+    .send({
+      description: 'i want roleeeee',
+      role: 'Investor Representative',
+    })
+    .expect(HttpStatus.CREATED);
+
+    return agent
+      .patch('/request/approve')
+      .send({
+        requestId: 1,
+        isApproved: false,
+      })
+      .expect(HttpStatus.OK);
+  });
+
+  it(`keeps the role the same after rejection`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    const response = await agent.get('/profile/myprofile').send({});
+
+    expect(response.body[0]).toBe('ethan');
+    expect(response.body[1]).toBe('lam');
+    expect(response.body[2]).toBe('');
+    expect(response.body[3]).toBe('');
+    expect(response.body[4]).toBe('Entrepreneur');
+    done();
+  });
+
+  it(`does not let you approve or reject a request that is not pending`, async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .patch('/request/approve')
+      .send({
+        requestId: 1,
+        isApproved: false,
+      })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
@@ -83,25 +187,25 @@ describe('Request Basic Functionality', () => {
   it('should create a request with valid id', async () => {
     const requests = new RequestInMemory();
 
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
-    return expect((await requests.getById(requestID)).id).toEqual(requestID);
+    return expect((await requests.getById(requestId)).id).toEqual(requestId);
   });
 
   it('should return a request with requested Role', async () => {
     const requests = new RequestInMemory();
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
 
-    const request = await requests.getById(requestID);
+    const request = await requests.getById(requestId);
     return expect(request.role).toEqual(Role.INVESTOR_REP);
   });
 });
@@ -110,7 +214,7 @@ describe('Request Pagination Basic Functionality', () => {
   it('should paginate the correct request', async () => {
     const requests = new RequestInMemory();
 
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
@@ -119,33 +223,33 @@ describe('Request Pagination Basic Functionality', () => {
 
     const answers = await requests.getPaginatedRequests(0, 1);
 
-    return expect(await answers[0].id).toEqual(requestID);
+    return expect(await answers[0].id).toEqual(requestId);
   });
 
   it('should return the correct slice for pagination', async () => {
     const requests = new RequestInMemory();
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
 
-    const requestID2 = await requests.createRequest(
+    const requestId2 = await requests.createRequest(
       2,
       'gimme permissions',
       new Date(),
       Role.ENTREPRENEUR,
     );
 
-    const requestID3 = await requests.createRequest(
+    const requestId3 = await requests.createRequest(
       3,
       'gimme permissions',
       new Date(),
       Role.SERVICE_PROVIDER_REP,
     );
 
-    const reqs = [requests.getById(requestID), requests.getById(requestID2)];
+    const reqs = [requests.getById(requestId), requests.getById(requestId2)];
 
     const answers = await requests.getPaginatedRequests(0, 2);
     return expect(answers).toEqual(answers);

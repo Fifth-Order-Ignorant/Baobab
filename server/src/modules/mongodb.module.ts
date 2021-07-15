@@ -1,5 +1,5 @@
-import { Global, Injectable, Module } from '@nestjs/common';
-import { InjectConnection, MongooseModule } from '@nestjs/mongoose';
+import { Global, Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../entities/user.entity';
 import { UserSchema } from '../dao/mongodb/schemas/user.schema';
@@ -8,31 +8,18 @@ import { ProfileSchema } from '../dao/mongodb/schemas/profile.schema';
 import { Assignment } from '../entities/assignment.entity';
 import { AssignmentSchema } from '../dao/mongodb/schemas/assignment.schema';
 import { UserProfileMongoDAO } from '../dao/mongodb/userprofiles.mdb';
+import { MulterConfigService, MulterMongoDAO } from '../dao/mongodb/files.mdb';
 import { Post } from '../entities/post.entity';
 import { PostSchema } from '../dao/mongodb/schemas/post.schema';
 import { PostMongoDAO } from '../dao/mongodb/posts.mdb';
+import { Team } from '../entities/team.entity';
+import { TeamSchema } from '../dao/mongodb/schemas/team.schema';
+import { TeamMongoDAO } from '../dao/mongodb/teams.mdb';
 import { Request } from '../entities/request.entity';
 import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
 import { RequestMongoDAO } from '../dao/mongodb/requests.mdb';
-import { GridFsStorage } from 'multer-gridfs-storage/lib/gridfs';
-import { Connection } from 'mongoose';
-import {
-  MulterModule,
-  MulterModuleOptions,
-  MulterOptionsFactory,
-} from '@nestjs/platform-express';
 import { AssignmentMongoDAO } from '../dao/mongodb/assignments.mdb';
-
-@Injectable()
-class MulterConfigService implements MulterOptionsFactory {
-  constructor(@InjectConnection() private _connection: Connection) {}
-
-  createMulterOptions(): MulterModuleOptions {
-    return {
-      storage: new GridFsStorage({ db: this._connection }),
-    };
-  }
-}
+import { MulterModule } from '@nestjs/platform-express';
 
 @Global()
 @Module({
@@ -50,23 +37,28 @@ class MulterConfigService implements MulterOptionsFactory {
       { name: Post.name, schema: PostSchema },
       { name: Request.name, schema: RequestSchema },
       { name: Assignment.name, schema: AssignmentSchema },
+      { name: Team.name, schema: TeamSchema },
     ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
   ],
   providers: [
+    { provide: 'MulterDAO', useClass: MulterMongoDAO },
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
     { provide: 'PostDAO', useClass: PostMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
+    { provide: 'TeamDAO', useClass: TeamMongoDAO },
   ],
   exports: [
     MulterModule,
+    { provide: 'MulterDAO', useClass: MulterMongoDAO },
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
     { provide: 'PostDAO', useClass: PostMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
+    { provide: 'TeamDAO', useClass: TeamMongoDAO },
   ],
 })
 export class MongoDBDAOModule {}

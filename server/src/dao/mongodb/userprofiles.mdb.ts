@@ -5,10 +5,12 @@ import { Connection, Model } from 'mongoose';
 import { Profile } from '../../entities/profile.entity';
 import { ProfileResponse } from 'baobab-common';
 import { GridFSBucket } from 'mongodb';
+import { Injectable } from '@nestjs/common';
 
 /**
  * Save UserProfileEntities in a MongoDB Database
  */
+@Injectable()
 export class UserProfileMongoDAO implements UserProfileDAO {
   private _gridFS: GridFSBucket;
 
@@ -43,6 +45,7 @@ export class UserProfileMongoDAO implements UserProfileDAO {
 
     const queryRes: Profile[] = await this._profiles
       .find()
+      .sort(this._profiles.translateAliases({ id: 1 }))
       .skip(start)
       .limit(end - start);
 
@@ -62,7 +65,7 @@ export class UserProfileMongoDAO implements UserProfileDAO {
     return profiles;
   }
 
-  async getProfileByID(id: number): Promise<Profile> {
+  async getProfileById(id: number): Promise<Profile> {
     return this._profiles.findById(id);
   }
 
@@ -70,20 +73,12 @@ export class UserProfileMongoDAO implements UserProfileDAO {
     return this._users.findOne(this._users.translateAliases({ email }));
   }
 
-  async getUserByID(id: number): Promise<User> {
+  async getUserById(id: number): Promise<User> {
     return this._users.findById(id);
   }
 
   async getUserProfileCount(): Promise<number> {
     return this._users.countDocuments();
-  }
-
-  async getProfilePicture(id: number): Promise<NodeJS.ReadableStream> {
-    const profile = await this.getProfileByID(id);
-    if (profile.picture) {
-      return this._gridFS.openDownloadStreamByName(profile.picture.storedName);
-    }
-    return null;
   }
 
   async updateProfile(profile: Profile): Promise<Profile> {
