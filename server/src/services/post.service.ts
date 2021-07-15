@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PostDAO } from '../dao/posts';
 import { Post } from '../entities/post.entity';
+import { Tag } from '../entities/tag.entity';
 import { UserProfileDAO } from '../dao/userprofiles';
 import { PostResponse } from 'baobab-common';
 
@@ -11,59 +12,90 @@ export class PostService {
     @Inject('PostDAO') private _postRepository: PostDAO,
   ) {}
 
-  createPost(
-    userID: number,
+  async createPost(
+    userId: number,
     content: string,
     timestamp: Date,
     parent: Post,
-  ): Post {
-    return this._postRepository.getByID(
-      this._postRepository.createPost(userID, content, timestamp, parent),
+    tags: Tag[],
+  ): Promise<Post> {
+    return await this._postRepository.getById(
+      await this._postRepository.createPost(
+        userId,
+        content,
+        timestamp,
+        parent,
+        tags,
+      ),
     );
   }
 
-  getParentPost(parentID: number): Post {
-    return this._postRepository.getByID(parentID);
+  async getParentPost(parentId: number): Promise<Post> {
+    return this._postRepository.getById(parentId);
   }
 
-  getPaginatedPosts(start: number, end: number): PostResponse[] {
-    const posts: Record<string, string | number>[] =
-      this._postRepository.getParentPosts(start, end);
+  async getPaginatedPosts(start: number, end: number): Promise<PostResponse[]> {
+    const posts: Post[] = await this._postRepository.getParentPosts(start, end);
     return this.changeIdToAuthor(posts);
   }
 
-  getReplies(postId: number, start: number, end: number): PostResponse[] {
-    const posts: Record<string, string | number>[] =
-      this._postRepository.getReplies(postId, start, end);
+  async getReplies(
+    postId: number,
+    start: number,
+    end: number,
+  ): Promise<PostResponse[]> {
+    const posts: Post[] = await this._postRepository.getReplies(
+      postId,
+      start,
+      end,
+    );
     return this.changeIdToAuthor(posts);
   }
 
-  getUserReplies(userId: number, start: number, end: number): PostResponse[] {
-    const posts: Record<string, string | number>[] =
-      this._postRepository.getRepliesOfUser(userId, start, end);
+  async getUserReplies(
+    userId: number,
+    start: number,
+    end: number,
+  ): Promise<PostResponse[]> {
+    const posts: Post[] = await this._postRepository.getRepliesOfUser(
+      userId,
+      start,
+      end,
+    );
     return this.changeIdToAuthor(posts);
   }
 
-  getUserPosts(userId: number, start: number, end: number): PostResponse[] {
-    const posts: Record<string, string | number>[] =
-      this._postRepository.getPostsOfUser(userId, start, end);
+  async getUserPosts(
+    userId: number,
+    start: number,
+    end: number,
+  ): Promise<PostResponse[]> {
+    const posts: Post[] = await this._postRepository.getPostsOfUser(
+      userId,
+      start,
+      end,
+    );
     return this.changeIdToAuthor(posts);
   }
 
-  changeIdToAuthor(lst: Record<string, string | number>[]): PostResponse[] {
-    const posts: Record<string, string | number>[] = lst;
+  async changeIdToAuthor(lst: Post[]): Promise<PostResponse[]> {
+    const posts: Post[] = lst;
     const newPosts: PostResponse[] = [];
     const n: number = posts.length;
     let i = 0;
     while (i < n) {
-      const post: Record<string, string | number> = posts[i];
+      const post: Post = posts[i];
       if (typeof post !== 'undefined') {
+        const authorName = (
+          await this._userRepository.getProfileById(post.userId)
+        ).name;
         const newPost: PostResponse = {
-          author: this._userRepository.getProfileByID(post.author as number)
-            .name,
-          timestamp: post.timestamp as string,
-          content: post.content as string,
-          postId: post.postId as number,
+          author: authorName,
+          timestamp: post.timestamp.toString(),
+          content: post.content,
+          postId: post.id,
+          authorId: post.userId,
+          tags: post.tags,
         };
         newPosts.push(newPost);
       }

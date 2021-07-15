@@ -1,41 +1,40 @@
+import { Tag } from './tag.entity';
+
 export class Post {
   private _id: number;
-  private _userID: number;
+  private _userId: number;
   private _content: string;
   private _timestamp: Date;
-  private _childs: Post[];
   // If no parent, _parent is undefined.
   private _parent: Post;
+  private _tags: Tag[];
 
   public constructor(
     id: number,
-    userID: number,
+    userId: number,
     content: string,
     timestamp: Date,
     parent: Post,
+    tags: Tag[],
   ) {
     this._id = id;
-    this._userID = userID;
+    this._userId = userId;
     this._content = content;
     this._timestamp = timestamp;
     this._parent = parent;
-    this._childs = [];
+    this._tags = tags;
   }
 
   get id(): number {
     return this._id;
   }
 
-  get userID(): number {
-    return this._userID;
+  get userId(): number {
+    return this._userId;
   }
 
   get content(): string {
     return this._content;
-  }
-
-  get childs(): Post[] {
-    return this._childs;
   }
 
   get parent(): Post {
@@ -46,7 +45,11 @@ export class Post {
     return this._timestamp;
   }
 
-  public addChild(child: Post): void {
-    this._childs.push(child);
+  get tags(): string[] {
+    const ans: string[] = [];
+    this._tags.forEach((element) => {
+      ans.push(element as string);
+    });
+    return ans;
   }
 }
