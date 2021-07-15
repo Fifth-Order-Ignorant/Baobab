@@ -3,8 +3,6 @@ import { Typography, Row, Col } from 'antd';
 
 import styles from '../styles/Post.module.css';
 import axios from 'axios';
-import { useContext} from 'react';
-import { AuthContext } from '../src/providers/AuthProvider';
 
 /**
  * Renders the page for admins to review role requests.
