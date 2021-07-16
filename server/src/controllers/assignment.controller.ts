@@ -22,6 +22,10 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as mime from 'mime';
 
+function pause100ms() {
+  return new Promise((res) => setTimeout(res, 100));
+}
+
 @Controller('assignment')
 export class AssignmentController {
   constructor(private _assignmentService: AssignmentService) {}
@@ -52,6 +56,12 @@ export class AssignmentController {
     }
 
     return {id: assignment.id};
+  }
+
+  @Post('dummy')
+  @ApiResponse({ status: 201, description: 'The assignment is created.' })
+  async dummy() {
+    await pause100ms();
   }
 
   @Post('fileup/:assId')
