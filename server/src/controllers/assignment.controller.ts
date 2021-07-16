@@ -1,4 +1,4 @@
-import { Assignment } from './../entities/assignment.entity';
+import { Assignment } from '../entities/assignment.entity';
 import {
   Body,
   Get,
@@ -51,10 +51,20 @@ export class AssignmentController {
   async pagination(
     @Query() query: AssignmentPaginationRequest,
   ): Promise<AssignmentResponse[]> {
-    const paginatedProfiles = await this._assignmentService.getPaginatedAssignments(
-      query.start,
-      query.end,
-    );
-    return paginatedProfiles;
+    const paginatedAssignments =
+      await this._assignmentService.getPaginatedAssignments(
+        query.start,
+        query.end,
+      );
+    const response: AssignmentResponse[] = [];
+    for (const assignment of paginatedAssignments) {
+      response.push({
+        id: assignment.id,
+        description: assignment.description,
+        maxMark: assignment.maxMark,
+        name: assignment.name,
+      });
+    }
+    return response;
   }
 }
