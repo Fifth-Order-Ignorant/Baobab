@@ -8,9 +8,10 @@ import Tags from '../constants/Tags';
  * @param props Contains a function that passes in the current tags.
  */
 export default function SetTagList(props: {
-  onTagChange: (tags: string[]) => void;
-  tags: string[];
-}) {
+  onTagChange: (tags: string[]) => void,
+  tags: string[]
+}): JSX.Element {
+  const [tags, setTags] = useState<string[]>([]);
   const [inputTag, setInputTag] = useState('');
 
   const options = [];
@@ -59,10 +60,16 @@ export default function SetTagList(props: {
             style={{ width: 200 }}
             value={inputTag}
             onChange={setInputTag}
-            filterOption={(inputValue, option) =>
-              option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
+            filterOption={(inputValue, option) => {
+              if (option !== undefined) {
+                return (
+                  option.value
+                    .toUpperCase()
+                    .indexOf(inputValue.toUpperCase()) !== -1
+                );
+              }
+              return false;
+            }}
           />
           <Button onClick={addTag}>Add Tag</Button>
         </Col>
