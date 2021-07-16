@@ -9,5 +9,10 @@ export default {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Basic = (): JSX.Element => (
-  <RequestComponent requestId={0} id={0} role={Role.ENTREPRENEUR} description={"It would be fun."}/>
+  <RequestComponent
+    requestId={0}
+    id={0}
+    role={Role.ENTREPRENEUR}
+    description={'It would be fun.'}
+  />
 );

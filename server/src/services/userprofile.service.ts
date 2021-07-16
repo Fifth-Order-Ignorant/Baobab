@@ -91,6 +91,11 @@ export class UserProfileService {
     ];
   }
 
+  async getFullName(id: number): Promise<string> {
+    const profile = await this._userProfileRepository.getProfileById(id);
+    return profile.name;
+  }
+
   async getPaginatedProfiles(
     start: number,
     end: number,

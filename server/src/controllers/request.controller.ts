@@ -68,9 +68,23 @@ export class RequestController {
   async pagination(
     @Query() query: RequestPaginationRequest,
   ): Promise<RoleRequestResponse[]> {
-    const paginatedRequests: RoleRequestResponse[] =
-      await this._requestService.getRequests(query.start, query.end);
-    return paginatedRequests;
+    const paginatedRequests: Request[] = await this._requestService.getRequests(
+      query.start,
+      query.end,
+    );
+
+    const ans: RoleRequestResponse[] = [];
+
+    for (const request of paginatedRequests) {
+      ans.push({
+        requestId: request.id,
+        userId: request.userId,
+        name: await this._userProfileService.getFullName(request.userId),
+        role: request.role as string,
+        description: request.description,
+      });
+    }
+    return ans;
   }
 
   @ApiResponse({ status: 200, description: 'Role is updated.' })

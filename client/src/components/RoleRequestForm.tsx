@@ -24,7 +24,9 @@ function RoleRequestForm(): JSX.Element {
 
   const onSubmit = async (data: RoleRequest) => {
     try {
-      data.description = (document.getElementById('description') as HTMLInputElement).value;
+      data.description = (
+        document.getElementById('description') as HTMLInputElement
+      ).value;
       console.log(data);
       setState('done');
       await axios.post('/api/request/role', data);
@@ -60,13 +62,13 @@ function RoleRequestForm(): JSX.Element {
                     <Select {...field}>
                       <Select.Option value="Default">Default</Select.Option>
                       <Select.Option value="Entrepreneur">
-                      Entrepreneur
+                        Entrepreneur
                       </Select.Option>
                       <Select.Option value="Investor Representative">
-                      Investor Representative
+                        Investor Representative
                       </Select.Option>
                       <Select.Option value="Service Provider Representative">
-                      Service Provider Representative
+                        Service Provider Representative
                       </Select.Option>
                     </Select>
                   )}
@@ -83,7 +85,10 @@ function RoleRequestForm(): JSX.Element {
                 validateStatus={errors.description ? 'error' : ''}
                 help={errors.description?.message}
               >
-                <Input.TextArea id={'description'} {...register('description')} />
+                <Input.TextArea
+                  id={'description'}
+                  {...register('description')}
+                />
               </Form.Item>
             )}
 

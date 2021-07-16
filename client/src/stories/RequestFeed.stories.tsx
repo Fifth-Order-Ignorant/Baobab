@@ -17,9 +17,9 @@ export const Basic = (): JSX.Element => (
           {
             requestId: 0,
             userId: 0,
-            role: "Entrepreneur",
-            description: "It would be fun."
-          }
+            role: 'Entrepreneur',
+            description: 'It would be fun.',
+          },
         ];
       }
       return [];

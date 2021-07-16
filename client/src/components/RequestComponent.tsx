@@ -34,26 +34,26 @@ type RequestProps = {
    * The id of the request.
    */
   requestId: number;
-}
+};
 
 /**
  * Renders the request component.
  */
 export function RequestComponent(props: RequestProps): JSX.Element {
-
   const authState = useContext(AuthContext);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [visible, setVisible] = useState(true);
 
-  const {
-    setError,
-  } = useForm<EditRoleRequest>({
+  const { setError } = useForm<EditRoleRequest>({
     resolver: yupResolver(EditRoleRequestSchema),
   });
 
   const submit = async (approved: boolean) => {
-    const data = {"requestId": props.requestId, "isApproved": approved} as EditRoleRequest;
+    const data = {
+      requestId: props.requestId,
+      isApproved: approved,
+    } as EditRoleRequest;
     try {
       await axios.patch('/api/request/approve', data);
       setVisible(false);
@@ -79,42 +79,37 @@ export function RequestComponent(props: RequestProps): JSX.Element {
     getInfo();
   }, []);
 
-
   return (
     <Card>
       <div>
-        {authState && visible && <List>
-          <List.Item>
-            <Comment
-              className={styles.postComment}
-              actions={[
-                <span key="role">
-                  <b>{props.role}</b>
-                </span>,
-                <span
-                  key="accept"
-                  onClick={()=>submit(true)}
-                >
-                  Accept
-                </span>,
-                <span
-                  key="decline"
-                  onClick={()=>submit(false)}
-                >
-                  Decline
-                </span>,
-              ]}
-              author={firstName + " " + lastName}
-              content={props.description}
-              avatar={
-                <Avatar
-                  src={`/api/user/picture/${props.id.toString()}`}
-                  icon={<UserOutlined />}
-                />
-              }
-            />
-          </List.Item>
-        </List>}
+        {authState && visible && (
+          <List>
+            <List.Item>
+              <Comment
+                className={styles.postComment}
+                actions={[
+                  <span key="role">
+                    <b>{props.role}</b>
+                  </span>,
+                  <span key="accept" onClick={() => submit(true)}>
+                    Accept
+                  </span>,
+                  <span key="decline" onClick={() => submit(false)}>
+                    Decline
+                  </span>,
+                ]}
+                author={firstName + ' ' + lastName}
+                content={props.description}
+                avatar={
+                  <Avatar
+                    src={`/api/user/picture/${props.id.toString()}`}
+                    icon={<UserOutlined />}
+                  />
+                }
+              />
+            </List.Item>
+          </List>
+        )}
       </div>
     </Card>
   );

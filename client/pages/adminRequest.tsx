@@ -25,7 +25,7 @@ export default function AdminRequest(): JSX.Element {
           <Typography>
             <h2>Requests</h2>
           </Typography>
-          <RequestFeed fetchRequests={fetchRequests}/>
+          <RequestFeed fetchRequests={fetchRequests} />
         </Col>
       </Row>
     </div>

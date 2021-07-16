@@ -1,7 +1,7 @@
 import { RequestList } from './RequestList';
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import {RoleRequestResponse} from 'baobab-common';
+import { RoleRequestResponse } from 'baobab-common';
 
 type RequestFeedProps = {
   /**

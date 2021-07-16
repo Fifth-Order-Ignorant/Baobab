@@ -22,8 +22,13 @@ export function RequestList(props: RequestListProps): JSX.Element {
     <List
       dataSource={props.requestPropsList}
       renderItem={(item) => (
-        <li style={{marginTop: '24px', marginBottom: '24px' }}>
-            <RequestComponent id={item.userId} description={item.description} role={item.role} requestId={item.requestId}/>
+        <li style={{ marginTop: '24px', marginBottom: '24px' }}>
+          <RequestComponent
+            id={item.userId}
+            description={item.description}
+            role={item.role}
+            requestId={item.requestId}
+          />
         </li>
       )}
     >
