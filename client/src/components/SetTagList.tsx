@@ -60,10 +60,10 @@ export default function SetTagList(props: {
             style={{ width: 200 }}
             value={inputTag}
             onChange={setInputTag}
-            filterOption={(inputValue: string, option?): boolean => {
-              if (option != null) {
+            filterOption={(inputValue, option) => {
+              if (option !== undefined) {
                 return (
-                  option!.value
+                  option.value
                     .toUpperCase()
                     .indexOf(inputValue.toUpperCase()) !== -1
                 );
