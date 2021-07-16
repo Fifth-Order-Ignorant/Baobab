@@ -87,6 +87,6 @@ describe('Assignment Pagination Basic Functionality', () => {
     );
 
     const assignments = await assignmentDAO.getAssignments(0, 2);
-    expect(assignments.length).toEqual(3);
+    expect(assignments.length).toEqual(2);
   });
 });

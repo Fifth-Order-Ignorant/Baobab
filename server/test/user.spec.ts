@@ -320,7 +320,7 @@ describe('Profile Pagination Basic Functionality', () => {
     );
 
     const profile1 = await users.getProfileById(userId);
-    profile1.changeRole(Role.INVESTOR_REP);
+    profile1.role = Role.INVESTOR_REP;
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
     const userId2 = await users.addUserProfile(
