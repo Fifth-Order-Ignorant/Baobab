@@ -242,14 +242,15 @@ describe('Request Pagination Basic Functionality', () => {
       Role.ENTREPRENEUR,
     );
 
-    const requestId3 = await requests.createRequest(
+    await requests.createRequest(
       3,
       'gimme permissions',
       new Date(),
       Role.SERVICE_PROVIDER_REP,
     );
 
-    const reqs = [requests.getById(requestId), requests.getById(requestId2)];
+    requests.getById(requestId);
+    requests.getById(requestId2);
 
     const answers = await requests.getPaginatedRequests(0, 2);
     return expect(answers).toEqual(answers);

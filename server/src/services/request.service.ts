@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Role } from '../entities/role.entity';
 import { RequestDAO } from '../dao/requests';
 import { Request } from '../entities/request.entity';
-import { RoleRequestResponse } from 'baobab-common';
 import { RequestStatus } from '../entities/requeststatus.entity';
 
 @Injectable()

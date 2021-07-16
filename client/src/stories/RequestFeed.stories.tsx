@@ -31,18 +31,16 @@ export const Basic = (): JSX.Element => (
               name: 'John Doe',
             },
             {
-                requestId: 0,
-                userId: 0,
-                role: 'Entrepreneur',
-                description: 'It would be fun.',
-                name: 'John Doe',
-              }
+              requestId: 0,
+              userId: 0,
+              role: 'Entrepreneur',
+              description: 'It would be fun.',
+              name: 'John Doe',
+            },
           ];
-        }
-        else {
-            fetched = false;
-        return [
-        ];
+        } else {
+          fetched = false;
+          return [];
         }
       }}
     />

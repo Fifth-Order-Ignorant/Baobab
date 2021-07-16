@@ -7,7 +7,6 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
-import { PostResponse } from 'baobab-common';
 import { Post } from '../src/entities/post.entity';
 import { Tag } from '../src/entities/tag.entity';
 import { Connection } from 'mongoose';

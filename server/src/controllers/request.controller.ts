@@ -5,14 +5,12 @@ import {
   Post,
   Get,
   Query,
-  Res,
   Req,
   Patch,
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { RequestService } from '../services/request.service';
-import { request, Response } from 'express';
 import {
   RoleRequest,
   RequestPaginationRequest,
@@ -37,11 +35,7 @@ export class RequestController {
   @Post('role')
   @ApiResponse({ status: 201, description: 'The role is returned.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
-  async requestRole(
-    @Body() reqBody: RoleRequest,
-    @Res({ passthrough: true }) res: Response,
-    @Req() req,
-  ) {
+  async requestRole(@Body() reqBody: RoleRequest, @Req() req) {
     const today = new Date();
 
     if (!Object.values<string>(Role).includes(reqBody.role)) {
@@ -90,10 +84,7 @@ export class RequestController {
   @ApiResponse({ status: 200, description: 'Role is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Patch('approve')
-  async editRole(
-    @Body() reqBody: EditRoleRequest,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async editRole(@Body() reqBody: EditRoleRequest) {
     const requestId = reqBody.requestId;
     if (!(await this._requestService.isPendingRequest(requestId))) {
       throw new BadRequestException({

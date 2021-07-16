@@ -72,39 +72,38 @@ export function RequestComponent(props: RequestProps): JSX.Element {
 
   return (
     <div>
-      {authState && visible && (<Card>
-      <div>
-        
-          <List>
-            <List.Item>
-              <Comment
-                className={styles.postComment}
-                actions={[
-                  <span key="role">
-                    <b>{props.role}</b>
-                  </span>,
-                  <span key="accept" onClick={() => submit(true)}>
-                    Accept
-                  </span>,
-                  <span key="decline" onClick={() => submit(false)}>
-                    Decline
-                  </span>,
-                ]}
-                author={props.name}
-                content={props.description}
-                avatar={
-                  <Avatar
-                    src={`/api/user/picture/${props.id.toString()}`}
-                    icon={<UserOutlined />}
-                  />
-                }
-              />
-            </List.Item>
-          </List>
-        
-      </div>
-    </Card>)}
+      {authState && visible && (
+        <Card>
+          <div>
+            <List>
+              <List.Item>
+                <Comment
+                  className={styles.postComment}
+                  actions={[
+                    <span key="role">
+                      <b>{props.role}</b>
+                    </span>,
+                    <span key="accept" onClick={() => submit(true)}>
+                      Accept
+                    </span>,
+                    <span key="decline" onClick={() => submit(false)}>
+                      Decline
+                    </span>,
+                  ]}
+                  author={props.name}
+                  content={props.description}
+                  avatar={
+                    <Avatar
+                      src={`/api/user/picture/${props.id.toString()}`}
+                      icon={<UserOutlined />}
+                    />
+                  }
+                />
+              </List.Item>
+            </List>
+          </div>
+        </Card>
+      )}
     </div>
-
   );
 }
