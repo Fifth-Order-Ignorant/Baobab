@@ -7,7 +7,7 @@ import axios from 'axios';
 /**
  * Renders the page for admins to review role requests.
  */
-export default function adminRequest(): JSX.Element {
+export default function AdminRequest(): JSX.Element {
   const fetchRequests = async (page: number) => {
     const newRequests = await axios.get('/api/request/pagination', {
       params: {

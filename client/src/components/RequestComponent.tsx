@@ -19,19 +19,19 @@ import { useForm } from 'react-hook-form';
  */
 type RequestProps = {
   /**
-   * Id of the user
+   * Id of the user.
    */
   id: number;
   /**
-   * Description of why they want the role
+   * Description of why they want the role.
    */
   description: string;
   /**
-   * The new role they want
+   * The new role they want.
    */
   role: Role;
   /**
-   * The id of the request
+   * The id of the request.
    */
   requestId: number;
 }

@@ -5,7 +5,7 @@ import { RequestComponent } from './RequestComponent';
 
 export interface RequestListProps {
   /**
-   *  List of Requests
+   *  List of Requests.
    */
   requestPropsList: RoleRequestResponse[];
   /**
