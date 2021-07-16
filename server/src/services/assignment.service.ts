@@ -26,7 +26,7 @@ export class AssignmentService {
   async getPaginatedAssignments(
     start: number,
     end: number,
-  ): Promise<AssignmentResponse[]> {
+  ): Promise<Assignment[]> {
     return this._assignmentRepository.getAssignments(start, end);
   }
 

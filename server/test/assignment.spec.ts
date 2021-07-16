@@ -74,19 +74,19 @@ describe('Assignment Create API Test', () => {
 describe('Assignment Pagination Basic Functionality', () => {
   it('should return the paginated data in the right format', async () => {
     const assignmentDAO = new AssignmentInMemory();
-    assignmentDAO.createAssignment(
+    await assignmentDAO.createAssignment(
       'CSC209: A1 Simulated File system',
       'Hard',
       100,
     );
 
-    assignmentDAO.createAssignment(
+    await assignmentDAO.createAssignment(
       'CSC209: A2 Process stuff',
       'Easy but you will screw up',
       100,
     );
 
     const assignments = await assignmentDAO.getAssignments(0, 2);
-    expect(assignments.length == 3);
+    expect(assignments.length).toEqual(3);
   });
 });
