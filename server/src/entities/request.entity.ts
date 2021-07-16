@@ -36,6 +36,10 @@ export class Request {
     return this._status;
   }
 
+  set status(newStatus: RequestStatus) {
+    this._status = newStatus;
+  }
+
   get timestamp(): Date {
     return this._timestamp;
   }

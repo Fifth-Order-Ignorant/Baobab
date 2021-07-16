@@ -1,5 +1,4 @@
 import { Assignment } from '../entities/assignment.entity';
-import { AssignmentResponse } from 'baobab-common';
 
 export interface AssignmentDAO {
   createAssignment(

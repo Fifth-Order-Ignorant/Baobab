@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { RequestStatus } from '../../entities/requeststatus.entity';
 import { Request } from '../../entities/request.entity';
 import { Role } from '../../entities/role.entity';
 import { RequestDAO } from '../requests';
@@ -41,5 +42,32 @@ export class RequestInMemory implements RequestDAO {
       }
     });
     return request;
+  }
+
+  public async getPaginatedRequests(
+    start: number,
+    end: number,
+  ): Promise<Request[]> {
+    const requests: Request[] = this.requests;
+    const n: number = requests.length;
+    const lst: Request[] = [];
+    let count = start;
+    while (count < end && count < n) {
+      const request: Request = requests[count];
+      if (request.status == RequestStatus.PENDING) {
+        lst.push(request);
+      }
+      count++;
+    }
+    return lst;
+  }
+
+  async updateRequest(request: Request): Promise<Request> {
+    for (let i = 0; i < this.requests.length; i++) {
+      if (this.requests[i].id === request.id) {
+        this.requests[i] = request;
+        return this.requests[i];
+      }
+    }
   }
 }
