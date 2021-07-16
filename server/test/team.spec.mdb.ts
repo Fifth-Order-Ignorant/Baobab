@@ -1,4 +1,4 @@
-import { AssignmentDAO } from 'src/dao/assignments';
+import { TeamDAO } from 'src/dao/teams';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';
@@ -6,9 +6,9 @@ import configuration from '../src/modules/configuration';
 import { Connection } from 'mongoose';
 import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
-describe('MongoDB Assignment DAO Tests', () => {
+describe('MongoDB Team DAO Tests', () => {
   let moduleRef: TestingModule;
-  let dao: AssignmentDAO;
+  let dao: TeamDAO;
 
   beforeAll(async () => {
     moduleRef = await Test.createTestingModule({
@@ -21,17 +21,22 @@ describe('MongoDB Assignment DAO Tests', () => {
       ],
     }).compile();
 
-    dao = moduleRef.get<AssignmentDAO>('AssignmentDAO');
+    dao = moduleRef.get<TeamDAO>('TeamDAO');
   });
 
-  it('Creates an assignment', async () => {
-    const id = await dao.createAssignment(
-      'Load Trips',
-      'Shoutout to michael liut',
-      100,
-    );
-    const assignment = await dao.getById(id);
-    expect(assignment.name).toEqual("Load Trips");
+  it('lets you create a new team', async () => {
+    const id = await dao.createTeam(0, new Date(), 'Sixth Order Ignorant');
+    const team = await dao.getById(id);
+    expect(team.id).toEqual(0);
+  });
+
+  it('notices that a team exists in the system', async () => {
+    expect(dao.teamExists('Sixth Order Ignorant'));
+  });
+
+  it('gets a list of teams correctly', async () => {
+    const teams = await dao.getTeams(0, 1);
+    expect(teams.length).toEqual(1);
   });
 
   afterAll(async () => {

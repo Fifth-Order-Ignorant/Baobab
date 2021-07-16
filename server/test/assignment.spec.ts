@@ -8,6 +8,8 @@ import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import { AssignmentInMemory } from '../src/dao/memory/assignments.mem';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('Assignment Create API Test', () => {
   let app: INestApplication;
@@ -58,10 +60,16 @@ describe('Assignment Create API Test', () => {
   });
 
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
-
 
 describe('Assignment Pagination Basic Functionality', () => {
 <<<<<<< HEAD
@@ -73,13 +81,13 @@ describe('Assignment Pagination Basic Functionality', () => {
     assignmentDAO.createAssignment(
       'CSC209: A1 Simulated File system',
       'Hard',
-      100
+      100,
     );
 
     assignmentDAO.createAssignment(
       'CSC209: A2 Process stuff',
       'Easy but you will screw up',
-      100
+      100,
     );
 
 <<<<<<< HEAD
