@@ -71,9 +71,10 @@ export function RequestComponent(props: RequestProps): JSX.Element {
   };
 
   return (
-    <Card>
+    <div>
+      {authState && visible && (<Card>
       <div>
-        {authState && visible && (
+        
           <List>
             <List.Item>
               <Comment
@@ -100,8 +101,10 @@ export function RequestComponent(props: RequestProps): JSX.Element {
               />
             </List.Item>
           </List>
-        )}
+        
       </div>
-    </Card>
+    </Card>)}
+    </div>
+
   );
 }
