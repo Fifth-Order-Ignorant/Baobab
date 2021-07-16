@@ -30,9 +30,20 @@ export const Basic = (): JSX.Element => (
               description: 'It would be fun.',
               name: 'John Doe',
             },
+            {
+                requestId: 0,
+                userId: 0,
+                role: 'Entrepreneur',
+                description: 'It would be fun.',
+                name: 'John Doe',
+              }
           ];
         }
-        return [];
+        else {
+            fetched = false;
+        return [
+        ];
+        }
       }}
     />
   </AuthContext.Provider>
