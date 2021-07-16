@@ -28,6 +28,7 @@ export function RequestList(props: RequestListProps): JSX.Element {
             description={item.description}
             role={item.role}
             requestId={item.requestId}
+            name={item.name}
           />
         </li>
       )}

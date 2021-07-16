@@ -1,7 +1,7 @@
 import { Comment, Avatar, List } from 'antd';
 import Card from './Card';
-import React, { useContext, useEffect, useState } from 'react';
-import styles from '../../styles/Post.module.css';
+import React, { useContext, useState } from 'react';
+import styles from '../../styles/Request.module.css';
 import { AuthContext } from '../providers/AuthProvider';
 import { UserOutlined } from '@ant-design/icons';
 import { Role } from '../../../server/src/entities/role.entity';
@@ -34,6 +34,10 @@ type RequestProps = {
    * The id of the request.
    */
   requestId: number;
+  /**
+   * Name of user.
+   */
+  name: string;
 };
 
 /**
@@ -41,8 +45,6 @@ type RequestProps = {
  */
 export function RequestComponent(props: RequestProps): JSX.Element {
   const authState = useContext(AuthContext);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [visible, setVisible] = useState(true);
 
   const { setError } = useForm<EditRoleRequest>({
@@ -68,17 +70,6 @@ export function RequestComponent(props: RequestProps): JSX.Element {
     }
   };
 
-  const getInfo = () => {
-    axios.post('/api/user/view', { userId: props.id }).then((response) => {
-      setFirstName(response.data[0]);
-      setLastName(response.data[1]);
-    });
-  };
-
-  useEffect(() => {
-    getInfo();
-  }, []);
-
   return (
     <Card>
       <div>
@@ -98,7 +89,7 @@ export function RequestComponent(props: RequestProps): JSX.Element {
                     Decline
                   </span>,
                 ]}
-                author={firstName + ' ' + lastName}
+                author={props.name}
                 content={props.description}
                 avatar={
                   <Avatar
