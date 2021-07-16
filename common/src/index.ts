@@ -21,6 +21,7 @@ export * from "./requests/TeamRequest.dto";
 export * from "./requests/UploadFileRequest.dto";
 export * from "./requests/UserPostsPaginationRequest.dto";
 export * from "./requests/UserRepliesPaginationRequest.dto";
+export * from "./responses/AssignmentResponse.dto";
 export * from "./responses/ErrorResponse.dto";
 export * from "./responses/PostResponse.dto";
 export * from "./responses/ProfileResponse.dto";

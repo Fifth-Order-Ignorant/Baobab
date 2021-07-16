@@ -12,7 +12,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
-import { CreateAssignmentRequest, UploadFileRequest } from 'baobab-common';
+import { AssignmentResponse, CreateAssignmentRequest, UploadFileRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import {
   ApiBadRequestResponse,
@@ -30,7 +30,7 @@ export class AssignmentController {
   @Post('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
-  async createAssignment(@Body() reqBody: CreateAssignmentRequest): Promise<number> {
+  async createAssignment(@Body() reqBody: CreateAssignmentRequest): Promise<AssignmentResponse> {
     let assignment: Assignment;
     if (reqBody.maxMark) {
       assignment = await this._assignmentService.createAssignment(
@@ -51,7 +51,7 @@ export class AssignmentController {
       });
     }
 
-    return assignment.id;
+    return {id: assignment.id};
   }
 
   @Post('fileup/:assId')
