@@ -3,6 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '../src/modules/configuration';
+import { Tag } from '../src/entities/tag.entity';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('MongoDB User Profile DAO Tests', () => {
   let moduleRef: TestingModule;
@@ -24,9 +27,9 @@ describe('MongoDB User Profile DAO Tests', () => {
 
   it('Create a post', async () => {
     const timestamp = new Date();
-    const id = await dao.createPost(0, 'Hello world!', timestamp, null);
-    const post = await dao.getByID(id);
-    expect(post.userID).toEqual(0);
+    const id = await dao.createPost(0, 'Hello world!', timestamp, null, []);
+    const post = await dao.getById(id);
+    expect(post.userId).toEqual(0);
     expect(post.content).toEqual('Hello world!');
     expect(post.timestamp).toEqual(timestamp);
   });
@@ -36,9 +39,10 @@ describe('MongoDB User Profile DAO Tests', () => {
       0,
       'Goodbye world!',
       new Date(),
-      await dao.getByID(0),
+      await dao.getById(0),
+      [],
     );
-    const childPost = await dao.getByID(childId);
+    const childPost = await dao.getById(childId);
     expect(childPost.parent.id).toEqual(0);
   });
 
@@ -48,7 +52,7 @@ describe('MongoDB User Profile DAO Tests', () => {
   });
 
   it('Paginate Original Posts', async () => {
-    await dao.createPost(0, 'Akukin Kensetsu', new Date(), null);
+    await dao.createPost(0, 'Akukin Kensetsu', new Date(), null, []);
 
     const [firstPost] = await dao.getParentPosts(0, 1);
 
@@ -60,10 +64,10 @@ describe('MongoDB User Profile DAO Tests', () => {
   });
 
   it('Paginate Replies', async () => {
-    const parentId = await dao.createPost(0, '?', new Date(), null);
-    await dao.createPost(1, '??', new Date(), await dao.getByID(parentId));
-    await dao.createPost(1, '?!', new Date(), await dao.getByID(parentId));
-    await dao.createPost(1, '?&', new Date(), await dao.getByID(parentId));
+    const parentId = await dao.createPost(0, '?', new Date(), null, []);
+    await dao.createPost(1, '??', new Date(), await dao.getById(parentId), []);
+    await dao.createPost(1, '?!', new Date(), await dao.getById(parentId), []);
+    await dao.createPost(1, '?&', new Date(), await dao.getById(parentId), []);
 
     const [firstPost] = await dao.getReplies(parentId, 0, 1);
 
@@ -79,12 +83,30 @@ describe('MongoDB User Profile DAO Tests', () => {
   });
 
   it("Paginate Users' Replies", async () => {
-    const parentId = await dao.createPost(2, '!', new Date(), null);
-    const parentId2 = await dao.createPost(3, '!', new Date(), null);
-    await dao.createPost(2, '!!', new Date(), await dao.getByID(parentId));
-    await dao.createPost(3, '!!!', new Date(), await dao.getByID(parentId2));
-    await dao.createPost(3, '!!!!', new Date(), await dao.getByID(parentId));
-    await dao.createPost(3, '!!!!!', new Date(), await dao.getByID(parentId2));
+    const parentId = await dao.createPost(2, '!', new Date(), null, []);
+    const parentId2 = await dao.createPost(3, '!', new Date(), null, []);
+    await dao.createPost(2, '!!', new Date(), await dao.getById(parentId), []);
+    await dao.createPost(
+      3,
+      '!!!',
+      new Date(),
+      await dao.getById(parentId2),
+      [],
+    );
+    await dao.createPost(
+      3,
+      '!!!!',
+      new Date(),
+      await dao.getById(parentId),
+      [],
+    );
+    await dao.createPost(
+      3,
+      '!!!!!',
+      new Date(),
+      await dao.getById(parentId2),
+      [],
+    );
 
     const [firstPost] = await dao.getRepliesOfUser(2, 0, 1);
 
@@ -102,15 +124,28 @@ describe('MongoDB User Profile DAO Tests', () => {
   });
 
   it("Paginate Users' Posts", async () => {
-    await dao.createPost(4, 'hello', new Date(), null);
-    const parentId = await dao.createPost(4, 'whoever is', new Date(), null);
+    await dao.createPost(4, 'hello', new Date(), null, []);
+    const parentId = await dao.createPost(
+      4,
+      'whoever is',
+      new Date(),
+      null,
+      [],
+    );
     await dao.createPost(
       4,
       'reading this',
       new Date(),
-      await dao.getByID(parentId),
+      await dao.getById(parentId),
+      [],
     );
-    await dao.createPost(4, 'yes this includes replies too', new Date(), null);
+    await dao.createPost(
+      4,
+      'yes this includes replies too',
+      new Date(),
+      null,
+      [],
+    );
     const [firstPost] = await dao.getPostsOfUser(4, 0, 1);
     expect(firstPost.content).toEqual('hello');
     const [secondPost] = await dao.getPostsOfUser(4, 1, 2);
@@ -120,8 +155,41 @@ describe('MongoDB User Profile DAO Tests', () => {
     expect(posts[3].content).toEqual('yes this includes replies too');
   });
 
+  it('Create a post with a tag', async () => {
+    const timestamp = new Date();
+    const id = await dao.createPost(0, 'Pain world!', timestamp, null, [
+      Tag.FUN,
+    ]);
+    const post = await dao.getById(id);
+    expect(post.userId).toEqual(0);
+    expect(post.content).toEqual('Pain world!');
+    expect(post.timestamp).toEqual(timestamp);
+    expect(post.tags).toEqual(['Fun']);
+  });
+
+  it('Create a post with many tags', async () => {
+    const timestamp = new Date();
+    const id = await dao.createPost(0, 'Triple Pain world!', timestamp, null, [
+      Tag.FUN,
+      Tag.TECH,
+      Tag.BUSINESS,
+    ]);
+    const post = await dao.getById(id);
+    expect(post.userId).toEqual(0);
+    expect(post.content).toEqual('Triple Pain world!');
+    expect(post.timestamp).toEqual(timestamp);
+    expect(post.tags).toEqual(['Fun', 'Technology', 'Business']);
+  });
+
   // close mongoose connection to prevent Jest from hanging
   afterAll(async () => {
+    const conn = moduleRef.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await moduleRef.close();
   });
 });

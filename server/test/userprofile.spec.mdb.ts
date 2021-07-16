@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from '../src/modules/configuration';
 import { FileInfo } from '../src/entities/fileinfo.entity';
 import * as mime from 'mime';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('MongoDB User Profile DAO Tests', () => {
   let moduleRef: TestingModule;
@@ -32,8 +34,8 @@ describe('MongoDB User Profile DAO Tests', () => {
       '12345',
     );
 
-    const user = await dao.getUserByID(id);
-    const profile = await dao.getProfileByID(id);
+    const user = await dao.getUserById(id);
+    const profile = await dao.getProfileById(id);
 
     expect(user.id).toEqual(0);
     expect(profile.id).toEqual(0);
@@ -47,14 +49,14 @@ describe('MongoDB User Profile DAO Tests', () => {
       'garlic',
     );
 
-    const oldProfile = await dao.getProfileByID(id);
+    const oldProfile = await dao.getProfileById(id);
 
     oldProfile.firstName = 'Minato';
     oldProfile.lastName = 'Aqua';
 
     await dao.updateProfile(oldProfile);
 
-    const newProfile = await dao.getProfileByID(id);
+    const newProfile = await dao.getProfileById(id);
 
     expect(newProfile.name).toEqual('Minato Aqua');
   });
@@ -74,7 +76,7 @@ describe('MongoDB User Profile DAO Tests', () => {
   });
 
   it('Profile Picture Update', async () => {
-    const oldProfile = await dao.getProfileByID(1);
+    const oldProfile = await dao.getProfileById(1);
 
     oldProfile.picture = new FileInfo(
       'akutan.jpg',
@@ -85,7 +87,7 @@ describe('MongoDB User Profile DAO Tests', () => {
 
     await dao.updateProfile(oldProfile);
 
-    const newProfile = await dao.getProfileByID(1);
+    const newProfile = await dao.getProfileById(1);
 
     expect(newProfile.picture.originalName).toEqual('akutan.jpg');
   });
@@ -98,6 +100,13 @@ describe('MongoDB User Profile DAO Tests', () => {
 
   // close mongoose connection to prevent Jest from hanging
   afterAll(async () => {
+    const conn = moduleRef.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await moduleRef.close();
   });
 });

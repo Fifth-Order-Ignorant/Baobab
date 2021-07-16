@@ -9,6 +9,8 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('Role Request Tests', () => {
   let app: INestApplication;
@@ -75,6 +77,13 @@ describe('Role Request Tests', () => {
   });
 
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
@@ -83,25 +92,25 @@ describe('Request Basic Functionality', () => {
   it('should create a request with valid id', async () => {
     const requests = new RequestInMemory();
 
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
-    return expect((await requests.getById(requestID)).id).toEqual(requestID);
+    return expect((await requests.getById(requestId)).id).toEqual(requestId);
   });
 
   it('should return a request with requested Role', async () => {
     const requests = new RequestInMemory();
-    const requestID = await requests.createRequest(
+    const requestId = await requests.createRequest(
       1,
       'gimme permissions',
       new Date(),
       Role.INVESTOR_REP,
     );
 
-    const request = await requests.getById(requestID);
+    const request = await requests.getById(requestId);
     return expect(request.role).toEqual(Role.INVESTOR_REP);
   });
 });
