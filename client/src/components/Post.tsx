@@ -8,7 +8,6 @@ import { PostList } from './PostList';
 import { PostResponse, REPLY_LIMIT } from 'baobab-common';
 import { AuthContext } from '../providers/AuthProvider';
 import TagList from './TagList';
-import SampleTags from '../constants/SampleTags';
 // <TagList tags={SampleTags} />
 import { UserOutlined } from '@ant-design/icons';
 
