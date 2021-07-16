@@ -7,6 +7,7 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
+import { AssignmentInMemory } from '../src/dao/memory/assignments.mem';
 import { Connection } from 'mongoose';
 import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
@@ -67,5 +68,25 @@ describe('Assignment Create API Test', () => {
       }
     }
     await app.close();
+  });
+});
+
+describe('Assignment Pagination Basic Functionality', () => {
+  it('should return the paginated data in the right format', async () => {
+    const assignmentDAO = new AssignmentInMemory();
+    await assignmentDAO.createAssignment(
+      'CSC209: A1 Simulated File system',
+      'Hard',
+      100,
+    );
+
+    await assignmentDAO.createAssignment(
+      'CSC209: A2 Process stuff',
+      'Easy but you will screw up',
+      100,
+    );
+
+    const assignments = await assignmentDAO.getAssignments(0, 2);
+    expect(assignments.length).toEqual(3);
   });
 });
