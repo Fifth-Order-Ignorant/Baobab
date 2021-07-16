@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Assignment } from '../../entities/assignment.entity';
 import { AssignmentDAO } from '../assignments';
+import { AssignmentResponse } from 'baobab-common';
 
 @Injectable()
 export class AssignmentInMemory implements AssignmentDAO {
@@ -38,5 +39,26 @@ export class AssignmentInMemory implements AssignmentDAO {
       }
     });
     return assignment;
+  }
+
+  public async getAssignments(
+    start: number,
+    end: number,
+  ): Promise<Assignment[]> {
+    const newAssignments: Assignment[] = [];
+    const n: number = this.assignments.length;
+    let i: number = start;
+    while (i < end && i < n) {
+      const assignment: Assignment = this.assignments[i];
+      const newAssignment: Assignment = Object({
+        id: i,
+        name: assignment.name,
+        description: assignment.description,
+        maxMark: assignment.maxMark,
+      });
+      newAssignments.push(newAssignment);
+      i++;
+    }
+    return newAssignments;
   }
 }
