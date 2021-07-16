@@ -21,7 +21,7 @@ export function AssignmentFileUpload() {
         data.append('attachment', options.file);
         console.log(options);
         axios
-          .post('/api/assignment/fileup', data, {
+          .post('/api/assignment/fileup/', data, {
             headers: { 'Content-Type': 'multipart/form-data' },
           })
           .then((value) => {
