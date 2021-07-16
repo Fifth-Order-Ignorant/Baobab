@@ -8,7 +8,8 @@ import Tags from '../constants/Tags';
  * @param props Contains a function that passes in the current tags.
  */
 export default function SetTagList(props: {
-  onTagChange: (tags: string[]) => void;
+  onTagChange: (tags: string[]) => void,
+  tags: string[]
 }): JSX.Element {
   const [tags, setTags] = useState<string[]>([]);
   const [inputTag, setInputTag] = useState('');
