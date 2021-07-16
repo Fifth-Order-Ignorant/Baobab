@@ -9,6 +9,7 @@ import {
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import styles from '../../styles/CreateAssignment.module.css';
+import { AssignmentFileUpload } from './AssignmentFileUpload';
 
 function CreateAssignmentForm(): JSX.Element {
   const [mark, setMark] = useState(1);
@@ -97,6 +98,11 @@ function CreateAssignmentForm(): JSX.Element {
               />
             </Form.Item>
           )}
+          {
+            state === 'default' && (
+              <AssignmentFileUpload/>
+            )
+          }
           {state === 'default' && (
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={isSubmitting}>
