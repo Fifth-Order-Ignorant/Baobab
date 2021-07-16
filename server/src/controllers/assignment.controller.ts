@@ -1,13 +1,19 @@
-import { Assignment } from './../entities/assignment.entity';
+import { Assignment } from '../entities/assignment.entity';
 import {
   Body,
+  Get,
   Controller,
+  Query,
   Post,
   UseGuards,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
-import { CreateAssignmentRequest } from 'baobab-common';
+import {
+  CreateAssignmentRequest,
+  AssignmentResponse,
+  AssignmentPaginationRequest,
+} from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import { ApiResponse } from '@nestjs/swagger';
 
@@ -39,5 +45,26 @@ export class AssignmentController {
         errors: [],
       });
     }
+  }
+
+  @Get('pagination')
+  async pagination(
+    @Query() query: AssignmentPaginationRequest,
+  ): Promise<AssignmentResponse[]> {
+    const paginatedAssignments =
+      await this._assignmentService.getPaginatedAssignments(
+        query.start,
+        query.end,
+      );
+    const response: AssignmentResponse[] = [];
+    for (const assignment of paginatedAssignments) {
+      response.push({
+        id: assignment.id,
+        description: assignment.description,
+        maxMark: assignment.maxMark,
+        name: assignment.name,
+      });
+    }
+    return response;
   }
 }
