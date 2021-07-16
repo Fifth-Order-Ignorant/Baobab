@@ -98,11 +98,7 @@ function CreateAssignmentForm(): JSX.Element {
               />
             </Form.Item>
           )}
-          {
-            state === 'default' && (
-              <AssignmentFileUpload/>
-            )
-          }
+          {state === 'default' && <AssignmentFileUpload />}
           {state === 'default' && (
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={isSubmitting}>

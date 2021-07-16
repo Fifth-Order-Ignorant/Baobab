@@ -9,9 +9,10 @@ import {
   Req,
   UploadedFile,
   BadRequestException,
+  Param,
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
-import { CreateAssignmentRequest } from 'baobab-common';
+import { CreateAssignmentRequest, UploadFileRequest } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import {
   ApiBadRequestResponse,
@@ -51,7 +52,7 @@ export class AssignmentController {
     }
   }
 
-  @Post('fileup')
+  @Post('fileup/:assId')
   @UseInterceptors(
     FileInterceptor('fileup', {
       fileFilter: (request, file, callback) => {
@@ -75,14 +76,17 @@ export class AssignmentController {
   @ApiBadRequestResponse({
     description: 'Uploaded file is not in one of the valid file formats.',
   })
-  async uploadFile(@Req() req, @UploadedFile() file: Express.Multer.File) {
+  async uploadFile(
+    @Param() params: UploadFileRequest,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     // when the callback above is rejected
     if (!file) {
       throw new BadRequestException();
     }
 
     await this._assignmentService.uploadFile(
-      req.user.id,
+      params.assId,
       file.originalname,
       file.mimetype,
       file.size,
