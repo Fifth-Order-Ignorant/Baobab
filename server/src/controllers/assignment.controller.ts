@@ -30,7 +30,7 @@ export class AssignmentController {
   @Post('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
-  async createAssignment(@Body() reqBody: CreateAssignmentRequest) {
+  async createAssignment(@Body() reqBody: CreateAssignmentRequest): Promise<number> {
     let assignment: Assignment;
     if (reqBody.maxMark) {
       assignment = await this._assignmentService.createAssignment(
@@ -50,6 +50,8 @@ export class AssignmentController {
         errors: [],
       });
     }
+
+    return assignment.id;
   }
 
   @Post('fileup/:assId')
