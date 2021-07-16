@@ -7,11 +7,6 @@ import axios from 'axios';
 import styles from '../../styles/RoleRequest.module.css';
 
 /**
- * Renders a textbox from input
- */
-const { TextArea } = Input;
-
-/**
  * Renders the entire form including dropdown and textarea to request role changes.
  */
 function RoleRequestForm(): JSX.Element {
@@ -29,6 +24,9 @@ function RoleRequestForm(): JSX.Element {
 
   const onSubmit = async (data: RoleRequest) => {
     try {
+      data.description = (
+        document.getElementById('description') as HTMLInputElement
+      ).value;
       console.log(data);
       setState('done');
       await axios.post('/api/request/role', data);
@@ -62,15 +60,15 @@ function RoleRequestForm(): JSX.Element {
                 <Controller
                   render={({ field }) => (
                     <Select {...field}>
-                      <Select.Option value="default">default</Select.Option>
-                      <Select.Option value="entrepeneur">
-                        entrepeneur
+                      <Select.Option value="Default">Default</Select.Option>
+                      <Select.Option value="Entrepreneur">
+                        Entrepreneur
                       </Select.Option>
-                      <Select.Option value="investor representative">
-                        investor representative
+                      <Select.Option value="Investor Representative">
+                        Investor Representative
                       </Select.Option>
-                      <Select.Option value="service provider representative">
-                        service provider representative
+                      <Select.Option value="Service Provider Representative">
+                        Service Provider Representative
                       </Select.Option>
                     </Select>
                   )}
@@ -87,7 +85,10 @@ function RoleRequestForm(): JSX.Element {
                 validateStatus={errors.description ? 'error' : ''}
                 help={errors.description?.message}
               >
-                <TextArea {...register('description')} />
+                <Input.TextArea
+                  id={'description'}
+                  {...register('description')}
+                />
               </Form.Item>
             )}
 
