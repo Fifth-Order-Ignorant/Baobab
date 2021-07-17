@@ -64,8 +64,8 @@ export class Profile {
     return this._role;
   }
 
-  changeRole(newRole: Role): void {
-    this._role = newRole;
+  set role(role: Role) {
+    this._role = role;
   }
 
   get jobTitle(): string {

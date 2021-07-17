@@ -1,4 +1,4 @@
-import { TeamDAO } from 'src/dao/teams';
+import { TeamDAO } from '../src/dao/teams';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';

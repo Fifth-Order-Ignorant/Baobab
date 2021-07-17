@@ -2,6 +2,7 @@ import { Assignment } from '../entities/assignment.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { AssignmentDAO } from '../dao/assignments';
 import { FileInfo } from '../entities/fileinfo.entity';
+import { AssignmentResponse } from 'baobab-common';
 
 @Injectable()
 export class AssignmentService {
@@ -34,5 +35,32 @@ export class AssignmentService {
       assignmentId,
       new FileInfo(fileName, mimetype, size, storedName),
     );
+  }
+  async getPaginatedAssignments(
+    start: number,
+    end: number,
+  ): Promise<Assignment[]> {
+    return this._assignmentRepository.getAssignments(start, end);
+  }
+
+  async convertToResponse(
+    assignments: Assignment[],
+  ): Promise<AssignmentResponse[]> {
+    const newAssignments: AssignmentResponse[] = [];
+    const n: number = assignments.length;
+    let i = 0;
+    while (i < n) {
+      const assignment: Assignment = assignments[i];
+
+      const newAssignment: AssignmentResponse = {
+        id: assignment.id,
+        name: assignment.name,
+        description: assignment.description,
+        maxMark: assignment.maxMark,
+      };
+      newAssignments.push(newAssignment);
+      i++;
+    }
+    return newAssignments;
   }
 }

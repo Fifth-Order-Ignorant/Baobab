@@ -60,6 +60,16 @@ describe('MongoDB Request DAO Tests', () => {
     request = await requestDao.getById(req2Id);
     expect(request.id).toEqual(req2Id);
   });
+  it('Paginate multiple requests', async () => {
+    const requests = await requestDao.getPaginatedRequests(0, 200);
+    expect(requests[0].id).toEqual(0);
+    expect(requests[1].id).toEqual(1);
+    expect(requests[2].id).toEqual(2);
+  });
+  it('Paginate one request', async () => {
+    const requests = await requestDao.getPaginatedRequests(0, 1);
+    expect(requests[0].id).toEqual(0);
+  });
   // close mongoose connection to prevent Jest from hanging
   afterAll(async () => {
     const conn = moduleRef.get<Connection>(DEFAULT_DB_CONNECTION);

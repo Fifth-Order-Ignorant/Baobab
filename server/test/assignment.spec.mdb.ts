@@ -1,4 +1,4 @@
-import { AssignmentDAO } from 'src/dao/assignments';
+import { AssignmentDAO } from '../src/dao/assignments';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoDBDAOModule } from '../src/modules/mongodb.module';
 import { ConfigModule } from '@nestjs/config';
@@ -32,7 +32,7 @@ describe('MongoDB Assignment DAO Tests', () => {
       100,
     );
     const assignment = await dao.getById(id);
-    expect(assignment.id).toEqual(0);
+    expect(assignment.name).toEqual('Load Trips');
   });
 
   it('should return the correct file info', async () => {
