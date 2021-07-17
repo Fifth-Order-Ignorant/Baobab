@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import { Assignment } from '../../../entities/assignment.entity';
+import { FileInfoSchema } from './fileinfo.schema';
 
 export const AssignmentSchema = new Schema<Assignment>(
   {
@@ -21,6 +22,10 @@ export const AssignmentSchema = new Schema<Assignment>(
       type: Number,
       required: true,
       alias: 'maxMark',
+    },
+    _file: {
+      type: FileInfoSchema,
+      alias: 'file',
     },
   },
   { id: false },
