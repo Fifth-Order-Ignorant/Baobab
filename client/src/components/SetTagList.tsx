@@ -11,7 +11,6 @@ export default function SetTagList(props: {
   onTagChange: (tags: string[]) => void;
   tags: string[];
 }): JSX.Element {
-  const [tags, setTags] = useState<string[]>([]);
   const [inputTag, setInputTag] = useState('');
 
   const options = [];

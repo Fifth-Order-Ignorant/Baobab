@@ -16,7 +16,7 @@ export const Basic = (): JSX.Element => (
         postId: 0,
         content: 'Hello world!',
         authorId: 0,
-        tags: ['Tech', 'Fun'],
+        tags: ['Technology', 'Fun'],
       },
       {
         author: 'John Deer',
