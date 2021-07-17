@@ -113,8 +113,7 @@ describe('Assignment Upload File API Tests', () => {
     return expect(file).toEqual(file2);
   });
 });
-  
-  
+
 describe('Assignment Pagination Basic Functionality', () => {
   it('should return the paginated data in the right format', async () => {
     const assignmentDAO = new AssignmentInMemory();

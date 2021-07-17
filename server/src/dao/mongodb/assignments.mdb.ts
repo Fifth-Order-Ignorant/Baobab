@@ -55,7 +55,7 @@ export class AssignmentMongoDAO implements AssignmentDAO {
       return null;
     }
   }
-  
+
   async getAssignments(start: number, end: number): Promise<Assignment[]> {
     const newAssignments: Assignment[] = await this._assignments
       .find(await this._assignments.translateAliases({}))

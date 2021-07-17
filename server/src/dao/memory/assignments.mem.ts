@@ -59,7 +59,7 @@ export class AssignmentInMemory implements AssignmentDAO {
       return null;
     }
   }
-  
+
   public async getAssignments(
     start: number,
     end: number,
