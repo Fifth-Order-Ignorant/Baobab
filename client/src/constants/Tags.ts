@@ -1,2 +1,2 @@
-const Tags = ['Business', 'Fun', 'Opportunity', 'Tech'];
+const Tags = ['Business', 'Fun', 'Opportunity', 'Technology'];
 export default Tags;
