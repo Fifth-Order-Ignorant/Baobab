@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
 import {
-  AssignmentResponse,
+  SingleAssignmentResponse,
   CreateAssignmentRequest,
   UploadFileRequest,
 } from 'baobab-common';
@@ -35,7 +35,7 @@ export class AssignmentController {
   @ApiResponse({ status: 400, description: 'Bad request.' })
   async createAssignment(
     @Body() reqBody: CreateAssignmentRequest,
-  ): Promise<AssignmentResponse> {
+  ): Promise<SingleAssignmentResponse> {
     let assignment: Assignment;
     if (reqBody.maxMark) {
       assignment = await this._assignmentService.createAssignment(
