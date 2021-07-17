@@ -60,6 +60,26 @@ describe('Assignment Create API Test', () => {
       .expect(HttpStatus.CREATED);
   });
 
+  it(`lets you create a new assignment and gives the correct id`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent
+      .post('/auth/login')
+      .send({
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
+
+    const response = await agent.post('/assignment/create').send({
+      name: 'A2',
+      description: 'poop',
+      maxMark: 50,
+    });
+    expect(response.body.id).toBe(1);
+    done();
+  });
+
   afterAll(async () => {
     const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
     if (conn) {

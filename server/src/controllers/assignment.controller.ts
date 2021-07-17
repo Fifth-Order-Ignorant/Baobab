@@ -6,12 +6,16 @@ import {
   UseGuards,
   InternalServerErrorException,
   UseInterceptors,
-  Req,
   UploadedFile,
   BadRequestException,
+  Param,
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
-import { CreateAssignmentRequest } from 'baobab-common';
+import {
+  AssignmentResponse,
+  CreateAssignmentRequest,
+  UploadFileRequest,
+} from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import {
   ApiBadRequestResponse,
@@ -29,7 +33,9 @@ export class AssignmentController {
   @Post('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
-  async createAssignment(@Body() reqBody: CreateAssignmentRequest) {
+  async createAssignment(
+    @Body() reqBody: CreateAssignmentRequest,
+  ): Promise<AssignmentResponse> {
     let assignment: Assignment;
     if (reqBody.maxMark) {
       assignment = await this._assignmentService.createAssignment(
@@ -49,9 +55,11 @@ export class AssignmentController {
         errors: [],
       });
     }
+
+    return { id: assignment.id };
   }
 
-  @Post('fileup')
+  @Post('fileup/:assId')
   @UseInterceptors(
     FileInterceptor('fileup', {
       fileFilter: (request, file, callback) => {
@@ -75,14 +83,17 @@ export class AssignmentController {
   @ApiBadRequestResponse({
     description: 'Uploaded file is not in one of the valid file formats.',
   })
-  async uploadFile(@Req() req, @UploadedFile() file: Express.Multer.File) {
+  async uploadFile(
+    @Param() params: UploadFileRequest,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     // when the callback above is rejected
     if (!file) {
       throw new BadRequestException();
     }
 
     await this._assignmentService.uploadFile(
-      req.user.id,
+      params.assId,
       file.originalname,
       file.mimetype,
       file.size,

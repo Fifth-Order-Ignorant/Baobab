@@ -1,7 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Form, Input, InputNumber, Typography } from 'antd';
+import { Button, Form, Input, InputNumber, Typography, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
+  AssignmentResponse,
   CreateAssignmentRequest,
   CreateAssignmentRequestSchema,
   ErrorResponse,
@@ -9,11 +10,18 @@ import {
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import styles from '../../styles/CreateAssignment.module.css';
-
+import * as mime from 'mime';
+import { UploadOutlined } from '@ant-design/icons';
+import { RcFile } from 'antd/lib/upload';
+/**
+ * Renders form to upload assignment
+ */
 function CreateAssignmentForm(): JSX.Element {
   const [mark, setMark] = useState(1);
 
   const [state, setState] = useState('default');
+
+  const [file, setFile] = useState<string | Blob | RcFile>();
 
   const {
     register,
@@ -25,11 +33,14 @@ function CreateAssignmentForm(): JSX.Element {
   });
 
   const onSubmit = async (data: CreateAssignmentRequest) => {
+    let assId;
     data.maxMark = mark;
     data.description = document.getElementById('content')?.innerHTML as string;
     try {
       setState('done');
-      await axios.post('/api/assignment/create', data);
+      await axios
+        .post('/api/assignment/create', data)
+        .then((returned) => (assId = (returned.data as AssignmentResponse).id));
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
 
@@ -37,6 +48,23 @@ function CreateAssignmentForm(): JSX.Element {
         setError(error.path as keyof CreateAssignmentRequest, {
           message: error.message,
         });
+      }
+    }
+    if (file) {
+      const data = new FormData();
+      data.append('fileup', file);
+      try {
+        await axios.post(('/api/assignment/fileup/' + assId) as string, data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      } catch (error) {
+        const { errors } = error.response.data as ErrorResponse;
+
+        for (const error of errors) {
+          setError(error.path as keyof CreateAssignmentRequest, {
+            message: error.message,
+          });
+        }
       }
     }
   };
@@ -95,6 +123,27 @@ function CreateAssignmentForm(): JSX.Element {
                 rows={3}
                 {...register('description')}
               />
+            </Form.Item>
+          )}
+          {state === 'default' && (
+            <Form.Item
+              label="File"
+              name="file"
+              validateStatus={errors.description ? 'error' : ''}
+              help={errors.description?.message}
+            >
+              <Upload
+                maxCount={1}
+                beforeUpload={(options) => (setFile(options), false)}
+                showUploadList={true}
+                accept={`${mime.getType('jpg')},
+                         ${mime.getType('png')},
+                         ${mime.getType('pdf')},
+                         ${mime.getType('mp3')},
+                         ${mime.getType('mp4')}`}
+              >
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              </Upload>
             </Form.Item>
           )}
           {state === 'default' && (
