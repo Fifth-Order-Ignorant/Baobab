@@ -2,20 +2,21 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Role } from '../entities/role.entity';
 import { RequestDAO } from '../dao/requests';
 import { Request } from '../entities/request.entity';
+import { RequestStatus } from '../entities/requeststatus.entity';
 
 @Injectable()
 export class RequestService {
   constructor(@Inject('RequestDAO') private _requestRepository: RequestDAO) {}
 
-  createRequest(
-    userID: number,
+  async createRequest(
+    userId: number,
     description: string,
     timestamp: Date,
     role: Role,
-  ): Request {
-    return this._requestRepository.getById(
-      this._requestRepository.createRequest(
-        userID,
+  ): Promise<Request> {
+    return await this._requestRepository.getById(
+      await this._requestRepository.createRequest(
+        userId,
         description,
         timestamp,
         role,
@@ -23,25 +24,26 @@ export class RequestService {
     );
   }
 
-  stringToRole(roleString: string): Role {
-    let role: Role;
-    switch (roleString) {
-      case 'default':
-        role = Role.DEFAULT;
-        break;
-      case 'entrepreneur':
-        role = Role.ENTREPRENEUR;
-        break;
-      case 'investor representative':
-        role = Role.INVESTOR_REP;
-        break;
-      case 'service provider representative':
-        role = Role.SERVICE_PROVIDER_REP;
-        break;
-      default:
-        role = undefined;
-        break;
-    }
-    return role;
+  async getRequests(start: number, end: number): Promise<Request[]> {
+    return this._requestRepository.getPaginatedRequests(start, end);
+  }
+
+  async approveRequest(id: number): Promise<[number, string]> {
+    const request: Request = await this._requestRepository.getById(id);
+    request.status = RequestStatus.APPROVED;
+    this._requestRepository.updateRequest(request);
+    return [request.userId, request.role];
+  }
+
+  async rejectRequest(id: number): Promise<[number, string]> {
+    const request: Request = await this._requestRepository.getById(id);
+    request.status = RequestStatus.REJECTED;
+    this._requestRepository.updateRequest(request);
+    return [request.userId, request.role];
+  }
+
+  async isPendingRequest(id: number): Promise<boolean> {
+    const request: Request = await this._requestRepository.getById(id);
+    return request.status == RequestStatus.PENDING;
   }
 }

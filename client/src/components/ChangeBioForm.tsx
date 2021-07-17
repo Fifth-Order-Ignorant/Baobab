@@ -38,9 +38,10 @@ function ChangeBioForm(bio: Biography): JSX.Element {
   });
 
   const onSubmit = async (data: EditBioRequest) => {
+    data.bio = (document.getElementById('bio') as HTMLInputElement).value;
     setInfo(data.bio);
     try {
-      await axios.post('/api/profile/editbio', data);
+      await axios.patch('/api/profile/editbio', data);
       changeState();
       GetInfo();
     } catch (error) {
@@ -53,6 +54,10 @@ function ChangeBioForm(bio: Biography): JSX.Element {
       }
     }
   };
+
+  useEffect(() => {
+    setInfo(bio.bio);
+  }, [bio]);
 
   const GetInfo = () => {
     axios
@@ -79,7 +84,7 @@ function ChangeBioForm(bio: Biography): JSX.Element {
     if (state == 'default' && bio.canEdit) {
       setState('edit');
     } else if (state == 'edit') {
-      setState('done');
+      setState('default');
     }
   };
 
@@ -87,18 +92,20 @@ function ChangeBioForm(bio: Biography): JSX.Element {
     <Form onFinish={handleSubmit(onSubmit)}>
       <Form.Item>
         <p onClick={() => changeState()}>
-          {state === 'default' && <Card>{<div>{bio.bio}</div>}</Card>}
+          {state === 'default' && <Card>{<div>{info}</div>}</Card>}
         </p>
-        {state === 'done' && (
-          <Card>{<div>{info + ' (reload to edit again.)'}</div>}</Card>
-        )}
         {state === 'edit' && (
           <Form.Item
             name="bio"
             validateStatus={errors.bio ? 'error' : ''}
             help={errors.bio?.message}
           >
-            <Input size="large" defaultValue={bio.bio} {...register('bio')} />
+            <Input.TextArea
+              size="large"
+              id={'bio'}
+              defaultValue={info}
+              {...register('bio')}
+            />
           </Form.Item>
         )}
         {state === 'edit' && (

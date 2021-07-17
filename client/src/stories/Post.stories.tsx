@@ -9,10 +9,12 @@ export default {
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Basic = (): JSX.Element => (
   <Post
-    author={'John Deer'}
+    author={'FIF FIF'}
     timestamp={'2021-04-23T18:25:43.511Z'}
-    content={'Hello world!'}
+    content={'Fifth Order Ignorant!'}
     postId={-1}
+    authorId={0}
+    tags={['Technology', 'Opportunity']}
     loadMoreReplies={async () => {
       return [];
     }}

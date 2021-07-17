@@ -1,5 +1,5 @@
 import PostFeed from '../src/components/PostFeed';
-import { CreatePost } from '../src/components/SendPost';
+import { CreatePost } from '../src/components/CreatePost';
 import { Typography, Row, Col } from 'antd';
 
 import styles from '../styles/Post.module.css';
@@ -30,7 +30,7 @@ export default function Feed(): JSX.Element {
           <Typography>
             <h2>Feed</h2>
           </Typography>
-          {authState && <CreatePost author={'You!'} />}
+          {authState && <CreatePost author={'You!'} authorId={authState.id} />}
           <PostFeed fetchPosts={fetchPosts} />
         </Col>
       </Row>

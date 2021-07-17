@@ -1,4 +1,4 @@
-import { UserProfileInMemory } from '../src/dao/userprofiles';
+import { UserProfileInMemory } from '../src/dao/memory/userprofiles.mem';
 
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
@@ -8,7 +8,12 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
-import { Role, roleToString } from '../src/entities/role.entity';
+import { Role } from '../src/entities/role.entity';
+import * as superagent from 'superagent';
+import * as crypto from 'crypto';
+import * as fs from 'fs';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('End to end profile editing tests', () => {
   let app: INestApplication;
@@ -60,12 +65,12 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/profile/editname')
+      .patch('/profile/editname')
       .send({
         firstName: 'ethan2',
         lastName: 'lam2',
       })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
   });
 
   it(`changes your name correctly`, async (done) => {
@@ -94,11 +99,11 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/profile/editjob')
+      .patch('/profile/editjob')
       .send({
         jobTitle: 'marketing vp',
       })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
   });
 
   it(`changes your job correctly`, async (done) => {
@@ -127,11 +132,11 @@ describe('End to end profile editing tests', () => {
     });
 
     return agent
-      .post('/profile/editbio')
+      .patch('/profile/editbio')
       .send({
         bio: 'haha!',
       })
-      .expect(HttpStatus.CREATED);
+      .expect(HttpStatus.OK);
   });
 
   it(`changes your bio correctly`, async (done) => {
@@ -151,7 +156,47 @@ describe('End to end profile editing tests', () => {
     done();
   });
 
+  it('Profile Picture Upload', async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    await agent
+      .post('/profile/picture')
+      .attach('picture', './test/pfp.png')
+      .expect(HttpStatus.CREATED);
+
+    const pfpDownload = await agent
+      .get('/user/picture/0')
+      .expect(HttpStatus.OK)
+      .buffer(true)
+      // eslint-disable-next-line import/namespace
+      .parse(superagent.parse.image);
+
+    const localChecksum = crypto
+      .createHash('md5')
+      .update(fs.readFileSync('./test/pfp.png'))
+      .digest('hex');
+
+    const downloadChecksum = crypto
+      .createHash('md5')
+      .update(pfpDownload.body)
+      .digest('hex');
+
+    expect(downloadChecksum).toEqual(localChecksum);
+  });
+
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
@@ -215,106 +260,93 @@ describe('End to end profile viewing tests', () => {
   });
 
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
 
 describe('User tests', () => {
-  it('should create a user', () => {
+  it('should create a user', async () => {
     const users = new UserProfileInMemory();
 
-    users.addUserProfile(
+    await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    expect(users.getUserProfileCount() == 1);
+    expect((await users.getUserProfileCount()) == 1);
   });
 
-  it('should return a valid user given id', () => {
+  it('should return a valid user given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const user = users.getUserByID(userID);
+    const user = await users.getUserById(userId);
     expect(user.email == 'michael092001@gmail.com');
   });
 
-  it('should return a valid profile given id', () => {
+  it('should return a valid profile given id', async () => {
     const users = new UserProfileInMemory();
-    const userID = users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
-    const profile = users.getProfileByID(userID);
+    const profile = await users.getProfileById(userId);
     expect(profile.name == 'Michael Sheinman Orenstrakh');
   });
 });
 
 describe('Profile Pagination Basic Functionality', () => {
-  it('should return the paginated data in the right format', () => {
+  it('should return the paginated data in the right format', async () => {
     const users = new UserProfileInMemory();
-    const userID = users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman Orenstrakh',
       'michael092001@gmail.com',
       '12345',
     );
 
-    const profile1 = users.getProfileByID(userID);
-    profile1.changeRole(Role.INVESTOR_REP);
+    const profile1 = await users.getProfileById(userId);
+    profile1.role = Role.INVESTOR_REP;
     profile1.bio = 'I love chihuahuas.';
     profile1.jobTitle = 'OP Programmer';
-    const userID2 = users.addUserProfile(
+    const userId2 = await users.addUserProfile(
       'Michael',
       'Sheinman (Clone)',
       'michael092002@gmail.com',
       '12345',
     );
-    const profiles = users.getPaginatedProfiles(0, 2);
+    const profiles = await users.getPaginatedProfiles(0, 2);
 
-    expect(profiles).toContainEqual(
-      Object({
-        id: userID,
-        bio: 'I love chihuahuas.',
-        firstName: 'Michael',
-        lastName: 'Sheinman Orenstrakh',
-        jobTitle: 'OP Programmer',
-        role: roleToString(Role.INVESTOR_REP),
-      }),
-    );
-    expect(profiles).toContainEqual(
-      Object({
-        id: userID2,
-        bio: '',
-        firstName: 'Michael',
-        lastName: 'Sheinman (Clone)',
-        jobTitle: '',
-        role: roleToString(Role.DEFAULT),
-      }),
-    );
     expect(profiles).toEqual([
       Object({
-        id: userID,
+        id: userId,
         bio: 'I love chihuahuas.',
         firstName: 'Michael',
         lastName: 'Sheinman Orenstrakh',
         jobTitle: 'OP Programmer',
-        role: roleToString(Role.INVESTOR_REP),
+        role: Role.INVESTOR_REP,
       }),
       Object({
-        id: userID2,
+        id: userId2,
         bio: '',
         firstName: 'Michael',
         lastName: 'Sheinman (Clone)',
         jobTitle: '',
-        role: roleToString(Role.DEFAULT),
+        role: Role.DEFAULT,
       }),
     ]);
   });

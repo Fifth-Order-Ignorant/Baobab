@@ -23,8 +23,8 @@ export class AuthService {
     this._staleSessions = new NodeCache();
   }
 
-  verifyLogin(email: string, password: string): User {
-    const user = this._userRepository.getUserByEmail(email);
+  async verifyLogin(email: string, password: string): Promise<User> {
+    const user = await this._userRepository.getUserByEmail(email);
     if (user && bcrypt.compareSync(password, user.password)) {
       return user;
     }
@@ -32,24 +32,28 @@ export class AuthService {
     return null;
   }
 
-  genJwt(userID: number): { jwt: string; integrityString: string } {
+  async genJwt(
+    userId: number,
+  ): Promise<{ jwt: string; integrityString: string }> {
     const integrityString = crypto.randomBytes(50).toString('hex');
     const integrityHash = crypto
       .createHash('sha256')
       .update(integrityString)
       .digest('hex');
 
+    const profile = await this._userRepository.getProfileById(userId);
+
     return {
       jwt: this._jwtService.sign({
-        id: userID,
-        fullName: this._userRepository.getProfileByID(userID).name,
+        id: userId,
+        fullName: profile.name,
         integrityHash: integrityHash,
       }),
       integrityString: integrityString,
     };
   }
 
-  renew(jwt: string): { jwt: string; integrityString: string } {
+  async renew(jwt: string): Promise<{ jwt: string; integrityString: string }> {
     const payload = this._jwtService.decode(jwt) as SessionPayload;
 
     const staleSession = this._staleSessions.get<StaleSession>(payload.id);
@@ -67,7 +71,7 @@ export class AuthService {
     return null;
   }
 
-  async verifyJwt(jwt: string, integrityString: string): Promise<boolean> {
+  verifyJwt(jwt: string, integrityString: string): boolean {
     const payload = this._jwtService.decode(jwt) as SessionPayload;
 
     const staleSession = this._staleSessions.get<StaleSession>(payload.id);
@@ -83,9 +87,9 @@ export class AuthService {
   }
 
   // todo: when a user changes their password, their previous sessions should be marked stale and not renewable
-  markSessionsStale(userID: number, renewable: boolean) {
+  markSessionsStale(userId: number, renewable: boolean) {
     this._staleSessions.set<StaleSession>(
-      userID,
+      userId,
       {
         time: Date.now() / 1000,
         renewable: renewable,

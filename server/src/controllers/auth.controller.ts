@@ -23,11 +23,14 @@ export class AuthController {
   @Post('login')
   @ApiResponse({ status: 201, description: 'The user logged in successfully.' })
   @ApiUnauthorizedResponse({ description: 'Invalid login.' })
-  login(
+  async login(
     @Body() reqBody: LoginRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = this._authService.verifyLogin(reqBody.email, reqBody.password);
+    const user = await this._authService.verifyLogin(
+      reqBody.email,
+      reqBody.password,
+    );
 
     if (!user) {
       throw new UnauthorizedException({
@@ -38,7 +41,7 @@ export class AuthController {
       });
     }
 
-    const { jwt, integrityString } = this._authService.genJwt(user.id);
+    const { jwt, integrityString } = await this._authService.genJwt(user.id);
 
     res.cookie('SESSION_JWT', jwt, {
       secure: this._configService.get<boolean>('production'),
