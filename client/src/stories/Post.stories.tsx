@@ -14,7 +14,7 @@ export const Basic = (): JSX.Element => (
     content={'Fifth Order Ignorant!'}
     postId={-1}
     authorId={0}
-    tags={['Tech', 'Opportunity']}
+    tags={['Technology', 'Opportunity']}
     loadMoreReplies={async () => {
       return [];
     }}
