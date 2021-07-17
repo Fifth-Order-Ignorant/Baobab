@@ -16,7 +16,6 @@ function CreateTeamForm(): JSX.Element {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<CreateTeamRequest>({
@@ -25,7 +24,7 @@ function CreateTeamForm(): JSX.Element {
 
   const onSubmit = async (data: CreateTeamRequest) => {
     try {
-      await axios.post('/api/team/create', data).then((_) => {
+      await axios.post('/api/team/create', data).then(() => {
         setState('done');
       });
     } catch (error) {

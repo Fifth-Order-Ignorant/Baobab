@@ -3,6 +3,7 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { Assignment } from '../../entities/assignment.entity';
 import { GridFSBucket } from 'mongodb';
+import { FileInfo } from '../../entities/fileinfo.entity';
 
 /**
  * Save Assignment Entities in a MongoDB Database
@@ -32,6 +33,27 @@ export class AssignmentMongoDAO implements AssignmentDAO {
 
   async getById(id: number): Promise<Assignment> {
     return this._assignments.findById(id);
+  }
+
+  async uploadFile(id: number, inputFile: FileInfo): Promise<boolean> {
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
+      assignment.file = inputFile;
+      await this._assignments.findByIdAndUpdate(id, assignment, { new: true });
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async getFile(id: number): Promise<FileInfo> {
+    const assignment: Assignment = await this.getById(id);
+    if (assignment !== null) {
+      const file: FileInfo = assignment.file;
+      return file;
+    } else {
+      return null;
+    }
   }
 
   async getAssignments(start: number, end: number): Promise<Assignment[]> {
