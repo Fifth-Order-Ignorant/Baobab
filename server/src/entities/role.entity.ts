@@ -1,19 +1,21 @@
 export enum Role {
-  DEFAULT,
-  ENTREPRENEUR,
-  INVESTOR_REP,
-  SERVICE_PROVIDER_REP,
+  DEFAULT = 'Default',
+  ENTREPRENEUR = 'Entrepreneur',
+  INVESTOR_REP = 'Investor Representative',
+  SERVICE_PROVIDER_REP = 'Service Provider Representative',
 }
 
-export function roleToString(role: Role): string {
-  if (role == Role.DEFAULT) {
-    return 'Default';
-  } else if (role == Role.ENTREPRENEUR) {
-    return 'Entrepreneur';
-  } else if (role == Role.INVESTOR_REP) {
-    return 'Investor Representative';
-  } else if (role == Role.SERVICE_PROVIDER_REP) {
-    return 'Service Provider Representative';
+export function stringToRole(role: string) {
+  switch (role) {
+    case 'Default':
+      return Role.DEFAULT;
+    case 'Entrepreneur':
+      return Role.ENTREPRENEUR;
+    case 'Investor Representative':
+      return Role.INVESTOR_REP;
+    case 'Service Provider Representative':
+      return Role.SERVICE_PROVIDER_REP;
+    default:
+      return null;
   }
-  return 'Default';
 }

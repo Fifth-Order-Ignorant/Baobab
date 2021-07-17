@@ -1,8 +1,11 @@
+import { FileInfo } from './fileinfo.entity';
+
 export class Assignment {
   private _id: number;
   private _name: string;
   private _description: string;
   private _maxMark: number;
+  private _file: FileInfo;
 
   public constructor(
     id: number,
@@ -14,6 +17,7 @@ export class Assignment {
     this._name = name;
     this._description = description;
     this._maxMark = maxMark;
+    this._file = null;
   }
 
   get id(): number {
@@ -30,5 +34,13 @@ export class Assignment {
 
   get maxMark(): number {
     return this._maxMark;
+  }
+
+  get file(): FileInfo {
+    return this._file;
+  }
+
+  set file(file: FileInfo) {
+    this._file = file;
   }
 }

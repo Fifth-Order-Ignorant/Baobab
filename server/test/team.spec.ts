@@ -1,5 +1,5 @@
-import { TeamInMemory } from '../src/dao/teams';
-import { UserProfileInMemory } from '../src/dao/userprofiles';
+import { TeamInMemory } from '../src/dao/memory/teams.mem';
+import { UserProfileInMemory } from '../src/dao/memory/userprofiles.mem';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
@@ -9,6 +9,8 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
+import { Connection } from 'mongoose';
+import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
 describe('Team Create API Test', () => {
   let app: INestApplication;
@@ -51,22 +53,29 @@ describe('Team Create API Test', () => {
     return agent
       .post('/team/create')
       .send({
-        teamName: 'Fifth Order Ignorant',
+        teamName: 'xi Order Ignorant',
       })
       .expect(HttpStatus.CREATED);
   });
 
   afterAll(async () => {
+    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
+    if (conn) {
+      const cols = await conn.db.collections();
+      for (const col of cols) {
+        await col.deleteMany({});
+      }
+    }
     await app.close();
   });
 });
 
 describe('Team Creation Test', () => {
-  it('should create a post with valid id', () => {
+  it('should create a post with valid id', async () => {
     const teams = new TeamInMemory();
     const nowTime = new Date();
     const users = new UserProfileInMemory();
-    const userId = users.addUserProfile(
+    const userId = await users.addUserProfile(
       'Michael',
       'Sheinman',
       'michael092001@gmail.com',
@@ -74,6 +83,6 @@ describe('Team Creation Test', () => {
     );
 
     const teamId = teams.createTeam(userId, nowTime, 'FIF');
-    expect(teams.getById(teamId).id == teamId);
+    expect((await teams.getById(await teamId)).id == (await teamId));
   });
 });

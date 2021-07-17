@@ -9,7 +9,7 @@ import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { extractJwtFromCookie } from './jwt.strategy';
-import { tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements NestInterceptor {
@@ -20,14 +20,16 @@ export class JwtInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      tap(() => {
+      map(async (data) => {
         const request = context.switchToHttp().getRequest<Request>();
-        const response = context.switchToHttp().getResponse<Response>();
 
         const jwt = extractJwtFromCookie(request);
 
-        const renewed = this._authService.renew(jwt);
+        const renewed = await this._authService.renew(jwt);
+
         if (renewed) {
+          const response = context.switchToHttp().getResponse<Response>();
+
           response.cookie('SESSION_JWT', renewed.jwt, {
             secure: this._configService.get<boolean>('production'),
             sameSite: 'lax',
@@ -38,6 +40,7 @@ export class JwtInterceptor implements NestInterceptor {
             sameSite: 'lax',
           });
         }
+        return data;
       }),
     );
   }

@@ -1,4 +1,6 @@
 import { Role } from './role.entity';
+import { FileInfo } from './fileinfo.entity';
+
 export class Profile {
   private _firstName: string;
   private _lastName: string;
@@ -8,6 +10,7 @@ export class Profile {
   private _jobTitle: string;
   private _role: Role;
   private _tags: string[];
+  private _picture: FileInfo;
 
   public constructor(id: number, firstName: string, lastName: string) {
     this._id = id;
@@ -18,6 +21,7 @@ export class Profile {
     this._tags = [];
     this._jobTitle = '';
     this._role = Role.DEFAULT;
+    this._picture = null;
   }
 
   get id(): number {
@@ -60,8 +64,8 @@ export class Profile {
     return this._role;
   }
 
-  changeRole(newRole: Role): void {
-    this._role = newRole;
+  set role(role: Role) {
+    this._role = role;
   }
 
   get jobTitle(): string {
@@ -80,5 +84,13 @@ export class Profile {
     if (index > -1) {
       this._externalLinks.splice(index, 1);
     }
+  }
+
+  get picture(): FileInfo {
+    return this._picture;
+  }
+
+  set picture(value: FileInfo) {
+    this._picture = value;
   }
 }

@@ -44,13 +44,15 @@ download the libraries this project relies on followed by
 `npm run build --workspace=common` to build code shared between the frontend and 
 backend of the project.
 
-To run the backend locally, use `npm run start --workspace=server`.
+To run the backend locally, set up a MongoDB server on the default port using the 
+[official documentation](https://docs.mongodb.com/manual/administration/install-community/) 
+then execute `npm run start --workspace=server`.
 
 To access the backend documentation, visit `localhost:3001/docs`.
 
-To run the frontend locally, use `npm run dev --workspace=client`.
+To run the frontend locally, execute `npm run dev --workspace=client`.
 
-To access the frontend documentation, use 
+To access the frontend documentation, execute 
 `npm run storybook --workspace=client`.
 
 ## Deployment
