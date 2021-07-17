@@ -12,7 +12,11 @@ import {
   Param,
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
-import { AssignmentResponse, CreateAssignmentRequest, UploadFileRequest } from 'baobab-common';
+import {
+  AssignmentResponse,
+  CreateAssignmentRequest,
+  UploadFileRequest,
+} from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import {
   ApiBadRequestResponse,
@@ -22,10 +26,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as mime from 'mime';
 
-function pause100ms() {
-  return new Promise((res) => setTimeout(res, 100));
-}
-
 @Controller('assignment')
 export class AssignmentController {
   constructor(private _assignmentService: AssignmentService) {}
@@ -34,7 +34,9 @@ export class AssignmentController {
   @Post('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
-  async createAssignment(@Body() reqBody: CreateAssignmentRequest): Promise<AssignmentResponse> {
+  async createAssignment(
+    @Body() reqBody: CreateAssignmentRequest,
+  ): Promise<AssignmentResponse> {
     let assignment: Assignment;
     if (reqBody.maxMark) {
       assignment = await this._assignmentService.createAssignment(
@@ -55,13 +57,7 @@ export class AssignmentController {
       });
     }
 
-    return {id: assignment.id};
-  }
-
-  @Post('dummy')
-  @ApiResponse({ status: 201, description: 'The assignment is created.' })
-  async dummy() {
-    await pause100ms();
+    return { id: assignment.id };
   }
 
   @Post('fileup/:assId')
