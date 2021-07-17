@@ -6,7 +6,6 @@ import {
   UseGuards,
   InternalServerErrorException,
   UseInterceptors,
-  Req,
   UploadedFile,
   BadRequestException,
   Param,

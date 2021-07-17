@@ -71,13 +71,13 @@ describe('Assignment Create API Test', () => {
       })
       .expect(HttpStatus.CREATED);
 
-      const response = await agent.post('/assignment/create').send({
-        name: 'A2',
-        description: 'poop',
-        maxMark: 50,
-      });
-      expect(response.body.id).toBe(1);
-      done();
+    const response = await agent.post('/assignment/create').send({
+      name: 'A2',
+      description: 'poop',
+      maxMark: 50,
+    });
+    expect(response.body.id).toBe(1);
+    done();
   });
 
   afterAll(async () => {

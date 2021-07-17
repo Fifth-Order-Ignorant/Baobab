@@ -10,7 +10,7 @@ import {
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import styles from '../../styles/CreateAssignment.module.css';
-import mime from 'mime';
+import * as mime from 'mime';
 import { UploadOutlined } from '@ant-design/icons';
 import { RcFile } from 'antd/lib/upload';
 /**
