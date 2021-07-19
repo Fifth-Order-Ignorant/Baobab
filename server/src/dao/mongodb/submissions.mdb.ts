@@ -6,7 +6,7 @@ import { SubmissionDAO } from '../submissions';
 import { Submission } from '../../entities/submission.entity';
 
 /**
- * Save Assignment Entities in a MongoDB Database
+ * Save Submission Entities in a MongoDB Database
  */
 
 export class SubmissionMongoDAO implements SubmissionDAO {
