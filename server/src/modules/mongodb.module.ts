@@ -20,9 +20,9 @@ import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
 import { RequestMongoDAO } from '../dao/mongodb/requests.mdb';
 import { AssignmentMongoDAO } from '../dao/mongodb/assignments.mdb';
 import { MulterModule } from '@nestjs/platform-express';
-import { Submission } from 'src/entities/submission.entity';
-import { SubmissionSchema } from 'src/dao/mongodb/schemas/submisison.schema';
-import { SubmissionMongoDAO } from 'src/dao/mongodb/submissions.mdb';
+import { Submission } from '../entities/submission.entity';
+import { SubmissionSchema } from '../dao/mongodb/schemas/submisison.schema';
+import { SubmissionMongoDAO } from '../dao/mongodb/submissions.mdb';
 
 @Global()
 @Module({

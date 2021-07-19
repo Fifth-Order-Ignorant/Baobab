@@ -1,4 +1,4 @@
-import { Submission } from 'src/entities/submission.entity';
+import { Submission } from '../entities/submission.entity';
 import { FileInfo } from '../entities/fileinfo.entity';
 
 export interface SubmissionDAO {
