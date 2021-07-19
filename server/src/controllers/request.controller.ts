@@ -38,7 +38,10 @@ export class RequestController {
   async requestRole(@Body() reqBody: RoleRequest, @Req() req) {
     const today = new Date();
 
-    if (!Object.values<string>(Role).includes(reqBody.role)) {
+    if (
+      !Object.values<string>(Role).includes(reqBody.role) ||
+      (reqBody.role as Role) == Role.ADMIN
+    ) {
       throw new BadRequestException({
         errors: [],
       });

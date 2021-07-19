@@ -17,8 +17,8 @@ export function stringToRole(role: string) {
       return Role.INVESTOR_REP;
     case 'Service Provider Representative':
       return Role.SERVICE_PROVIDER_REP;
-      case 'Mentor':
-        return Role.MENTOR;
+    case 'Mentor':
+      return Role.MENTOR;
     case 'Admin':
       return Role.ADMIN;
     default:
