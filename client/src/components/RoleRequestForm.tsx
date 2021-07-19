@@ -71,7 +71,7 @@ function RoleRequestForm(): JSX.Element {
                         Service Provider Representative
                       </Select.Option>
                       <Select.Option value="Mentor">
-                        Service Provider Representative
+                        Mentor
                       </Select.Option>
                     </Select>
                   )}
