@@ -11,6 +11,7 @@ import {
   UploadedFile,
   BadRequestException,
   Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
 import {
@@ -19,6 +20,7 @@ import {
   CreateAssignmentRequest,
   AssignmentResponse,
   AssignmentPaginationRequest,
+  GetSingleSubmissionRequest,
 } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import {
@@ -124,5 +126,27 @@ export class AssignmentController {
       });
     }
     return response;
+  }
+
+  @Get('get/:id')
+  @ApiResponse({ status: 200, description: 'The assignment was found.' })
+  @ApiResponse({ status: 404, description: 'No assignment found.' })
+  async getUserSubmission(
+    @Param() params: GetSingleSubmissionRequest,
+  ): Promise<AssignmentResponse> {
+    const assignment: Assignment = await this._assignmentService.getAssignment(
+      params.id,
+    );
+    if (!assignment) {
+      throw new NotFoundException({
+        errors: [],
+      });
+    }
+    return {
+      id: assignment.id,
+      description: assignment.description,
+      maxMark: assignment.maxMark,
+      name: assignment.name,
+    };
   }
 }
