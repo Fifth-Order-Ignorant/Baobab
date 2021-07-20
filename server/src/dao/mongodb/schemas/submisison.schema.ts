@@ -21,6 +21,14 @@ export const SubmissionSchema = new Schema<Submission>(
       required: true,
       alias: 'timestamp',
     },
+    _mark: {
+      type: Number,
+      alias: 'mark',
+    },
+    _feedback: {
+      type: String,
+      alias: 'feedback',
+    },
     _file: {
       type: FileInfoSchema,
       alias: 'file',

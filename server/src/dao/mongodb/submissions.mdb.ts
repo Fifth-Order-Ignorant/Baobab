@@ -6,7 +6,7 @@ import { SubmissionDAO } from '../submissions';
 import { Submission } from '../../entities/submission.entity';
 
 /**
- * Save Assignment Entities in a MongoDB Database
+ * Save Submission Entities in a MongoDB Database
  */
 
 export class SubmissionMongoDAO implements SubmissionDAO {
@@ -56,6 +56,35 @@ export class SubmissionMongoDAO implements SubmissionDAO {
     }
   }
 
+  async uploadFeedback(
+    id: number,
+    mark: number,
+    feedback: string,
+  ): Promise<Submission> {
+    const submission: Submission = await this.getById(id);
+    if (!submission) {
+      return null;
+    }
+    submission.mark = mark;
+    submission.feedback = feedback;
+    return this._submissions.findByIdAndUpdate(id, submission, {
+      new: true,
+    });
+  }
+
+  async replaceSubmission(id: number, timestamp: Date): Promise<Submission> {
+    const submission: Submission = await this.getById(id);
+    if (!submission) {
+      return null;
+    }
+    submission.timestamp = timestamp;
+    submission.mark = null;
+    submission.feedback = '';
+    return this._submissions.findByIdAndUpdate(id, submission, {
+      new: true,
+    });
+  }
+
   async getSubmissions(
     start: number,
     end: number,
@@ -71,5 +100,23 @@ export class SubmissionMongoDAO implements SubmissionDAO {
       .skip(start)
       .limit(end - start);
     return ans;
+  }
+
+  async getSubmissionForUser(
+    userId: number,
+    assignmentId: number,
+  ): Promise<Submission> {
+    const ans: Submission[] = await this._submissions
+      .find(
+        await this._submissions.translateAliases({
+          userId: userId,
+          assignmentId: assignmentId,
+        }),
+      )
+      .sort(await this._submissions.translateAliases({ timestamp: 'asc' }));
+    if (ans.length == 0) {
+      return null;
+    }
+    return ans[0];
   }
 }
