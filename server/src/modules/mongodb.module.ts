@@ -20,6 +20,9 @@ import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
 import { RequestMongoDAO } from '../dao/mongodb/requests.mdb';
 import { AssignmentMongoDAO } from '../dao/mongodb/assignments.mdb';
 import { MulterModule } from '@nestjs/platform-express';
+import { Submission } from '../entities/submission.entity';
+import { SubmissionSchema } from '../dao/mongodb/schemas/submisison.schema';
+import { SubmissionMongoDAO } from '../dao/mongodb/submissions.mdb';
 
 @Global()
 @Module({
@@ -38,6 +41,7 @@ import { MulterModule } from '@nestjs/platform-express';
       { name: Request.name, schema: RequestSchema },
       { name: Assignment.name, schema: AssignmentSchema },
       { name: Team.name, schema: TeamSchema },
+      { name: Submission.name, schema: SubmissionSchema },
     ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
@@ -50,6 +54,7 @@ import { MulterModule } from '@nestjs/platform-express';
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
     { provide: 'TeamDAO', useClass: TeamMongoDAO },
+    { provide: 'SubmissionDAO', useClass: SubmissionMongoDAO },
   ],
   exports: [
     MulterModule,
@@ -59,6 +64,7 @@ import { MulterModule } from '@nestjs/platform-express';
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
     { provide: 'TeamDAO', useClass: TeamMongoDAO },
+    { provide: 'SubmissionDAO', useClass: SubmissionMongoDAO },
   ],
 })
 export class MongoDBDAOModule {}
