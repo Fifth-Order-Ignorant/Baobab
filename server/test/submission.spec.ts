@@ -27,7 +27,7 @@ describe('Get Submission API Test', () => {
     await app.init();
   });
 
-  // this test needs to be updated once the endpoint exists
+  // TODO: this test needs to be updated once the endpoint to make a submission exists
   it(`lets you create a submission`, async () => {
     const agent = request.agent(app.getHttpServer());
 

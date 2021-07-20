@@ -91,49 +91,40 @@ describe('Assignment Create API Test', () => {
       })
       .expect(HttpStatus.CREATED);
 
-    return await agent
-      .get('assignment/get')
-      .send({ id: 0 })
-      .expect(HttpStatus.OK);
+    return await agent.get('/assignment/get/0').expect(HttpStatus.OK);
   });
 
-  // it(`lets you view an assignment and the given details are correct`, async (done) => {
-  //   const agent = request.agent(app.getHttpServer());
+  it(`lets you view an assignment and the given details are correct`, async (done) => {
+    const agent = request.agent(app.getHttpServer());
 
-  //   await agent
-  //     .post('/auth/login')
-  //     .send({
-  //       email: 'ethan@mail.com',
-  //       password: 'mcs',
-  //     })
-  //     .expect(HttpStatus.CREATED);
+    await agent
+      .post('/auth/login')
+      .send({
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
 
-  //   const response = await agent
-  //     .get('assignment/get')
-  //     .send({ id: 0 })
-  //     .expect(HttpStatus.OK);
-  //   expect(response.body.name).toBe('A1');
-  //   expect(response.body.description).toBe('hi');
-  //   expect(response.body.maxMark).toBe(100);
-  //   done();
-  // });
+    const response = await agent.get('/assignment/get/0').expect(HttpStatus.OK);
+    expect(response.body.name).toBe('A1');
+    expect(response.body.description).toBe('hi');
+    expect(response.body.maxMark).toBe(100);
+    done();
+  });
 
-  // it(`does not let you view an assignment that does not exist`, async () => {
-  //   const agent = request.agent(app.getHttpServer());
+  it(`does not let you view an assignment that does not exist`, async () => {
+    const agent = request.agent(app.getHttpServer());
 
-  //   await agent
-  //     .post('/auth/login')
-  //     .send({
-  //       email: 'ethan@mail.com',
-  //       password: 'mcs',
-  //     })
-  //     .expect(HttpStatus.CREATED);
+    await agent
+      .post('/auth/login')
+      .send({
+        email: 'ethan@mail.com',
+        password: 'mcs',
+      })
+      .expect(HttpStatus.CREATED);
 
-  //   return await agent
-  //     .get('assignment/get')
-  //     .send({ id: 3 })
-  //     .expect(HttpStatus.NOT_FOUND);
-  // });
+    return await agent.get('/assignment/get/3').expect(HttpStatus.NOT_FOUND);
+  });
 
   afterAll(async () => {
     const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
