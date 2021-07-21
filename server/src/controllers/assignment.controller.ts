@@ -118,11 +118,16 @@ export class AssignmentController {
       );
     const response: AssignmentResponse[] = [];
     for (const assignment of paginatedAssignments) {
+      let fileName: string = null;
+      if (assignment.file) {
+        fileName = assignment.file.originalName;
+      }
       response.push({
         id: assignment.id,
         description: assignment.description,
         maxMark: assignment.maxMark,
         name: assignment.name,
+        filename: fileName,
       });
     }
     return response;
@@ -142,11 +147,16 @@ export class AssignmentController {
         errors: [],
       });
     }
+    let fileName: string = null;
+    if (assignment.file) {
+      fileName = assignment.file.originalName;
+    }
     return {
       id: assignment.id,
       description: assignment.description,
       maxMark: assignment.maxMark,
       name: assignment.name,
+      filename: fileName,
     };
   }
 }
