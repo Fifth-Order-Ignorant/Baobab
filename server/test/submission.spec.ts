@@ -75,7 +75,7 @@ describe('Get Submission API Test', () => {
       })
       .expect(HttpStatus.OK);
 
-    await agent
+    return await agent
       .post('/submission/fileup/0')
       .attach('fileup', './test/pfp.png')
       .expect(HttpStatus.CREATED);
