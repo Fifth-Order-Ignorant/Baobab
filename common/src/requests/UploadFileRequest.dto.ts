@@ -1,9 +1,9 @@
 import { object, SchemaOf, number } from 'yup';
 
 export class UploadFileRequest {
-  assId!: number;
+  id!: number;
 }
 
 export const UploadFileRequestSchema: SchemaOf<UploadFileRequest> = object({
-  assId: number().required(),
+  id: number().required(),
 });
