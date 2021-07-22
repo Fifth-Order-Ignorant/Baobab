@@ -168,13 +168,11 @@ export class AssignmentController {
   @ApiOkResponse({ description: 'File download successful.' })
   @ApiNotFoundResponse({ description: 'File not found.' })
   @Get('file/:id')
-  async getAssFile(
-    @Param() params: FileRequest,
-    @Res() res: Response,
-  ) {
+  async getAssFile(@Param() params: FileRequest, @Res() res: Response) {
     const assFile = await this._assignmentService.getFile(params.id);
     if (assFile) {
-      res.header('Content-Type', assFile.info.mimetype);
+      res.attachment(assFile.info.originalName);
+      res.contentType(assFile.info.mimetype);
       assFile.data.pipe(res);
     } else {
       throw new NotFoundException();
