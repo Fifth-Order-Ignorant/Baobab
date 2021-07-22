@@ -15,7 +15,7 @@ import {
   ProfilePaginationRequest,
   ProfileViewRequest,
   ProfileResponse,
-  ProfilePictureRequest,
+  UploadFileRequest,
 } from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
@@ -86,10 +86,7 @@ export class UserProfileController {
   @ApiOkResponse({ description: 'Profile picture download successful.' })
   @ApiNotFoundResponse({ description: 'Profile picture not found.' })
   @Get('picture/:id')
-  async getPicture(
-    @Param() params: ProfilePictureRequest,
-    @Res() res: Response,
-  ) {
+  async getPicture(@Param() params: UploadFileRequest, @Res() res: Response) {
     const picture = await this._userProfileService.getPicture(params.id);
     if (picture) {
       res.header('Content-Type', picture.info.mimetype);
