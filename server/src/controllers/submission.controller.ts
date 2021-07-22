@@ -78,9 +78,9 @@ export class SubmissionController {
   ): Promise<AssignmentSubmissionResponse[]> {
     const submissions: Submission[] =
       await this._submissionService.getPaginatedSubmissions(
-        params.id,
         query.start,
         query.end,
+        params.id,
       );
     let subRes: AssignmentSubmissionResponse[] = [];
     for (const submission of submissions) {
@@ -95,7 +95,7 @@ export class SubmissionController {
     }
     return subRes;
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Put('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
