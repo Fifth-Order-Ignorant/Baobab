@@ -2,10 +2,12 @@ import { Assignment } from '../entities/assignment.entity';
 import { Inject, Injectable } from '@nestjs/common';
 import { AssignmentDAO } from '../dao/assignments';
 import { FileInfo } from '../entities/fileinfo.entity';
+import { MulterDAO } from '../dao/files';
 
 @Injectable()
 export class AssignmentService {
   constructor(
+    @Inject('MulterDAO') private _files: MulterDAO,
     @Inject('AssignmentDAO') private _assignmentRepository: AssignmentDAO,
   ) {}
 
@@ -42,7 +44,18 @@ export class AssignmentService {
     return this._assignmentRepository.getAssignments(start, end);
   }
 
-  async getAssignment(assignmentId): Promise<Assignment> {
+  async getAssignment(assignmentId: number): Promise<Assignment> {
     return this._assignmentRepository.getById(assignmentId);
+  }
+
+  async getFile(assignmentId: number): Promise<{ info: FileInfo; data: NodeJS.ReadableStream }> {
+    const assFile = await this._assignmentRepository.getFile(assignmentId);
+    if (assFile) {
+      return {
+        info: assFile,
+        data: await this._files.getFile(assFile.storedName),
+      };
+    }
+    return null;
   }
 }
