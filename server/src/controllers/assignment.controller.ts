@@ -2,6 +2,7 @@ import { Assignment } from '../entities/assignment.entity';
 import {
   Body,
   Get,
+  Res,
   Controller,
   Query,
   Post,
@@ -21,15 +22,19 @@ import {
   AssignmentResponse,
   AssignmentPaginationRequest,
   GetSingleSubmissionRequest,
+  FileRequest,
 } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiResponse,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as mime from 'mime';
+import { Response } from 'express';
 
 @Controller('assignment')
 export class AssignmentController {
@@ -158,5 +163,21 @@ export class AssignmentController {
       name: assignment.name,
       filename: fileName,
     };
+  }
+
+  @ApiOkResponse({ description: 'File download successful.' })
+  @ApiNotFoundResponse({ description: 'File not found.' })
+  @Get('file/:id')
+  async getAssFile(
+    @Param() params: FileRequest,
+    @Res() res: Response,
+  ) {
+    const assFile = await this._assignmentService.getFile(params.id);
+    if (assFile) {
+      res.header('Content-Type', assFile.info.mimetype);
+      assFile.data.pipe(res);
+    } else {
+      throw new NotFoundException();
+    }
   }
 }
