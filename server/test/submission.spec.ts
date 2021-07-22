@@ -10,8 +10,42 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import { Connection } from 'mongoose';
 import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 
+/**
+ * Returns a SuperAgentTest for testing
+ * @param app Nest application
+ * @param firstName first name of user
+ * @param lastName last name of user
+ * @param email email of user
+ * @param password password of user
+ * @returns agent for testing
+ */
+async function getUserAgent(
+  app: INestApplication,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+): Promise<request.SuperAgentTest> {
+  const agent = request.agent(app.getHttpServer());
+  await agent.post('/user/register').send({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+  });
+  await agent.post('/auth/login').send({
+    email: email,
+    password: password,
+  });
+  return agent;
+}
+
 describe('Get Submission API Test', () => {
   let app: INestApplication;
+  let agent: request.SuperAgentTest;
+  let agent2: request.SuperAgentTest;
+  let agent3: request.SuperAgentTest;
+  let agent4: request.SuperAgentTest;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -25,36 +59,53 @@ describe('Get Submission API Test', () => {
     app.useGlobalPipes(new YupValidationPipe());
     app.use(cookieParser());
     await app.init();
+
+    agent = await getUserAgent(
+      app,
+      'rich',
+      'tree',
+      'rich@tree.com',
+      'richtree',
+    );
+    agent2 = await getUserAgent(
+      app,
+      'ethan',
+      'lam',
+      'ethan.lam@mail.com',
+      'mcs',
+    );
+    agent3 = await getUserAgent(
+      app,
+      'cool',
+      'dude',
+      'cool.dude@mail.utoronto.ca',
+      'utm',
+    );
+    agent4 = await getUserAgent(
+      app,
+      'mentoring',
+      'TAPerson',
+      'i.teach.people@u.of.t',
+      'c01',
+    );
   });
 
-  // TODO: this test needs to be updated once the endpoint to make a submission exists
   it(`lets you create a submission`, async () => {
-    const agent = request.agent(app.getHttpServer());
-
-    await agent
-      .post('/user/register')
-      .send({
-        firstName: 'ethan',
-        lastName: 'lam',
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
-    await agent
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
     await agent
       .post('/assignment/create')
       .send({
         name: 'A1',
         description: 'hi',
         maxMark: 100,
+      })
+      .expect(HttpStatus.CREATED);
+
+    await agent
+      .post('/assignment/create')
+      .send({
+        name: 'A2',
+        description: 'hello',
+        maxMark: 1,
       })
       .expect(HttpStatus.CREATED);
 
@@ -75,10 +126,79 @@ describe('Get Submission API Test', () => {
       })
       .expect(HttpStatus.OK);
 
+    // create a few more assignments
+    await agent
+      .put('/submission/create')
+      .send({
+        userId: 0,
+        assignmentId: 1,
+      })
+      .expect(HttpStatus.OK);
+
+    await agent2
+      .put('/submission/create')
+      .send({
+        userId: 1,
+        assignmentId: 1,
+      })
+      .expect(HttpStatus.OK);
+
+    await agent3
+      .put('/submission/create')
+      .send({
+        userId: 2,
+        assignmentId: 1,
+      })
+      .expect(HttpStatus.OK);
+
+    await agent3
+      .put('/submission/create')
+      .send({
+        userId: 2,
+        assignmentId: 0,
+      })
+      .expect(HttpStatus.OK);
+
     return await agent
       .post('/submission/fileup/0')
       .attach('fileup', './test/pfp.png')
       .expect(HttpStatus.CREATED);
+  });
+
+  describe('Paginate submissions', () => {
+    // TODO: Add testcase with unauthorized user
+    it('Paginate empty', async () => {
+      const assignments = (
+        await agent4
+          .get('/submission/pagination/0')
+          .send({ start: 0, end: 0 })
+          .expect(HttpStatus.OK)
+      ).body;
+      const assignments2 = (
+        await agent4
+          .get('/submission/pagination/1')
+          .send({ start: 0, end: 1 })
+          .expect(HttpStatus.OK)
+      ).body;
+      expect(assignments.length).toEqual(0);
+      expect(assignments2.length).toEqual(0);
+    });
+    it('Paginate with contents', async () => {
+      const assignments = (
+        await agent4
+          .get('/submission/pagination/0')
+          .send({ start: 0, end: 2 })
+          .expect(HttpStatus.OK)
+      ).body;
+      const assignments2 = (
+        await agent4
+          .get('/submission/pagination/1')
+          .send({ start: 0, end: 4 })
+          .expect(HttpStatus.OK)
+      ).body;
+      expect(assignments.length).toEqual(1);
+      expect(assignments2.length).toEqual(3);
+    });
   });
 
   afterAll(async () => {
