@@ -1,3 +1,4 @@
+import { SubmissionModule } from './submission.module';
 import { Module } from '@nestjs/common';
 import { UserProfileModule } from './userprofile.module';
 import { AuthModule } from './auth.module';
@@ -25,6 +26,7 @@ import { MongoDBDAOModule } from './mongodb.module';
     PostModule,
     AssignmentModule,
     TeamModule,
+    SubmissionModule,
   ],
 })
 export class AppModule {}

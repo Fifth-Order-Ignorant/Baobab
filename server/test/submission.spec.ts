@@ -49,13 +49,35 @@ describe('Get Submission API Test', () => {
       })
       .expect(HttpStatus.CREATED);
 
-    return agent
+    await agent
       .post('/assignment/create')
       .send({
         name: 'A1',
         description: 'hi',
         maxMark: 100,
       })
+      .expect(HttpStatus.CREATED);
+
+    await agent
+      .put('/submission/create')
+      .send({
+        userId: 0,
+        assignmentId: 0,
+      })
+      .expect(HttpStatus.OK);
+
+    // Duplicate submissions should not error out.
+    await agent
+      .put('/submission/create')
+      .send({
+        userId: 0,
+        assignmentId: 0,
+      })
+      .expect(HttpStatus.OK);
+
+    return await agent
+      .post('/submission/fileup/0')
+      .attach('fileup', './test/pfp.png')
       .expect(HttpStatus.CREATED);
   });
 
