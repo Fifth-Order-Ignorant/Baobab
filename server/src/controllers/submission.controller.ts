@@ -1,8 +1,16 @@
-import { Get, Controller, Req, Param, NotFoundException } from '@nestjs/common';
+import {
+  Get,
+  Controller,
+  Req,
+  Param,
+  NotFoundException,
+  Query,
+} from '@nestjs/common';
 import { SubmissionService } from '../services/submission.service';
 import {
   AssignmentSubmissionResponse,
   GetSingleSubmissionRequest,
+  SubmissionPaginationRequest,
 } from 'baobab-common';
 import { JwtAuth } from './jwt.decorator';
 import { ApiResponse } from '@nestjs/swagger';
@@ -41,5 +49,30 @@ export class SubmissionController {
       mark: submission.mark,
       feedback: submission.feedback,
     };
+  }
+
+  @Get('pagination/:id')
+  async pagination(
+    @Param() params: GetSingleSubmissionRequest,
+    @Query() query: SubmissionPaginationRequest,
+  ): Promise<AssignmentSubmissionResponse[]> {
+    const submissions: Submission[] =
+      await this._submissionService.getPaginatedSubmissions(
+        params.id,
+        query.start,
+        query.end,
+      );
+    let subRes: AssignmentSubmissionResponse[] = [];
+    for (const submission of submissions) {
+      subRes.push({
+        id: submission.id,
+        userId: submission.userId,
+        assignmentId: submission.assignmentId,
+        timestamp: submission.timestamp.toString(),
+        mark: submission.mark,
+        feedback: submission.feedback,
+      });
+    }
+    return subRes;
   }
 }
