@@ -103,6 +103,12 @@ export class UserProfileEditController {
   }
 
   @JwtAuth()
+  @ApiResponse({ status: 200, description: 'External Links are updated.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @Patch('editlinks')
+  async editLinks() {}
+
+  @JwtAuth()
   @Post('picture')
   @UseInterceptors(
     FileInterceptor('picture', {
