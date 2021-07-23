@@ -42,9 +42,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         sameSite: 'lax',
       });
 
-      return { id: renewed.payload.id, role: renewed.payload.role };
+      return renewed.payload;
     }
 
-    return { id: payload.id, role: payload.role };
+    return payload;
   }
 }
