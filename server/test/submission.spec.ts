@@ -170,33 +170,26 @@ describe('Get Submission API Test', () => {
     it('Paginate empty', async () => {
       const assignments = (
         await agent4
-          .get('/submission/pagination/0')
-          .send({ start: 0, end: 0 })
+          .get('/submission/pagination/0?start=0&end=0')
           .expect(HttpStatus.OK)
       ).body;
-      const assignments2 = (
-        await agent4
-          .get('/submission/pagination/1')
-          .send({ start: 0, end: 1 })
-          .expect(HttpStatus.OK)
-      ).body;
+      console.log(assignments)
       expect(assignments.length).toEqual(0);
-      expect(assignments2.length).toEqual(0);
     });
     it('Paginate with contents', async () => {
       const assignments = (
         await agent4
-          .get('/submission/pagination/0')
+          .get('/submission/pagination/0?start=0&end=2')
           .send({ start: 0, end: 2 })
           .expect(HttpStatus.OK)
       ).body;
       const assignments2 = (
         await agent4
-          .get('/submission/pagination/1')
+          .get('/submission/pagination/1?start=0&end=4')
           .send({ start: 0, end: 4 })
           .expect(HttpStatus.OK)
       ).body;
-      expect(assignments.length).toEqual(1);
+      expect(assignments.length).toEqual(2);
       expect(assignments2.length).toEqual(3);
     });
   });
