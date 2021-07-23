@@ -29,6 +29,22 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
-    return { id: payload.id };
+    const renewed = await this._authService.renew(payload);
+
+    if (renewed) {
+      request.res.cookie('SESSION_JWT', renewed.jwt, {
+        secure: this._configService.get<boolean>('production'),
+        sameSite: 'lax',
+      });
+      request.res.cookie('SESSION_INT', renewed.integrityString, {
+        httpOnly: true,
+        secure: this._configService.get<boolean>('production'),
+        sameSite: 'lax',
+      });
+
+      return { id: renewed.payload.id, role: renewed.payload.role };
+    }
+
+    return { id: payload.id, role: payload.role };
   }
 }

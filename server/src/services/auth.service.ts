@@ -32,9 +32,11 @@ export class AuthService {
     return null;
   }
 
-  async genJwt(
-    userId: number,
-  ): Promise<{ jwt: string; integrityString: string }> {
+  async genJwt(userId: number): Promise<{
+    jwt: string;
+    integrityString: string;
+    payload: SessionPayload;
+  }> {
     const integrityString = crypto.randomBytes(50).toString('hex');
     const integrityHash = crypto
       .createHash('sha256')
@@ -43,19 +45,27 @@ export class AuthService {
 
     const profile = await this._userRepository.getProfileById(userId);
 
+    const jwt = this._jwtService.sign({
+      id: userId,
+      fullName: profile.name,
+      integrityHash: integrityHash,
+      role: profile.role,
+    });
+
+    const payload = this._jwtService.verify<SessionPayload>(jwt);
+
     return {
-      jwt: this._jwtService.sign({
-        id: userId,
-        fullName: profile.name,
-        integrityHash: integrityHash,
-      }),
+      jwt: jwt,
       integrityString: integrityString,
+      payload: payload,
     };
   }
 
-  async renew(jwt: string): Promise<{ jwt: string; integrityString: string }> {
-    const payload = this._jwtService.decode(jwt) as SessionPayload;
-
+  async renew(payload: SessionPayload): Promise<{
+    jwt: string;
+    integrityString: string;
+    payload: SessionPayload;
+  }> {
     const staleSession = this._staleSessions.get<StaleSession>(payload.id);
 
     if (staleSession && staleSession.renewable) {
