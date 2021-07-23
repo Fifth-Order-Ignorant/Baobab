@@ -71,9 +71,7 @@ export class AuthService {
     return null;
   }
 
-  verifyJwt(jwt: string, integrityString: string): boolean {
-    const payload = this._jwtService.decode(jwt) as SessionPayload;
-
+  verifyJwt(payload: SessionPayload, integrityString: string): boolean {
     const staleSession = this._staleSessions.get<StaleSession>(payload.id);
 
     if (staleSession && !staleSession.renewable) {

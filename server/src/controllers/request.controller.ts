@@ -21,8 +21,6 @@ import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuth } from './jwt.decorator';
 import { Role } from '../entities/role.entity';
 import { Request } from '../entities/request.entity';
-import { Roles } from './roles.decorator'
-
 import { UserProfileService } from '../services/userprofile.service';
 
 @Controller('request')
@@ -44,7 +42,6 @@ export class RequestController {
         errors: [],
       });
     }
-    console.log("Request is", req);
 
     const request = this._requestService.createRequest(
       req.user.id,
@@ -61,7 +58,7 @@ export class RequestController {
   }
 
   @Get('pagination')
-  @Roles(Role.ADMIN)
+  @JwtAuth(Role.ADMIN)
   async pagination(
     @Query() query: RequestPaginationRequest,
   ): Promise<RoleRequestResponse[]> {

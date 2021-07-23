@@ -11,15 +11,15 @@ import {
 import { TeamService } from '../services/team.service';
 import { Response } from 'express';
 import { CreateTeamRequest } from 'baobab-common';
-import { JwtAuthGuard } from './jwt.guard';
 import { ApiResponse } from '@nestjs/swagger';
 import { ValidationError } from 'yup';
+import { JwtAuth } from './jwt.decorator';
 
 @Controller('team')
 export class TeamController {
   constructor(private _teamService: TeamService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Post('create')
   @ApiResponse({ status: 201, description: 'The team is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })

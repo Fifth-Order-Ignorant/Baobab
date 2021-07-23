@@ -20,7 +20,6 @@ import {
   AssignmentResponse,
   AssignmentPaginationRequest,
 } from 'baobab-common';
-import { JwtAuthGuard } from './jwt.guard';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -28,12 +27,13 @@ import {
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as mime from 'mime';
+import { JwtAuth } from './jwt.decorator';
 
 @Controller('assignment')
 export class AssignmentController {
   constructor(private _assignmentService: AssignmentService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Post('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
