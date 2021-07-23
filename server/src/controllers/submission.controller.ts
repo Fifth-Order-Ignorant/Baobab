@@ -8,6 +8,7 @@ import {
   Req,
   Param,
   NotFoundException,
+  Query,
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
@@ -20,6 +21,7 @@ import * as mime from 'mime';
 import {
   AssignmentSubmissionResponse,
   GetSingleSubmissionRequest,
+  SubmissionPaginationRequest,
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
@@ -67,6 +69,31 @@ export class SubmissionController {
       mark: submission.mark,
       feedback: submission.feedback,
     };
+  }
+
+  @Get('pagination/:id')
+  async pagination(
+    @Param() params: GetSingleSubmissionRequest,
+    @Query() query: SubmissionPaginationRequest,
+  ): Promise<AssignmentSubmissionResponse[]> {
+    const submissions: Submission[] =
+      await this._submissionService.getPaginatedSubmissions(
+        query.start,
+        query.end,
+        params.id,
+      );
+    const subRes: AssignmentSubmissionResponse[] = [];
+    for (const submission of submissions) {
+      subRes.push({
+        id: submission.id,
+        userId: submission.userId,
+        assignmentId: submission.assignmentId,
+        timestamp: submission.timestamp.toString(),
+        mark: submission.mark,
+        feedback: submission.feedback,
+      });
+    }
+    return subRes;
   }
 
   @UseGuards(JwtAuthGuard)
