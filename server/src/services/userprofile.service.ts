@@ -74,6 +74,12 @@ export class UserProfileService {
     await this._userProfileRepository.updateProfile(profile);
   }
 
+  async editLinks(id: number, links: string[]): Promise<void> {
+    const profile = await this._userProfileRepository.getProfileById(id);
+    profile.externalLinks = links;
+    await this._userProfileRepository.updateProfile(profile);
+  }
+
   isValidRole(requestRole: string): boolean {
     return stringToRole(requestRole) != null;
   }

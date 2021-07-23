@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import { EditNameRequest, EditJobRequest, EditBioRequest } from 'baobab-common';
+import { EditNameRequest, EditJobRequest, EditBioRequest, EditLinksRequest } from 'baobab-common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -95,6 +95,25 @@ export class UserProfileEditController {
     const id = req.user.id;
     if (await this._userProfileService.isValidProfile(id)) {
       await this._userProfileService.editBio(id, reqBody.bio);
+    } else {
+      throw new BadRequestException({
+        errors: [],
+      });
+    }
+  }
+
+  @JwtAuth()
+  @ApiResponse({ status: 200, description: 'External Links are updated.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @Patch('editlinks')
+  async editLinks(
+    @Body() reqBody: EditLinksRequest,
+    @Res({ passthrough: true }) res: Response,
+    @Req() req,
+  ) {
+    const id = req.user.id;
+    if (await this._userProfileService.isValidProfile(id)) {
+      await this._userProfileService.editLinks(id, reqBody.links);
     } else {
       throw new BadRequestException({
         errors: [],
