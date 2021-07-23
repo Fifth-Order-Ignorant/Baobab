@@ -19,7 +19,7 @@ import { SubmissionService } from '../services/submission.service';
 import * as mime from 'mime';
 import {
   AssignmentSubmissionResponse,
-  GetSingleSubmissionRequest,
+  GetSingleSubAssRequest,
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
@@ -46,7 +46,7 @@ export class SubmissionController {
     description: 'No submission found for this user on this assignment.',
   })
   async getUserSubmission(
-    @Param() params: GetSingleSubmissionRequest,
+    @Param() params: GetSingleSubAssRequest,
     @Req() req,
   ): Promise<AssignmentSubmissionResponse> {
     const submission: Submission =

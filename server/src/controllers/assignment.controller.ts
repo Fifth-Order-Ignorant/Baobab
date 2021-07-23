@@ -21,7 +21,7 @@ import {
   CreateAssignmentRequest,
   AssignmentResponse,
   AssignmentPaginationRequest,
-  GetSingleSubmissionRequest,
+  GetSingleSubAssRequest,
   FileRequest,
 } from 'baobab-common';
 import { JwtAuthGuard } from './jwt.guard';
@@ -145,8 +145,8 @@ export class AssignmentController {
   @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The assignment was found.' })
   @ApiResponse({ status: 404, description: 'No assignment found.' })
-  async getUserSubmission(
-    @Param() params: GetSingleSubmissionRequest,
+  async getAssignment(
+    @Param() params: GetSingleSubAssRequest,
   ): Promise<AssignmentResponse> {
     const assignment: Assignment = await this._assignmentService.getAssignment(
       params.id,
