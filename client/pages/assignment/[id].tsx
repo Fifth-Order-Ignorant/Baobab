@@ -5,6 +5,7 @@ import { AssignmentResponse } from 'baobab-common';
 import { Col, Row, Spin } from 'antd';
 import AssignmentView from '../../src/components/AssignmentView';
 import styles from '../../styles/Assignment.module.css';
+import UploadFile from 'src/components/UploadFile';
 
 function Assignment(): JSX.Element {
   const router = useRouter();
@@ -36,6 +37,7 @@ function Assignment(): JSX.Element {
       <Col span={16}>
         {assignment ? (
           <AssignmentView assignment={assignment} />
+          <UploadFile userId={router.query} assignmentId={assignment.id}/>
         ) : (
           <Spin className={styles.spin} />
         )}
