@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { AssignmentService } from '../services/assignment.service';
 import {
-  SingleAssignmentResponse,
+  ResourceCreatedResponse,
   UploadFileRequest,
   CreateAssignmentRequest,
   AssignmentResponse,
@@ -46,7 +46,7 @@ export class AssignmentController {
   @ApiResponse({ status: 400, description: 'Bad request.' })
   async createAssignment(
     @Body() reqBody: CreateAssignmentRequest,
-  ): Promise<SingleAssignmentResponse> {
+  ): Promise<ResourceCreatedResponse> {
     let assignment: Assignment;
     if (reqBody.maxMark) {
       assignment = await this._assignmentService.createAssignment(
@@ -70,7 +70,7 @@ export class AssignmentController {
     return { id: assignment.id };
   }
 
-  @Post('fileup/:assId')
+  @Post('fileup/:id')
   @UseInterceptors(
     FileInterceptor('fileup', {
       fileFilter: (request, file, callback) => {
@@ -103,13 +103,17 @@ export class AssignmentController {
       throw new BadRequestException();
     }
 
-    await this._assignmentService.uploadFile(
-      params.assId,
+    const rv: boolean = await this._assignmentService.uploadFile(
+      params.id,
       file.originalname,
       file.mimetype,
       file.size,
       file.filename,
     );
+
+    if (!rv) {
+      throw new BadRequestException();
+    }
   }
 
   @Get('pagination')

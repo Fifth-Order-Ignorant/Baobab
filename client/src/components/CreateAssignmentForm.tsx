@@ -33,7 +33,7 @@ function CreateAssignmentForm(): JSX.Element {
   });
 
   const onSubmit = async (data: CreateAssignmentRequest) => {
-    let assId;
+    let id;
     data.maxMark = mark;
     data.description = document.getElementById('content')?.innerHTML as string;
     try {
@@ -41,8 +41,7 @@ function CreateAssignmentForm(): JSX.Element {
       await axios
         .post('/api/assignment/create', data)
         .then(
-          (returned) =>
-            (assId = (returned.data as SingleAssignmentResponse).id),
+          (returned) => (id = (returned.data as SingleAssignmentResponse).id),
         );
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
@@ -57,7 +56,7 @@ function CreateAssignmentForm(): JSX.Element {
       const data = new FormData();
       data.append('fileup', file);
       try {
-        await axios.post(('/api/assignment/fileup/' + assId) as string, data, {
+        await axios.post(('/api/assignment/fileup/' + id) as string, data, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } catch (error) {

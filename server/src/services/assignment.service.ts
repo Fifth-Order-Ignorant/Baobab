@@ -48,7 +48,9 @@ export class AssignmentService {
     return this._assignmentRepository.getById(assignmentId);
   }
 
-  async getFile(assignmentId: number): Promise<{ info: FileInfo; data: NodeJS.ReadableStream }> {
+  async getFile(
+    assignmentId: number,
+  ): Promise<{ info: FileInfo; data: NodeJS.ReadableStream }> {
     const assFile = await this._assignmentRepository.getFile(assignmentId);
     if (assFile) {
       return {

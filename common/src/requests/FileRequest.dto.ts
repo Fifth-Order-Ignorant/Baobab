@@ -5,5 +5,5 @@ export class FileRequest {
 }
 
 export const FileRequestSchema: SchemaOf<FileRequest> = object({
-  id: number().required()
+  id: number().required(),
 });
