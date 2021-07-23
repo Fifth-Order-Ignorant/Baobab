@@ -82,7 +82,7 @@ export class SubmissionController {
         query.end,
         params.id,
       );
-    let subRes: AssignmentSubmissionResponse[] = [];
+    const subRes: AssignmentSubmissionResponse[] = [];
     for (const submission of submissions) {
       subRes.push({
         id: submission.id,
