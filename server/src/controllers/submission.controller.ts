@@ -75,7 +75,7 @@ export class SubmissionController {
   @ApiResponse({ status: 400, description: 'Bad request.' })
   async createSubmission(
     @Body() reqBody: SubmissionCreateRequest,
-    @Req() req
+    @Req() req,
   ): Promise<ResourceCreatedResponse> {
     const submission: Submission =
       await this._submissionService.createSubmission(
