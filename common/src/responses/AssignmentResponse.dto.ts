@@ -3,5 +3,5 @@ export class AssignmentResponse {
   name!: string;
   description!: string;
   maxMark!: number;
-  filename!: string;
+  filename!: string | null;
 }
