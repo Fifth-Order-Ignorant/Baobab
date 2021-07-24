@@ -12,7 +12,7 @@ export default function Home(): JSX.Element {
           name="description"
           content="Baobab: Your Learning and Networking Platform"
         />
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/transparentlogo.png" />
       </Head>
       <img
         style={{ maxHeight: '50vh' }}
