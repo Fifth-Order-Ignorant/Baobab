@@ -7,4 +7,6 @@ export default {
 } as Meta;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const Basic = (): JSX.Element => <UploadFile userId={0} assignmentId={0} />;
+export const Basic = (): JSX.Element => (
+  <UploadFile userId={0} assignmentId={0} />
+);
