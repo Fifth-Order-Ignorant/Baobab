@@ -12,7 +12,6 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
-  UseGuards
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -32,13 +31,18 @@ import {
   ApiCreatedResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { Submission } from 'src/entities/submission.entity';
+import { Submission } from '../entities/submission.entity';
+import { UserProfileService } from '../services/userprofile.service';
+import { Role } from '../entities/role.entity';
 
 @Controller('submission')
 export class SubmissionController {
-  constructor(private _submissionService: SubmissionService) {}
+  constructor(
+    private _submissionService: SubmissionService,
+    private _userProfileService: UserProfileService,
+  ) {}
 
-  @JwtAuth()
+  @JwtAuth(Role.MENTOR)
   @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The submission was found.' })
   @ApiResponse({
@@ -59,9 +63,10 @@ export class SubmissionController {
         errors: [],
       });
     }
+    const name = await this._userProfileService.getFullName(submission.userId);
     return {
       id: submission.id,
-      userId: submission.userId,
+      name: name,
       assignmentId: submission.assignmentId,
       timestamp: submission.timestamp.toString(),
       mark: submission.mark,
@@ -69,6 +74,7 @@ export class SubmissionController {
     };
   }
 
+  @JwtAuth(Role.MENTOR)
   @Get('pagination/:id')
   async pagination(
     @Param() params: GetSingleSubmissionRequest,
@@ -82,9 +88,12 @@ export class SubmissionController {
       );
     const subRes: AssignmentSubmissionResponse[] = [];
     for (const submission of submissions) {
+      const name = await this._userProfileService.getFullName(
+        submission.userId,
+      );
       subRes.push({
         id: submission.id,
-        userId: submission.userId,
+        name: name,
         assignmentId: submission.assignmentId,
         timestamp: submission.timestamp.toString(),
         mark: submission.mark,
