@@ -5,10 +5,9 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { extractJwtFromCookie } from './jwt.strategy';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -21,11 +20,9 @@ export class JwtInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map(async (data) => {
-        const request = context.switchToHttp().getRequest<Request>();
+        const { user } = context.switchToHttp().getRequest();
 
-        const jwt = extractJwtFromCookie(request);
-
-        const renewed = await this._authService.renew(jwt);
+        const renewed = await this._authService.renew(user);
 
         if (renewed) {
           const response = context.switchToHttp().getResponse<Response>();

@@ -11,7 +11,6 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
-  UseGuards,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -25,7 +24,6 @@ import {
   SubmissionCreateRequest,
 } from 'baobab-common';
 
-import { JwtAuthGuard } from './jwt.guard';
 import { JwtAuth } from './jwt.decorator';
 import {
   ApiResponse,
@@ -69,7 +67,7 @@ export class SubmissionController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth()
   @Put('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
