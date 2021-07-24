@@ -4,7 +4,6 @@ import { Table, Typography } from 'antd';
 export interface Submission {
     id: number,
     name: string,
-    filename: string,
     timestamp: string,
     mark: number,
     feedback: string,
