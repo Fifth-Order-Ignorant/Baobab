@@ -34,11 +34,15 @@ import {
   ApiCreatedResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { Submission } from 'src/entities/submission.entity';
+import { Submission } from '../entities/submission.entity';
+import { UserProfileService } from '../services/userprofile.service';
 
 @Controller('submission')
 export class SubmissionController {
-  constructor(private _submissionService: SubmissionService) {}
+  constructor(
+    private _submissionService: SubmissionService,
+    private _userProfileService: UserProfileService,
+  ) {}
 
   @JwtAuth()
   @Get('get/:id')
@@ -61,9 +65,10 @@ export class SubmissionController {
         errors: [],
       });
     }
+    const name = await this._userProfileService.getFullName(submission.userId);
     return {
       id: submission.id,
-      userId: submission.userId,
+      name: name,
       assignmentId: submission.assignmentId,
       timestamp: submission.timestamp.toString(),
       mark: submission.mark,
@@ -84,9 +89,12 @@ export class SubmissionController {
       );
     const subRes: AssignmentSubmissionResponse[] = [];
     for (const submission of submissions) {
+      const name = await this._userProfileService.getFullName(
+        submission.userId,
+      );
       subRes.push({
         id: submission.id,
-        userId: submission.userId,
+        name: name,
         assignmentId: submission.assignmentId,
         timestamp: submission.timestamp.toString(),
         mark: submission.mark,
