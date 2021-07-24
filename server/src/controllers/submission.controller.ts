@@ -71,7 +71,7 @@ export class SubmissionController {
       timestamp: submission.timestamp.toString(),
       mark: submission.mark,
       feedback: submission.feedback,
-      filename: submission.file.storedName
+      filename: submission.file.storedName,
     };
   }
 
@@ -99,7 +99,7 @@ export class SubmissionController {
         timestamp: submission.timestamp.toString(),
         mark: submission.mark,
         feedback: submission.feedback,
-        filename: submission.file.storedName
+        filename: submission.file.storedName,
       });
     }
     return subRes;
