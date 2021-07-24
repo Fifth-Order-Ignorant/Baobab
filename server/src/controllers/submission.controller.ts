@@ -12,7 +12,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -34,6 +34,7 @@ import {
 } from '@nestjs/swagger';
 import { Submission } from '../entities/submission.entity';
 import { UserProfileService } from '../services/userprofile.service';
+import { Role } from 'src/entities/role.entity';
 
 @Controller('submission')
 export class SubmissionController {
@@ -42,7 +43,7 @@ export class SubmissionController {
     private _userProfileService: UserProfileService,
   ) {}
 
-  @JwtAuth()
+  @JwtAuth(Role.MENTOR)
   @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The submission was found.' })
   @ApiResponse({
@@ -74,6 +75,7 @@ export class SubmissionController {
     };
   }
 
+  @JwtAuth(Role.MENTOR)
   @Get('pagination/:id')
   async pagination(
     @Param() params: GetSingleSubmissionRequest,
@@ -102,6 +104,7 @@ export class SubmissionController {
     return subRes;
   }
 
+  @JwtAuth(Role.MENTOR)
   @JwtAuth()
   @Put('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
