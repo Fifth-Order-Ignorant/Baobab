@@ -12,7 +12,6 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
-  UseGuards,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
