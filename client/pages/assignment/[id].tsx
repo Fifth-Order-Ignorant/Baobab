@@ -5,15 +5,19 @@ import { AssignmentResponse } from 'baobab-common';
 import { Col, Row, Spin } from 'antd';
 import AssignmentView from '../../src/components/AssignmentView';
 import styles from '../../styles/Assignment.module.css';
+import UploadFile from 'src/components/UploadFile';
 
 function Assignment(): JSX.Element {
   const router = useRouter();
 
-  const [assignment, setAssignment] = useState<AssignmentResponse>();
+  const [assignment, setAssignment] = useState<AssignmentResponse>(
+    new AssignmentResponse(),
+  );
+  const [id, setId] = useState<number>(0);
 
   useEffect(() => {
     if (router.isReady) {
-      const { id } = router.query;
+      setId(router.query.id as unknown as number);
 
       axios
         .get<AssignmentResponse>(`/api/assignment/get/${id}`)
@@ -39,6 +43,7 @@ function Assignment(): JSX.Element {
         ) : (
           <Spin className={styles.spin} />
         )}
+        <UploadFile userId={id} assignmentId={assignment.id} />
       </Col>
     </Row>
   );
