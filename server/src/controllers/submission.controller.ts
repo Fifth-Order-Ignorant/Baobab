@@ -34,7 +34,7 @@ import {
 } from '@nestjs/swagger';
 import { Submission } from '../entities/submission.entity';
 import { UserProfileService } from '../services/userprofile.service';
-import { Role } from 'src/entities/role.entity';
+import { Role } from '../entities/role.entity';
 
 @Controller('submission')
 export class SubmissionController {
@@ -104,7 +104,6 @@ export class SubmissionController {
     return subRes;
   }
 
-  @JwtAuth(Role.MENTOR)
   @JwtAuth()
   @Put('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
