@@ -1,21 +1,9 @@
 import Card from './Card';
 import React from 'react';
-import { Col, Descriptions, Row, Typography } from 'antd';
+import { Descriptions, Typography } from 'antd';
+import { AssignmentSubmissionResponse } from 'baobab-common';
 
-/**
- * TODO: Replace this with AssignmentSubmissionResponse once FIF-114 is done
- */
-export interface FutureSubmissionResponse {
-    id: number;
-    name: string;
-    assignmentId: number;
-    timestamp: string;
-    mark: number;
-    feedback: string;
-    filename: string;
-}
-
-export interface SubmissionResponseWithAssignment extends FutureSubmissionResponse {
+export interface SubmissionResponseWithAssignment extends AssignmentSubmissionResponse {
     outOf: number;
 }
 
