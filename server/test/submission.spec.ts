@@ -26,7 +26,7 @@ async function getUserAgent(
   firstName: string,
   lastName: string,
   email: string,
-  password: string
+  password: string,
 ): Promise<request.SuperAgentTest> {
   const agent = request.agent(app.getHttpServer());
   await agent.post('/user/register').send({
@@ -48,7 +48,7 @@ async function getMentorAgent(
   firstName: string,
   lastName: string,
   email: string,
-  password: string
+  password: string,
 ): Promise<request.SuperAgentTest> {
   const agent = request.agent(app.getHttpServer());
   await agent.post('/user/register').send({
@@ -84,8 +84,7 @@ describe('Get Submission API Test', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    })
-    .compile();
+    }).compile();
 
     app = moduleRef.createNestApplication();
     const { httpAdapter } = app.get(HttpAdapterHost);
@@ -228,10 +227,10 @@ describe('Get Submission API Test', () => {
       expect(assignments2.length).toEqual(3);
     });
     it('Prevent pagination as a non-mentor', async () => {
-        await agent
-          .get('/submission/pagination/0?start=0&end=2')
-          .send({ start: 0, end: 2 })
-          .expect(403);
+      await agent
+        .get('/submission/pagination/0?start=0&end=2')
+        .send({ start: 0, end: 2 })
+        .expect(403);
     });
   });
 
