@@ -3,7 +3,6 @@ import {
   Controller,
   Post,
   Res,
-  UseGuards,
   Req,
   InternalServerErrorException,
   BadRequestException,

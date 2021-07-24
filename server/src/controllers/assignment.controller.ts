@@ -6,7 +6,6 @@ import {
   Controller,
   Query,
   Post,
-  UseGuards,
   InternalServerErrorException,
   UseInterceptors,
   UploadedFile,
