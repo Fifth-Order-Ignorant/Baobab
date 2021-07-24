@@ -1,6 +1,5 @@
 import UploadFile from '../components/UploadFile';
 import { Meta } from '@storybook/react';
-import Tags from '../constants/Tags';
 
 export default {
   title: 'UploadFile',
