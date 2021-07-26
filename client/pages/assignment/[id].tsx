@@ -5,6 +5,7 @@ import { AssignmentResponse } from 'baobab-common';
 import { Col, Row, Spin } from 'antd';
 import AssignmentView from '../../src/components/AssignmentView';
 import styles from '../../styles/Assignment.module.css';
+import UploadFile from 'src/components/UploadFile';
 
 function Assignment(): JSX.Element {
   const router = useRouter();
@@ -14,7 +15,6 @@ function Assignment(): JSX.Element {
   useEffect(() => {
     if (router.isReady) {
       const { id } = router.query;
-
       axios
         .get<AssignmentResponse>(`/api/assignment/get/${id}`)
         .then((value) => setAssignment(value.data))
@@ -35,7 +35,10 @@ function Assignment(): JSX.Element {
     <Row justify="center" className={styles.row}>
       <Col span={16}>
         {assignment ? (
-          <AssignmentView assignment={assignment} />
+          <div key={assignment.id}>
+            <AssignmentView assignment={assignment} />
+            <UploadFile assignmentId={assignment.id} />
+          </div>
         ) : (
           <Spin className={styles.spin} />
         )}
