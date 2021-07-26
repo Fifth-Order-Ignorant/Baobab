@@ -43,7 +43,7 @@ export class SubmissionController {
     private _userProfileService: UserProfileService,
   ) {}
 
-  @JwtAuth(Role.MENTOR)
+  @JwtAuth(Role.MENTOR, Role.ADMIN)
   @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The submission was found.' })
   @ApiResponse({
@@ -75,7 +75,7 @@ export class SubmissionController {
     };
   }
 
-  @JwtAuth(Role.MENTOR)
+  @JwtAuth(Role.MENTOR, Role.ADMIN)
   @Get('pagination/:id')
   async pagination(
     @Param() params: GetSingleSubmissionRequest,
