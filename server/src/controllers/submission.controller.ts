@@ -34,6 +34,7 @@ import {
 import { Submission } from '../entities/submission.entity';
 import { UserProfileService } from '../services/userprofile.service';
 import { Role } from '../entities/role.entity';
+import { SubmissionPaginationResponse } from 'baobab-common';
 
 @Controller('submission')
 export class SubmissionController {
@@ -70,8 +71,7 @@ export class SubmissionController {
       assignmentId: submission.assignmentId,
       timestamp: submission.timestamp.toString(),
       mark: submission.mark,
-      feedback: submission.feedback,
-      filename: submission.file.storedName,
+      feedback: submission.feedback
     };
   }
 
@@ -80,7 +80,7 @@ export class SubmissionController {
   async pagination(
     @Param() params: GetSingleSubmissionRequest,
     @Query() query: SubmissionPaginationRequest,
-  ): Promise<AssignmentSubmissionResponse[]> {
+  ): Promise<SubmissionPaginationResponse> {
     const submissions: Submission[] =
       await this._submissionService.getPaginatedSubmissions(
         query.start,
@@ -98,11 +98,10 @@ export class SubmissionController {
         assignmentId: submission.assignmentId,
         timestamp: submission.timestamp.toString(),
         mark: submission.mark,
-        feedback: submission.feedback,
-        filename: submission.file.storedName,
+        feedback: submission.feedback
       });
     }
-    return subRes;
+    return {data: subRes, total: await this._submissionService.getCount(params.id)};
   }
 
   @JwtAuth()
