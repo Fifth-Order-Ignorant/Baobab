@@ -42,13 +42,14 @@ async function getUserAgent(
   return agent;
 }
 
-async function getMentorAgent(
+async function getRoleAgent(
   app: INestApplication,
   userProfileDAO: UserProfileDAO,
   firstName: string,
   lastName: string,
   email: string,
   password: string,
+  role: Role,
 ): Promise<request.SuperAgentTest> {
   const agent = request.agent(app.getHttpServer());
   await agent.post('/user/register').send({
@@ -64,7 +65,7 @@ async function getMentorAgent(
   await agent.post('/auth/logout');
   const { id } = await userProfileDAO.getUserByEmail(email);
   const profile = await userProfileDAO.getProfileById(id);
-  profile.role = Role.MENTOR;
+  profile.role = role;
   await userProfileDAO.updateProfile(profile);
   await agent.post('/auth/login').send({
     email: email,
@@ -108,20 +109,23 @@ describe('Get Submission API Test', () => {
       'ethan.lam@mail.com',
       'mcs',
     );
-    agent3 = await getUserAgent(
+    agent3 = await getRoleAgent(
       app,
+      userProfileDAO,
       'cool',
       'dude',
       'cool.dude@mail.utoronto.ca',
       'utm',
+      Role.ADMIN,
     );
-    agent4 = await getMentorAgent(
+    agent4 = await getRoleAgent(
       app,
       userProfileDAO,
       'mentoring',
       'TAPerson',
       'i.teach.people@u.of.t',
       'c01',
+      Role.MENTOR,
     );
   });
 
@@ -217,7 +221,7 @@ describe('Get Submission API Test', () => {
           .expect(HttpStatus.OK)
       ).body;
       const assignments2 = (
-        await agent4
+        await agent3
           .get('/submission/pagination/1?start=0&end=4')
           .expect(HttpStatus.OK)
       ).body;
