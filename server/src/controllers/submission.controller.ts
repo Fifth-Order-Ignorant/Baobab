@@ -24,6 +24,7 @@ import {
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
+  SubmissionPaginationResponse,
 } from 'baobab-common';
 import { JwtAuth } from './jwt.decorator';
 import {
@@ -80,7 +81,7 @@ export class SubmissionController {
   async pagination(
     @Param() params: GetSingleSubmissionRequest,
     @Query() query: SubmissionPaginationRequest,
-  ): Promise<AssignmentSubmissionResponse[]> {
+  ): Promise<SubmissionPaginationResponse> {
     const submissions: Submission[] =
       await this._submissionService.getPaginatedSubmissions(
         query.start,
@@ -102,7 +103,10 @@ export class SubmissionController {
         filename: submission.file.storedName,
       });
     }
-    return subRes;
+    return {
+      data: subRes,
+      total: await this._submissionService.getCount(params.id),
+    };
   }
 
   @JwtAuth()
