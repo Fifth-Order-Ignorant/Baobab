@@ -1,15 +1,15 @@
-import { SubmissionList } from '../components/SubmissionList';
+import { SubmissionTable } from '../components/SubmissionTable';
 import { Meta } from '@storybook/react';
 
 export default {
-  title: 'SubmissionList',
-  component: SubmissionList,
+  title: 'SubmissionTable',
+  component: SubmissionTable,
 } as Meta;
 
 const dataSource = [
     {
         name: "Jim Jim",
-        filename: "cscc01_test_submission.txt",
+        assignmentId: 0,
         timestamp: (new Date()).toString(),
         feedback: "Good work! A 10% improvement from your last test!",
         mark: 10,
@@ -17,7 +17,7 @@ const dataSource = [
     },
     {
         name: "Tim Tim",
-        filename: "pdf.txt",
+        assignmentId: 0,
         timestamp: (new Date()).toString(),
         feedback: "Perfect!",
         mark: 100,
@@ -27,8 +27,9 @@ const dataSource = [
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Basic = (): JSX.Element => (
-  <SubmissionList
-    submissions={dataSource}
+  <SubmissionTable
+    fetchData={async () => {return {data: dataSource, total: 2}}}
+    pageSize={2}
     outOf={100}
   />
 );
