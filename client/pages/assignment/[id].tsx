@@ -10,9 +10,7 @@ import UploadFile from 'src/components/UploadFile';
 function Assignment(): JSX.Element {
   const router = useRouter();
 
-  const [assignment, setAssignment] = useState<AssignmentResponse>(
-    new AssignmentResponse(),
-  );
+  const [assignment, setAssignment] = useState<AssignmentResponse>();
 
   useEffect(() => {
     if (router.isReady) {
