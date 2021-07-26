@@ -1,8 +1,9 @@
-import * as crypto from 'crypto';
-
 export default () => ({
   production: process.env.NODE_ENV === 'production',
-  // all sessions become invalid on server shutdown (so we don't have to persist stale sessions)
-  jwtSecret: crypto.randomBytes(10).toString('hex'),
+  jwtSecret: process.env.JWT_SECRET || '1eUKAdATDgkk6fGW1hvblDolPxCMgjhq',
   mongoUri: process.env.MONGO_URI || 'mongodb://localhost:27017/baobab',
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT) || 6379,
+  },
 });

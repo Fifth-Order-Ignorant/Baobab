@@ -1,4 +1,11 @@
-import { Global, Module } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  CacheModule,
+  Global,
+  Inject,
+  Module,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../entities/user.entity';
@@ -23,6 +30,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { Submission } from '../entities/submission.entity';
 import { SubmissionSchema } from '../dao/mongodb/schemas/submisison.schema';
 import { SubmissionMongoDAO } from '../dao/mongodb/submissions.mdb';
+import { Cache } from 'cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Global()
 @Module({
@@ -46,6 +55,14 @@ import { SubmissionMongoDAO } from '../dao/mongodb/submissions.mdb';
     MulterModule.registerAsync({
       useClass: MulterConfigService,
     }),
+    CacheModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get<string>('redis.host'),
+        port: configService.get<number>('redis.port'),
+      }),
+    }),
   ],
   providers: [
     { provide: 'MulterDAO', useClass: MulterMongoDAO },
@@ -58,6 +75,7 @@ import { SubmissionMongoDAO } from '../dao/mongodb/submissions.mdb';
   ],
   exports: [
     MulterModule,
+    CacheModule,
     { provide: 'MulterDAO', useClass: MulterMongoDAO },
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
     { provide: 'PostDAO', useClass: PostMongoDAO },
@@ -67,4 +85,12 @@ import { SubmissionMongoDAO } from '../dao/mongodb/submissions.mdb';
     { provide: 'SubmissionDAO', useClass: SubmissionMongoDAO },
   ],
 })
-export class MongoDBDAOModule {}
+export class MongoDBDAOModule implements OnModuleDestroy {
+  constructor(@Inject(CACHE_MANAGER) private _cacheManager: Cache) {}
+
+  onModuleDestroy() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this._cacheManager.store.getClient().quit();
+  }
+}

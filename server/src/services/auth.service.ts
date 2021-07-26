@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { UserProfileDAO } from '../dao/userprofiles';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 import { SessionPayload } from 'baobab-common';
-import * as NodeCache from 'node-cache';
+import { Cache } from 'cache-manager';
 
 type StaleSession = {
   time: number;
@@ -14,14 +14,11 @@ type StaleSession = {
 
 @Injectable()
 export class AuthService {
-  private _staleSessions: NodeCache;
-
   constructor(
     @Inject('UserProfileDAO') private _userRepository: UserProfileDAO,
     private _jwtService: JwtService,
-  ) {
-    this._staleSessions = new NodeCache();
-  }
+    @Inject(CACHE_MANAGER) private _cacheManager: Cache,
+  ) {}
 
   async verifyLogin(email: string, password: string): Promise<User> {
     const user = await this._userRepository.getUserByEmail(email);
@@ -66,7 +63,9 @@ export class AuthService {
     integrityString: string;
     payload: SessionPayload;
   }> {
-    const staleSession = this._staleSessions.get<StaleSession>(payload.id);
+    const staleSession = await this._cacheManager.get<StaleSession>(
+      payload.id.toString(),
+    );
 
     if (staleSession && staleSession.renewable) {
       return this.genJwt(payload.id);
@@ -81,8 +80,13 @@ export class AuthService {
     return null;
   }
 
-  verifyJwt(payload: SessionPayload, integrityString: string): boolean {
-    const staleSession = this._staleSessions.get<StaleSession>(payload.id);
+  async verifyJwt(
+    payload: SessionPayload,
+    integrityString: string,
+  ): Promise<boolean> {
+    const staleSession = await this._cacheManager.get<StaleSession>(
+      payload.id.toString(),
+    );
 
     if (staleSession && !staleSession.renewable) {
       return false;
@@ -95,14 +99,14 @@ export class AuthService {
   }
 
   // todo: when a user changes their password, their previous sessions should be marked stale and not renewable
-  markSessionsStale(userId: number, renewable: boolean) {
-    this._staleSessions.set<StaleSession>(
-      userId,
+  async markSessionsStale(userId: number, renewable: boolean) {
+    await this._cacheManager.set<StaleSession>(
+      userId.toString(),
       {
         time: Date.now() / 1000,
         renewable: renewable,
       },
-      Date.now() / 1000 + 30 * 60,
+      { ttl: 30 * 60 },
     );
   }
 }

@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(request: Request, payload: any) {
     const integrityString = request.cookies['SESSION_INT'];
-    if (!this._authService.verifyJwt(payload, integrityString)) {
+    if (!(await this._authService.verifyJwt(payload, integrityString))) {
       throw new UnauthorizedException();
     }
 

@@ -44,13 +44,17 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
     "swagger-ui-express": "^4.1.6",
-    "yup": "^0.32.9"
+    "yup": "^0.32.9",
+    "cache-manager": "^3.4.4",
+    "cache-manager-redis-store": "^2.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
     "@nestjs/schematics": "^7.3.1",
     "@nestjs/testing": "^7.6.15",
     "@types/bcrypt": "^5.0.0",
+    "@types/cache-manager": "^3.4.2",
+    "@types/cache-manager-redis-store": "^2.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.22",
