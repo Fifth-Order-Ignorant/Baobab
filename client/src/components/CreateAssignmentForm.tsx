@@ -39,10 +39,8 @@ function CreateAssignmentForm(): JSX.Element {
     try {
       setState('done');
       await axios
-        .post('/api/assignment/create', data)
-        .then(
-          (returned) => (id = (returned.data as ResourceCreatedResponse).id),
-        );
+        .post<ResourceCreatedResponse>('/api/assignment/create', data)
+        .then((returned) => (id = returned.data.id));
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
 

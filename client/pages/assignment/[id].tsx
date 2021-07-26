@@ -10,15 +10,11 @@ import UploadFile from 'src/components/UploadFile';
 function Assignment(): JSX.Element {
   const router = useRouter();
 
-  const [assignment, setAssignment] = useState<AssignmentResponse>(
-    new AssignmentResponse(),
-  );
-  const [id, setId] = useState<number>(0);
+  const [assignment, setAssignment] = useState<AssignmentResponse>();
 
   useEffect(() => {
     if (router.isReady) {
-      setId(router.query.id as unknown as number);
-
+      const { id } = router.query;
       axios
         .get<AssignmentResponse>(`/api/assignment/get/${id}`)
         .then((value) => setAssignment(value.data))
@@ -39,11 +35,13 @@ function Assignment(): JSX.Element {
     <Row justify="center" className={styles.row}>
       <Col span={16}>
         {assignment ? (
-          <AssignmentView assignment={assignment} />
+          <div key={assignment.id}>
+            <AssignmentView assignment={assignment} />
+            <UploadFile assignmentId={assignment.id} />
+          </div>
         ) : (
           <Spin className={styles.spin} />
         )}
-        <UploadFile userId={id} assignmentId={assignment.id} />
       </Col>
     </Row>
   );

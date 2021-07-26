@@ -11,11 +11,7 @@ import {
 } from 'baobab-common';
 import axios from 'axios';
 
-type Ids = {
-  /**
-   * The user's ID.
-   */
-  userId: number;
+type Id = {
   /**
    * The ID of the assignment.
    */
@@ -25,7 +21,7 @@ type Ids = {
  * Renders component displaying a button so the user can upload
  * a submission file for their project.
  */
-function UploadFile(info: Ids): JSX.Element {
+function UploadFile(info: Id): JSX.Element {
   const [file, setFile] = useState<string | Blob | RcFile>();
   const [status, setStatus] = useState('default');
 
@@ -39,13 +35,10 @@ function UploadFile(info: Ids): JSX.Element {
     let id;
     try {
       await axios
-        .put('/api/submission/create', {
-          userId: info.userId,
+        .put<ResourceCreatedResponse>('/api/submission/create', {
           assignmentId: info.assignmentId,
         })
-        .then(
-          (returned) => (id = (returned.data as ResourceCreatedResponse).id),
-        );
+        .then((returned) => (id = returned.data.id));
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
 
