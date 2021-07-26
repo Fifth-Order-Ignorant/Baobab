@@ -14,7 +14,8 @@ function Assignment(): JSX.Element {
   const authContext = useContext(AuthContext);
   const [assignment, setAssignment] = useState<AssignmentResponse>();
   const isMentor = authContext
-    ? authContext.role.toString() === 'Mentor'
+    ? authContext.role.toString() === 'Mentor' ||
+      authContext.role.toString() === 'Admin'
     : false;
 
   useEffect(() => {
