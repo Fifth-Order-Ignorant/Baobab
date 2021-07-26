@@ -12,6 +12,14 @@ export interface SubmissionTableProps {
   fetchData: (page: number) => Promise<SubmissionPaginationResponse>;
 }
 
+const Download = (id: number) => {
+  return (
+    <Typography.Link href={`/api/submission/file/${id}`}>
+      Download
+    </Typography.Link>
+  );
+};
+
 /**
  * Renders the submissions.
  */
@@ -59,11 +67,7 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
       title: 'Assignment',
       dataIndex: 'id',
       key: 'id',
-      render: function (id: number) {
-        <Typography.Link href={`/api/submission/file/${id}`}>
-          Download
-        </Typography.Link>;
-      },
+      render: (id: number) => Download(id),
     },
     {
       title: 'Submitted On',
