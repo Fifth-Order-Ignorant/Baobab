@@ -8,15 +8,12 @@ import styles from '../../styles/Assignment.module.css';
 import { SubmissionTable } from '../../src/components/SubmissionTable';
 import { AuthContext } from '../../src/providers/AuthProvider';
 
-// TODO: Could cause issues, imports from server (seen in SessionPayload.ts)
-import { Role } from 'baobab-server/src/entities/role.entity';
-
 function Assignment(): JSX.Element {
   const router = useRouter();
   const pageSize = 10;
   const authContext = useContext(AuthContext);
   const [assignment, setAssignment] = useState<AssignmentResponse>();
-  const isMentor = authContext ? authContext.role === Role.MENTOR : false;
+  const isMentor = authContext ? authContext.role.toString() === 'Mentor' : false;
 
   useEffect(() => {
     if (router.isReady) {
