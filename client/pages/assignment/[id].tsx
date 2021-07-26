@@ -13,7 +13,9 @@ function Assignment(): JSX.Element {
   const pageSize = 10;
   const authContext = useContext(AuthContext);
   const [assignment, setAssignment] = useState<AssignmentResponse>();
-  const isMentor = authContext ? authContext.role.toString() === 'Mentor' : false;
+  const isMentor = authContext
+    ? authContext.role.toString() === 'Mentor'
+    : false;
 
   useEffect(() => {
     if (router.isReady) {
@@ -36,32 +38,39 @@ function Assignment(): JSX.Element {
   }, [router.isReady]);
 
   const fetchSubmissions = async (p: number, assignmentId: number) => {
-    const { data } = await axios.get(`/api/submission/pagination/${assignmentId}`,
+    const { data } = await axios.get(
+      `/api/submission/pagination/${assignmentId}`,
       {
         params: {
           start: p * pageSize,
           end: (p + 1) * pageSize,
         },
-      });
+      },
+    );
     return data;
-  }
+  };
 
   return (
     <Row justify="center" className={styles.row}>
       <Col span={16}>
-        {
-          assignment ? (
-            <div>
-              <AssignmentView assignment={assignment} />
-              {
-                isMentor ? (<SubmissionTable pageSize={pageSize} fetchData={(page: number) => fetchSubmissions(page, assignment.id)} outOf={assignment.maxMark} />)
-                  : (<div />)
-              }
-            </div>
-          ) : (
-            <Spin className={styles.spin} />
-          )
-        }
+        {assignment ? (
+          <div>
+            <AssignmentView assignment={assignment} />
+            {isMentor ? (
+              <SubmissionTable
+                pageSize={pageSize}
+                fetchData={(page: number) =>
+                  fetchSubmissions(page, assignment.id)
+                }
+                outOf={assignment.maxMark}
+              />
+            ) : (
+              <div />
+            )}
+          </div>
+        ) : (
+          <Spin className={styles.spin} />
+        )}
       </Col>
     </Row>
   );
