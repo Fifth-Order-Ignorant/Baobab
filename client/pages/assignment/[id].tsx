@@ -1,16 +1,22 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { AssignmentResponse } from 'baobab-common';
 import { Col, Row, Spin } from 'antd';
 import AssignmentView from '../../src/components/AssignmentView';
 import styles from '../../styles/Assignment.module.css';
-import { SubmissionTable } from 'src/components/SubmissionTable';
+import { SubmissionTable } from '../../src/components/SubmissionTable';
+import { AuthContext } from '../../src/providers/AuthProvider';
+
+// TODO: Could cause issues, imports from server (seen in SessionPayload.ts)
+import { Role } from 'baobab-server/src/entities/role.entity';
 
 function Assignment(): JSX.Element {
   const router = useRouter();
   const pageSize = 10;
+  const authContext = useContext(AuthContext);
   const [assignment, setAssignment] = useState<AssignmentResponse>();
+  const isMentor = authContext ? authContext.role === Role.MENTOR : false;
 
   useEffect(() => {
     if (router.isReady) {
@@ -48,7 +54,8 @@ function Assignment(): JSX.Element {
         {assignment ? (
           <div>
             <AssignmentView assignment={assignment} />
-            <SubmissionTable pageSize={pageSize} fetchData={(page: number) => fetchSubmissions(page, assignment.id)} outOf={assignment.maxMark} />
+            {isMentor ? (<SubmissionTable pageSize={pageSize} fetchData={(page: number) => fetchSubmissions(page, assignment.id)} outOf={assignment.maxMark} />)
+              : (<div />)}
           </div>
         ) : (
           <Spin className={styles.spin} />
