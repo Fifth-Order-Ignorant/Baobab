@@ -9,7 +9,7 @@ import { SubmissionTable } from 'src/components/SubmissionTable';
 
 function Assignment(): JSX.Element {
   const router = useRouter();
-  const pageSize = 2;
+  const pageSize = 10;
   const [assignment, setAssignment] = useState<AssignmentResponse>();
 
   useEffect(() => {
