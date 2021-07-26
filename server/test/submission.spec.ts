@@ -225,9 +225,7 @@ describe('Get Submission API Test', () => {
       expect(assignments2.data.length).toEqual(3);
     });
     it('Prevent pagination as a non-mentor', async () => {
-      await agent
-        .get('/submission/pagination/0?start=0&end=2')
-        .expect(403);
+      await agent.get('/submission/pagination/0?start=0&end=2').expect(403);
     });
     it('Count pages of an assignment', async () => {
       const assignments = (

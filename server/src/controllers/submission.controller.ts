@@ -24,6 +24,7 @@ import {
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
+  SubmissionPaginationResponse,
 } from 'baobab-common';
 import { JwtAuth } from './jwt.decorator';
 import {
@@ -34,7 +35,6 @@ import {
 import { Submission } from '../entities/submission.entity';
 import { UserProfileService } from '../services/userprofile.service';
 import { Role } from '../entities/role.entity';
-import { SubmissionPaginationResponse } from 'baobab-common';
 
 @Controller('submission')
 export class SubmissionController {
@@ -71,7 +71,7 @@ export class SubmissionController {
       assignmentId: submission.assignmentId,
       timestamp: submission.timestamp.toString(),
       mark: submission.mark,
-      feedback: submission.feedback
+      feedback: submission.feedback,
     };
   }
 
@@ -98,10 +98,13 @@ export class SubmissionController {
         assignmentId: submission.assignmentId,
         timestamp: submission.timestamp.toString(),
         mark: submission.mark,
-        feedback: submission.feedback
+        feedback: submission.feedback,
       });
     }
-    return {data: subRes, total: await this._submissionService.getCount(params.id)};
+    return {
+      data: subRes,
+      total: await this._submissionService.getCount(params.id),
+    };
   }
 
   @JwtAuth()
