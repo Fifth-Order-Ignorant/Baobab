@@ -23,7 +23,7 @@ import {
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
-  UploadFeedbackRequest
+  UploadFeedbackRequest,
 } from 'baobab-common';
 
 import { JwtAuth } from './jwt.decorator';
@@ -138,16 +138,20 @@ export class SubmissionController {
     }
   }
 
-  @ApiResponse({status: 200, description: "Updated feedback successfully."})
-  @ApiResponse({status: 400, description: "Bad request."})
-  @ApiResponse({status: 401, description: "No logged in account."})
-  @ApiResponse({status: 403, description: "User is not a mentor."})
+  @ApiResponse({ status: 200, description: 'Updated feedback successfully.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 401, description: 'No logged in account.' })
+  @ApiResponse({ status: 403, description: 'User is not a mentor.' })
   @JwtAuth(Role.ADMIN, Role.MENTOR)
   @Patch('feedback')
-  async updateFeedback(
-    @Body() reqBody: UploadFeedbackRequest
-  ) {
-    if (!await this._submissionService.uploadFeedback(reqBody.id, reqBody.mark, reqBody.feedback)) {
+  async updateFeedback(@Body() reqBody: UploadFeedbackRequest) {
+    if (
+      !(await this._submissionService.uploadFeedback(
+        reqBody.id,
+        reqBody.mark,
+        reqBody.feedback,
+      ))
+    ) {
       throw new BadRequestException({
         errors: [],
       });
