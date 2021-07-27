@@ -12,6 +12,7 @@ import {
   InternalServerErrorException,
   UploadedFile,
   UseGuards,
+  Res,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -23,6 +24,7 @@ import {
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
+  FileRequest,
 } from 'baobab-common';
 
 import { JwtAuthGuard } from './jwt.guard';
@@ -31,8 +33,11 @@ import {
   ApiResponse,
   ApiCreatedResponse,
   ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { Submission } from 'src/entities/submission.entity';
+import { Response } from 'express';
 
 @Controller('submission')
 export class SubmissionController {
@@ -71,7 +76,7 @@ export class SubmissionController {
 
   @UseGuards(JwtAuthGuard)
   @Put('create')
-  @ApiResponse({ status: 201, description: 'The assignment is created.' })
+  @ApiResponse({ status: 201, description: 'The submission is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   async createSubmission(
     @Body() reqBody: SubmissionCreateRequest,
@@ -134,6 +139,20 @@ export class SubmissionController {
     );
     if (!rv) {
       throw new BadRequestException();
+    }
+  }
+
+  @ApiOkResponse({ description: 'File download successful.' })
+  @ApiNotFoundResponse({ description: 'File not found.' })
+  @Get('file/:id')
+  async getSubFile(@Param() params: FileRequest, @Res() res: Response) {
+    const subFile = await this._submissionService.getFile(params.id);
+    if (subFile) {
+      res.attachment(subFile.info.originalName);
+      res.contentType(subFile.info.mimetype);
+      subFile.data.pipe(res);
+    } else {
+      throw new NotFoundException();
     }
   }
 }
