@@ -160,7 +160,6 @@ describe('Get Submission API Test', () => {
     await agent
       .put('/submission/create')
       .send({
-        userId: 0,
         assignmentId: 0,
       })
       .expect(HttpStatus.OK);

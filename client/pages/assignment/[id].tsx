@@ -7,6 +7,7 @@ import AssignmentView from '../../src/components/AssignmentView';
 import styles from '../../styles/Assignment.module.css';
 import { SubmissionTable } from '../../src/components/SubmissionTable';
 import { AuthContext } from '../../src/providers/AuthProvider';
+import UploadFile from 'src/components/UploadFile';
 
 function Assignment(): JSX.Element {
   const router = useRouter();
@@ -21,7 +22,6 @@ function Assignment(): JSX.Element {
   useEffect(() => {
     if (router.isReady) {
       const { id } = router.query;
-
       axios
         .get<AssignmentResponse>(`/api/assignment/get/${id}`)
         .then((value) => setAssignment(value.data))
@@ -57,6 +57,7 @@ function Assignment(): JSX.Element {
         {assignment ? (
           <div>
             <AssignmentView assignment={assignment} />
+            <UploadFile assignmentId={assignment.id} />
             {isMentor ? (
               <SubmissionTable
                 pageSize={pageSize}
