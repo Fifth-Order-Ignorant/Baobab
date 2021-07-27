@@ -8,6 +8,7 @@ import {
   Req,
   Param,
   NotFoundException,
+  Query,
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
@@ -19,24 +20,30 @@ import * as mime from 'mime';
 import {
   AssignmentSubmissionResponse,
   GetSingleSubmissionRequest,
+  SubmissionPaginationRequest,
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
+  SubmissionPaginationResponse,
 } from 'baobab-common';
-
 import { JwtAuth } from './jwt.decorator';
 import {
   ApiResponse,
   ApiCreatedResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { Submission } from 'src/entities/submission.entity';
+import { Submission } from '../entities/submission.entity';
+import { UserProfileService } from '../services/userprofile.service';
+import { Role } from '../entities/role.entity';
 
 @Controller('submission')
 export class SubmissionController {
-  constructor(private _submissionService: SubmissionService) {}
+  constructor(
+    private _submissionService: SubmissionService,
+    private _userProfileService: UserProfileService,
+  ) {}
 
-  @JwtAuth()
+  @JwtAuth(Role.MENTOR, Role.ADMIN)
   @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The submission was found.' })
   @ApiResponse({
@@ -57,13 +64,46 @@ export class SubmissionController {
         errors: [],
       });
     }
+    const name = await this._userProfileService.getFullName(submission.userId);
     return {
       id: submission.id,
-      userId: submission.userId,
+      name: name,
       assignmentId: submission.assignmentId,
       timestamp: submission.timestamp.toString(),
       mark: submission.mark,
       feedback: submission.feedback,
+    };
+  }
+
+  @JwtAuth(Role.MENTOR, Role.ADMIN)
+  @Get('pagination/:id')
+  async pagination(
+    @Param() params: GetSingleSubmissionRequest,
+    @Query() query: SubmissionPaginationRequest,
+  ): Promise<SubmissionPaginationResponse> {
+    const submissions: Submission[] =
+      await this._submissionService.getPaginatedSubmissions(
+        query.start,
+        query.end,
+        params.id,
+      );
+    const subRes: AssignmentSubmissionResponse[] = [];
+    for (const submission of submissions) {
+      const name = await this._userProfileService.getFullName(
+        submission.userId,
+      );
+      subRes.push({
+        id: submission.id,
+        name: name,
+        assignmentId: submission.assignmentId,
+        timestamp: submission.timestamp.toString(),
+        mark: submission.mark,
+        feedback: submission.feedback,
+      });
+    }
+    return {
+      data: subRes,
+      total: await this._submissionService.getCount(params.id),
     };
   }
 
