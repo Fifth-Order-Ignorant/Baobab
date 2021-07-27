@@ -96,4 +96,8 @@ export class SubmissionService {
       assignmentId,
     );
   }
+
+  async getCount(assignmentId: number): Promise<number> {
+    return this._submissionRepository.getCount(assignmentId);
+  }
 }
