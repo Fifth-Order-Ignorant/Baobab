@@ -11,7 +11,7 @@ export * from "./requests/EditNameRequest.dto";
 export * from "./requests/EditProfileRequest.dto";
 export * from "./requests/EditRoleRequest.dto";
 export * from "./requests/FileRequest.dto";
-export * from "./requests/GetSingleSubmissionRequest.dto";
+export * from "./requests/GetSingleSubAssRequest.dto";
 export * from "./requests/LoginRequest.dto";
 export * from "./requests/PostPaginationRequest.dto";
 export * from "./requests/PostRequest.dto";
