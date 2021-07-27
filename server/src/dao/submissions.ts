@@ -25,4 +25,5 @@ export interface SubmissionDAO {
     userId: number,
     assignmentId: number,
   ): Promise<Submission>;
+  getCount(assignmentId: number): Promise<number>;
 }
