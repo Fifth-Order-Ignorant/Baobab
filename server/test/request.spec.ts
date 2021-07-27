@@ -171,6 +171,23 @@ describe('Role Request Tests', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
+  it('users who are not admins cannot access requests', async () => {
+    const agent = request.agent(app.getHttpServer());
+
+    await agent.post('/auth/login').send({
+      email: 'ethan@mail.com',
+      password: 'mcs',
+    });
+
+    return agent
+      .get('/request/pagination')
+      .query({
+        start: 0,
+        stop: 1,
+      })
+      .expect(403);
+  });
+
   afterAll(async () => {
     const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
     if (conn) {

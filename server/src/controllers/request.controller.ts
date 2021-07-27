@@ -21,7 +21,6 @@ import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuth } from './jwt.decorator';
 import { Role } from '../entities/role.entity';
 import { Request } from '../entities/request.entity';
-
 import { UserProfileService } from '../services/userprofile.service';
 
 @Controller('request')
@@ -62,6 +61,7 @@ export class RequestController {
   }
 
   @Get('pagination')
+  @JwtAuth(Role.ADMIN)
   async pagination(
     @Query() query: RequestPaginationRequest,
   ): Promise<RoleRequestResponse[]> {
