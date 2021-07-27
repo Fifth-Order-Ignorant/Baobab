@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 import { SessionPayload } from 'baobab-common';
 import { Cache } from 'cache-manager';
+import { ConfigService } from '@nestjs/config';
 
 type StaleSession = {
   time: number;
@@ -18,6 +19,7 @@ export class AuthService {
     @Inject('UserProfileDAO') private _userRepository: UserProfileDAO,
     private _jwtService: JwtService,
     @Inject(CACHE_MANAGER) private _cacheManager: Cache,
+    private _configService: ConfigService,
   ) {}
 
   async verifyLogin(email: string, password: string): Promise<User> {
@@ -58,6 +60,7 @@ export class AuthService {
     };
   }
 
+  // only verified payloads should be passed in here
   async renew(payload: SessionPayload): Promise<{
     jwt: string;
     integrityString: string;
@@ -67,13 +70,17 @@ export class AuthService {
       payload.id.toString(),
     );
 
-    if (staleSession && staleSession.renewable) {
+    if (
+      staleSession &&
+      staleSession.renewable &&
+      payload.iat >= staleSession.time
+    ) {
       return this.genJwt(payload.id);
     }
 
     const now = Date.now() / 1000; // in secs
 
-    if (payload.exp - 60 < now && now < payload.exp) {
+    if (payload.exp - this._configService.get<number>('jwtExp') / 2 < now) {
       return this.genJwt(payload.id);
     }
 
@@ -106,7 +113,7 @@ export class AuthService {
         time: Date.now() / 1000,
         renewable: renewable,
       },
-      { ttl: 30 * 60 },
+      { ttl: this._configService.get<number>('jwtExp') },
     );
   }
 }
