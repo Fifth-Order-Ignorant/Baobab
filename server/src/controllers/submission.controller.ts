@@ -12,6 +12,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -19,11 +20,12 @@ import { SubmissionService } from '../services/submission.service';
 import * as mime from 'mime';
 import {
   AssignmentSubmissionResponse,
-  GetSingleSubmissionRequest,
-  SubmissionPaginationRequest,
+  GetSingleSubAssRequest,
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
+  FileRequest,
+  SubmissionPaginationRequest,
   SubmissionPaginationResponse,
 } from 'baobab-common';
 import { JwtAuth } from './jwt.decorator';
@@ -31,7 +33,10 @@ import {
   ApiResponse,
   ApiCreatedResponse,
   ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 import { Submission } from '../entities/submission.entity';
 import { UserProfileService } from '../services/userprofile.service';
 import { Role } from '../entities/role.entity';
@@ -51,7 +56,7 @@ export class SubmissionController {
     description: 'No submission found for this user on this assignment.',
   })
   async getUserSubmission(
-    @Param() params: GetSingleSubmissionRequest,
+    @Param() params: GetSingleSubAssRequest,
     @Req() req,
   ): Promise<AssignmentSubmissionResponse> {
     const submission: Submission =
@@ -78,7 +83,7 @@ export class SubmissionController {
   @JwtAuth(Role.MENTOR, Role.ADMIN)
   @Get('pagination/:id')
   async pagination(
-    @Param() params: GetSingleSubmissionRequest,
+    @Param() params: GetSingleSubAssRequest,
     @Query() query: SubmissionPaginationRequest,
   ): Promise<SubmissionPaginationResponse> {
     const submissions: Submission[] =
@@ -109,7 +114,7 @@ export class SubmissionController {
 
   @JwtAuth()
   @Put('create')
-  @ApiResponse({ status: 201, description: 'The assignment is created.' })
+  @ApiResponse({ status: 201, description: 'The submission is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   async createSubmission(
     @Body() reqBody: SubmissionCreateRequest,
@@ -173,6 +178,20 @@ export class SubmissionController {
     );
     if (!rv) {
       throw new BadRequestException();
+    }
+  }
+
+  @ApiOkResponse({ description: 'File download successful.' })
+  @ApiNotFoundResponse({ description: 'File not found.' })
+  @Get('file/:id')
+  async getSubFile(@Param() params: FileRequest, @Res() res: Response) {
+    const subFile = await this._submissionService.getFile(params.id);
+    if (subFile) {
+      res.attachment(subFile.info.originalName);
+      res.contentType(subFile.info.mimetype);
+      subFile.data.pipe(res);
+    } else {
+      throw new NotFoundException();
     }
   }
 }

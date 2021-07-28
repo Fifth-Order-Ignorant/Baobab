@@ -25,21 +25,26 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(request: Request, payload: any) {
     const integrityString = request.cookies['SESSION_INT'];
-    if (!this._authService.verifyJwt(payload, integrityString)) {
+    if (!(await this._authService.verifyJwt(payload, integrityString))) {
       throw new UnauthorizedException();
     }
 
     const renewed = await this._authService.renew(payload);
 
     if (renewed) {
+      const maxAge = renewed.payload.exp - Date.now() / 1000;
+
       request.res.cookie('SESSION_JWT', renewed.jwt, {
         secure: this._configService.get<boolean>('production'),
         sameSite: 'lax',
+        maxAge: maxAge * 1000,
       });
+
       request.res.cookie('SESSION_INT', renewed.integrityString, {
         httpOnly: true,
         secure: this._configService.get<boolean>('production'),
         sameSite: 'lax',
+        maxAge: maxAge * 1000,
       });
 
       return renewed.payload;

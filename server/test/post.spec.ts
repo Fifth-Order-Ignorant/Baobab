@@ -9,8 +9,7 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
 import { Post } from '../src/entities/post.entity';
 import { Tag } from '../src/entities/tag.entity';
-import { Connection } from 'mongoose';
-import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
+import { clean } from './clean';
 
 describe('Post Creation Tests', () => {
   let app: INestApplication;
@@ -126,13 +125,7 @@ describe('Post Creation Tests', () => {
   });
 
   afterAll(async () => {
-    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
-    if (conn) {
-      const cols = await conn.db.collections();
-      for (const col of cols) {
-        await col.deleteMany({});
-      }
-    }
+    await clean(app);
     await app.close();
   });
 });

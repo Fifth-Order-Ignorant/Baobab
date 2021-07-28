@@ -74,6 +74,7 @@ async function getRoleAgent(
   });
   return agent;
 }
+import { clean } from './clean';
 
 describe('Role Request Tests', () => {
   let app: INestApplication;
@@ -215,13 +216,7 @@ describe('Role Request Tests', () => {
   });
 
   afterAll(async () => {
-    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
-    if (conn) {
-      const cols = await conn.db.collections();
-      for (const col of cols) {
-        await col.deleteMany({});
-      }
-    }
+    await clean(app);
     await app.close();
   });
 });
