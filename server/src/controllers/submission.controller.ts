@@ -12,7 +12,6 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
-  UseGuards,
   Res,
 } from '@nestjs/common';
 
