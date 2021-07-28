@@ -33,16 +33,19 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as mime from 'mime';
 import { JwtAuth } from './jwt.decorator';
+import { Role } from '../entities/role.entity';
 import { Response } from 'express';
 
 @Controller('assignment')
 export class AssignmentController {
   constructor(private _assignmentService: AssignmentService) {}
 
-  @JwtAuth()
+  @JwtAuth(Role.ADMIN, Role.MENTOR)
   @Post('create')
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 401, description: 'User is not logged in.' })
+  @ApiResponse({ status: 403, description: 'User is not a mentor nor an admin.' })
   async createAssignment(
     @Body() reqBody: CreateAssignmentRequest,
   ): Promise<ResourceCreatedResponse> {
@@ -69,6 +72,7 @@ export class AssignmentController {
     return { id: assignment.id };
   }
 
+  @JwtAuth(Role.ADMIN, Role.MENTOR)
   @Post('fileup/:id')
   @UseInterceptors(
     FileInterceptor('fileup', {
@@ -93,6 +97,9 @@ export class AssignmentController {
   @ApiBadRequestResponse({
     description: 'Uploaded file is not in one of the valid file formats.',
   })
+  @ApiResponse({ status: 401, description: 'User is not logged in.' })
+  @ApiResponse({ status: 403, description: 'User is not a mentor nor an admin.' })
+
   async uploadFile(
     @Param() params: UploadFileRequest,
     @UploadedFile() file: Express.Multer.File,
@@ -115,6 +122,7 @@ export class AssignmentController {
     }
   }
 
+  @ApiResponse({status: 400, description: "Bad request"})
   @Get('pagination')
   async pagination(
     @Query() query: AssignmentPaginationRequest,
@@ -141,10 +149,10 @@ export class AssignmentController {
     return response;
   }
 
-  @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The assignment was found.' })
   @ApiResponse({ status: 404, description: 'No assignment found.' })
-  async getUserSubmission(
+  @Get('get/:id')
+  async getAssignment(
     @Param() params: GetSingleSubmissionRequest,
   ): Promise<AssignmentResponse> {
     const assignment: Assignment = await this._assignmentService.getAssignment(

@@ -130,7 +130,7 @@ describe('Get Submission API Test', () => {
   });
 
   it(`lets you create a submission`, async () => {
-    await agent
+    await agent4
       .post('/assignment/create')
       .send({
         name: 'A1',
@@ -139,7 +139,7 @@ describe('Get Submission API Test', () => {
       })
       .expect(HttpStatus.CREATED);
 
-    await agent
+    await agent4
       .post('/assignment/create')
       .send({
         name: 'A2',
