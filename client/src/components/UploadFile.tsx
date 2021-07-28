@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import * as mime from 'mime';
 import { Button, Form, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -10,6 +10,7 @@ import {
   ErrorResponse,
 } from 'baobab-common';
 import axios from 'axios';
+import { AuthContext } from 'src/providers/AuthProvider';
 
 type Id = {
   /**
@@ -25,6 +26,7 @@ type Id = {
 function UploadFile(info: Id): JSX.Element {
   const [file, setFile] = useState<string | Blob | RcFile>();
   const [status, setStatus] = useState('default');
+  const authState = useContext(AuthContext);
 
   const {
     handleSubmit,
@@ -71,7 +73,9 @@ function UploadFile(info: Id): JSX.Element {
   };
 
   return (
-    <Form onFinish={handleSubmit(onSubmit)}>
+    <div>
+      {console.log(authState)}
+    {authState && <Form onFinish={handleSubmit(onSubmit)}>
       <Form.Item>
         <h4>Upload Your Submission</h4>
       </Form.Item>
@@ -101,7 +105,8 @@ function UploadFile(info: Id): JSX.Element {
           Submit
         </Button>
       </Form.Item>
-    </Form>
+    </Form>}
+    </div>
   );
 }
 export default UploadFile;
