@@ -27,14 +27,19 @@ export class JwtInterceptor implements NestInterceptor {
         if (renewed) {
           const response = context.switchToHttp().getResponse<Response>();
 
+          const maxAge = renewed.payload.exp - Date.now() / 1000;
+
           response.cookie('SESSION_JWT', renewed.jwt, {
             secure: this._configService.get<boolean>('production'),
             sameSite: 'lax',
+            maxAge: maxAge * 1000,
           });
+
           response.cookie('SESSION_INT', renewed.integrityString, {
             httpOnly: true,
             secure: this._configService.get<boolean>('production'),
             sameSite: 'lax',
+            maxAge: maxAge * 1000,
           });
         }
         return data;

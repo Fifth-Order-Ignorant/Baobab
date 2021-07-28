@@ -1,8 +1,7 @@
-import * as crypto from 'crypto';
-
 export default () => ({
   production: process.env.NODE_ENV === 'production',
-  // all sessions become invalid on server shutdown (so we don't have to persist stale sessions)
-  jwtSecret: crypto.randomBytes(10).toString('hex'),
+  jwtSecret: process.env.JWT_SECRET || '1eUKAdATDgkk6fGW1hvblDolPxCMgjhq',
+  jwtExp: parseInt(process.env.JWT_EXP) || 604800, // 7d (secs)
   mongoUri: process.env.MONGO_URI || 'mongodb://localhost:27017/baobab',
+  redisUri: process.env.REDIS_URI || 'redis://localhost:6379/0',
 });

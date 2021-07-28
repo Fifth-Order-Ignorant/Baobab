@@ -1,6 +1,6 @@
 export class AssignmentSubmissionResponse {
   id!: number;
-  userId!: number;
+  name!: string;
   assignmentId!: number;
   timestamp!: string;
   mark!: number;

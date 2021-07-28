@@ -22,6 +22,7 @@ participants of the challenge.
 
 - Node.js 16.2.0 (npm 7.13.0)
 - MongoDB Community Server 4.4.6
+- Redis 6.2
 
 ### Git (Windows)
 
