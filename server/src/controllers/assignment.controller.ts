@@ -154,6 +154,7 @@ export class AssignmentController {
     return response;
   }
 
+  @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The assignment was found.' })
   @ApiResponse({ status: 404, description: 'No assignment found.' })
   async getAssignment(
