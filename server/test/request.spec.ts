@@ -9,8 +9,6 @@ import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import * as cookieParser from 'cookie-parser';
 import { HttpAdapterHost } from '@nestjs/core';
 import { CustomExceptionsFilter } from '../src/controllers/unauthorized.filter';
-import { Connection } from 'mongoose';
-import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 import { UserProfileDAO } from '../src/dao/userprofiles';
 
 /**
@@ -22,7 +20,7 @@ import { UserProfileDAO } from '../src/dao/userprofiles';
  * @param password password of user
  * @returns agent for testing
  */
- async function getUserAgent(
+async function getUserAgent(
   app: INestApplication,
   firstName: string,
   lastName: string,
@@ -104,7 +102,7 @@ describe('Role Request Tests', () => {
       'richtree',
     );
 
-    // Setup an admin agent. 
+    // Setup an admin agent.
     adminAgent = await getRoleAgent(
       app,
       userProfileDAO,
@@ -114,11 +112,9 @@ describe('Role Request Tests', () => {
       'utm',
       Role.ADMIN,
     );
-
   });
 
   it(`lets you request a role`, async () => {
-
     return userAgent
       .post('/request/role')
       .send({
@@ -129,7 +125,6 @@ describe('Role Request Tests', () => {
   });
 
   it(`doesn't let you request a bad role`, async () => {
-
     return userAgent
       .post('/request/role')
       .send({
@@ -140,7 +135,6 @@ describe('Role Request Tests', () => {
   });
 
   it(`lets you approve a role change`, async () => {
-
     return adminAgent
       .patch('/request/approve')
       .send({
@@ -151,7 +145,6 @@ describe('Role Request Tests', () => {
   });
 
   it(`changes the role correctly`, async (done) => {
-
     const response = await userAgent.get('/profile/myprofile').send({});
 
     expect(await response.body[0]).toBe('rich');
@@ -163,7 +156,6 @@ describe('Role Request Tests', () => {
   });
 
   it(`lets you reject a role change`, async () => {
-
     await userAgent
       .post('/request/role')
       .send({
@@ -182,7 +174,6 @@ describe('Role Request Tests', () => {
   });
 
   it(`keeps the role the same after rejection`, async (done) => {
-
     const response = await userAgent.get('/profile/myprofile').send({});
 
     expect(await response.body[0]).toBe('rich');
@@ -194,7 +185,6 @@ describe('Role Request Tests', () => {
   });
 
   it(`does not let you approve or reject a request that is not pending`, async () => {
-
     return adminAgent
       .patch('/request/approve')
       .send({
@@ -205,7 +195,6 @@ describe('Role Request Tests', () => {
   });
 
   it('users who are not admins cannot access requests', async () => {
-
     return userAgent
       .get('/request/pagination')
       .query({

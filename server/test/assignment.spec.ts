@@ -9,8 +9,6 @@ import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import { AssignmentInMemory } from '../src/dao/memory/assignments.mem';
 import { FileInfo } from '../src/entities/fileinfo.entity';
-import { Connection } from 'mongoose';
-import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
 import { UserProfileDAO } from '../src/dao/userprofiles';
 import { Role } from '../src/entities/role.entity';
 
@@ -23,7 +21,7 @@ import { Role } from '../src/entities/role.entity';
  * @param password password of user
  * @returns agent for testing
  */
- async function getUserAgent(
+async function getUserAgent(
   app: INestApplication,
   firstName: string,
   lastName: string,
@@ -104,8 +102,8 @@ describe('Assignment Create API Test', () => {
       'rich@tree.com',
       'richtree',
     );
-    
-    // Setup an admin agent. 
+
+    // Setup an admin agent.
     adminAgent = await getRoleAgent(
       app,
       userProfileDAO,
@@ -115,11 +113,9 @@ describe('Assignment Create API Test', () => {
       'utm',
       Role.ADMIN,
     );
-
   });
 
   it(`lets you create a new assignment`, async () => {
-
     return adminAgent
       .post('/assignment/create')
       .send({
@@ -131,8 +127,6 @@ describe('Assignment Create API Test', () => {
   });
 
   it(`lets you create a new assignment and gives the correct id`, async (done) => {
-
-
     const response = await adminAgent.post('/assignment/create').send({
       name: 'A2',
       description: 'poop',
@@ -143,13 +137,13 @@ describe('Assignment Create API Test', () => {
   });
 
   it(`lets you view an assignment`, async () => {
-
     return await userAgent.get('/assignment/get/0').expect(HttpStatus.OK);
   });
 
   it(`lets you view an assignment and the given details are correct`, async (done) => {
-
-    const response = await userAgent.get('/assignment/get/0').expect(HttpStatus.OK);
+    const response = await userAgent
+      .get('/assignment/get/0')
+      .expect(HttpStatus.OK);
     expect(response.body.name).toBe('A1');
     expect(response.body.description).toBe('hi');
     expect(response.body.maxMark).toBe(100);
@@ -157,8 +151,9 @@ describe('Assignment Create API Test', () => {
   });
 
   it(`does not let you view an assignment that does not exist`, async () => {
-
-    return await userAgent.get('/assignment/get/3').expect(HttpStatus.NOT_FOUND);
+    return await userAgent
+      .get('/assignment/get/3')
+      .expect(HttpStatus.NOT_FOUND);
   });
 
   afterAll(async () => {

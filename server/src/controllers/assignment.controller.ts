@@ -45,7 +45,10 @@ export class AssignmentController {
   @ApiResponse({ status: 201, description: 'The assignment is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   @ApiResponse({ status: 401, description: 'User is not logged in.' })
-  @ApiResponse({ status: 403, description: 'User is not a mentor nor an admin.' })
+  @ApiResponse({
+    status: 403,
+    description: 'User is not a mentor nor an admin.',
+  })
   async createAssignment(
     @Body() reqBody: CreateAssignmentRequest,
   ): Promise<ResourceCreatedResponse> {
@@ -98,8 +101,10 @@ export class AssignmentController {
     description: 'Uploaded file is not in one of the valid file formats.',
   })
   @ApiResponse({ status: 401, description: 'User is not logged in.' })
-  @ApiResponse({ status: 403, description: 'User is not a mentor nor an admin.' })
-
+  @ApiResponse({
+    status: 403,
+    description: 'User is not a mentor nor an admin.',
+  })
   async uploadFile(
     @Param() params: UploadFileRequest,
     @UploadedFile() file: Express.Multer.File,
@@ -122,7 +127,7 @@ export class AssignmentController {
     }
   }
 
-  @ApiResponse({status: 400, description: "Bad request"})
+  @ApiResponse({ status: 400, description: 'Bad request' })
   @Get('pagination')
   async pagination(
     @Query() query: AssignmentPaginationRequest,
