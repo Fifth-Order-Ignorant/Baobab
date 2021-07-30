@@ -31,7 +31,6 @@ const Profiles = (): JSX.Element => {
         end: page * 10,
       },
     });
-    console.log(newProfiles.data);
     return newProfiles.data;
   };
   const loadMore = async (page: number) => {

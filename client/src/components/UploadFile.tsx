@@ -74,7 +74,6 @@ function UploadFile(info: Id): JSX.Element {
 
   return (
     <div>
-      {console.log(authState)}
     {authState && <Form onFinish={handleSubmit(onSubmit)}>
       <Form.Item>
         <h4>Upload Your Submission</h4>

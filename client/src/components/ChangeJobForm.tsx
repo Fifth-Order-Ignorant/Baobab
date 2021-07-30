@@ -42,6 +42,7 @@ function ChangeJobForm(job: Job): JSX.Element {
       const { errors } = error.response.data as ErrorResponse;
 
       for (const error of errors) {
+        console.log(error.path);
         setError(error.path as keyof EditJobRequest, {
           message: error.message,
         });
@@ -53,7 +54,6 @@ function ChangeJobForm(job: Job): JSX.Element {
   const [info, setInfo] = useState('');
 
   const changeState = () => {
-    console.log(state);
     if (state == 'default' && job.canEdit) {
       setState('edit');
     } else if (state == 'edit') {

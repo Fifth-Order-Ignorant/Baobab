@@ -23,6 +23,8 @@ function CreateAssignmentForm(): JSX.Element {
 
   const [file, setFile] = useState<string | Blob | RcFile>();
 
+  const [content, setContent] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -34,22 +36,20 @@ function CreateAssignmentForm(): JSX.Element {
 
   const onSubmit = async (data: CreateAssignmentRequest) => {
     let id;
-    data.maxMark = mark;
-    data.description = document.getElementById('content')?.innerHTML as string;
     try {
-      setState('done');
       await axios
         .post<ResourceCreatedResponse>('/api/assignment/create', data)
         .then((returned) => (id = returned.data.id));
+        setState("done");
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
-
       for (const error of errors) {
         setError(error.path as keyof CreateAssignmentRequest, {
           message: error.message,
         });
       }
     }
+  
     if (file) {
       const data = new FormData();
       data.append('fileup', file);
@@ -59,7 +59,6 @@ function CreateAssignmentForm(): JSX.Element {
         });
       } catch (error) {
         const { errors } = error.response.data as ErrorResponse;
-
         for (const error of errors) {
           setError(error.path as keyof CreateAssignmentRequest, {
             message: error.message,
@@ -72,9 +71,9 @@ function CreateAssignmentForm(): JSX.Element {
     setMark(
       document
         .getElementById('mark')
-        ?.getAttribute('aria-valuenow') as unknown as number,
-    );
-  }, [setMark, mark]);
+        ?.getAttribute('aria-valuenow') as unknown as number
+    )
+  }, [setMark, mark, setContent, content, onSubmit]);
 
   return (
     <div>
@@ -104,7 +103,6 @@ function CreateAssignmentForm(): JSX.Element {
             >
               <InputNumber
                 id="mark"
-                value={mark}
                 min={1}
                 {...register('maxMark')}
                 onChange={setMark}
@@ -121,7 +119,9 @@ function CreateAssignmentForm(): JSX.Element {
               <Input.TextArea
                 id="content"
                 rows={3}
+                value={content}
                 {...register('description')}
+                onChange={(e)=>setContent(e.target.value)}
               />
             </Form.Item>
           )}
@@ -129,8 +129,6 @@ function CreateAssignmentForm(): JSX.Element {
             <Form.Item
               label="File"
               name="file"
-              validateStatus={errors.description ? 'error' : ''}
-              help={errors.description?.message}
             >
               <Upload
                 maxCount={1}

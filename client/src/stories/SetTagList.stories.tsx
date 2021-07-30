@@ -12,7 +12,6 @@ export const Basic = (): JSX.Element => (
   <SetTagList
     tags={Tags}
     onTagChange={(tags: string[]) => {
-      console.log(tags);
     }}
   />
 );

@@ -48,6 +48,7 @@ function ChangeBioForm(bio: Biography): JSX.Element {
       const { errors } = error.response.data as ErrorResponse;
 
       for (const error of errors) {
+        console.log(error)
         setError(error.path as keyof EditBioRequest, {
           message: error.message,
         });
