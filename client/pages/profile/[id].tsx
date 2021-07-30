@@ -1,4 +1,5 @@
 import { About } from '../../src/components/About';
+import { Links } from '../../src/components/Links'
 import PostFeed from '../../src/components/PostFeed';
 import { Row, Col, Typography, Tabs } from 'antd';
 import styles from '../../styles/Profile.module.css';
@@ -31,6 +32,7 @@ export default function Profile(): JSX.Element {
           <Col span={2} />
           <Col span={4}>
             {id && <AvatarComponent id={parseInt(id as string, 10)} />}
+            <Links id={parseInt(id as string, 10)}/>
           </Col>
           <Col span={1} />
           <Col className={styles.tabContents} span={13}>

@@ -80,6 +80,11 @@ export class UserProfileService {
     await this._userProfileRepository.updateProfile(profile);
   }
 
+  async getLinks(id: number): Promise<string[]> {
+    const profile = await this._userProfileRepository.getProfileById(id);1
+    return profile.externalLinks;
+  }
+
   isValidRole(requestRole: string): boolean {
     return stringToRole(requestRole) != null;
   }
