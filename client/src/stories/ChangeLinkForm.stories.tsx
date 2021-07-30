@@ -8,5 +8,12 @@ export default {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Basic = (): JSX.Element => (
-  <ChangeLinkForm links={["https://www.ethanlam.ca/", "https://www.ethanlam.ca/", "https://www.ethanlam.ca/"]} canEdit={true} />
+  <ChangeLinkForm
+    links={[
+      'https://www.ethanlam.ca/',
+      'https://www.ethanlam.ca/',
+      'https://www.ethanlam.ca/',
+    ]}
+    canEdit={true}
+  />
 );

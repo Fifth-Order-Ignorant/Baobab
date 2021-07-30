@@ -81,7 +81,8 @@ export class UserProfileService {
   }
 
   async getLinks(id: number): Promise<string[]> {
-    const profile = await this._userProfileRepository.getProfileById(id);1
+    const profile = await this._userProfileRepository.getProfileById(id);
+    1;
     return profile.externalLinks;
   }
 

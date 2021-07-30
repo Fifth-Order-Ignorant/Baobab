@@ -1,4 +1,4 @@
-import Links from '../components/Links';
+import { Links } from '../components/Links';
 import { Meta } from '@storybook/react';
 
 export default {
@@ -7,6 +7,4 @@ export default {
 } as Meta;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const Basic = (): JSX.Element => (
-  <Links id={0} />
-);
+export const Basic = (): JSX.Element => <Links id={0} />;

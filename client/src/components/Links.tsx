@@ -15,24 +15,31 @@ type Id = {
  */
 export function Links(id: Id): JSX.Element {
   const [links, setLinks] = useState<string[]>([]);
-  
+
   const getLinks = () => {
-    axios.post('/api/user/links', { userId: id.id }).then(response => {
-      let tempList = response.data;
-      if (tempList.length == 0) {
-        setLinks(['No Link Available', "No Link Available", "No Link Available"]);
-      } else {
-        setLinks(tempList);
-      }
-    }).catch((reason) => {
-      if (axios.isAxiosError(reason)) {
-        console.log(reason, reason.response?.data);
-      }
-    });
-  }
-  
+    axios
+      .post('/api/user/links', { userId: id.id })
+      .then((response) => {
+        const tempList = response.data;
+        if (tempList.length == 0) {
+          setLinks([
+            'No Link Available',
+            'No Link Available',
+            'No Link Available',
+          ]);
+        } else {
+          setLinks(tempList);
+        }
+      })
+      .catch((reason) => {
+        if (axios.isAxiosError(reason)) {
+          console.log(reason, reason.response?.data);
+        }
+      });
+  };
+
   const authState = useContext(AuthContext);
-  
+
   const canEdit = () => {
     try {
       return id.id == (authState as SessionPayload).id;
@@ -40,19 +47,16 @@ export function Links(id: Id): JSX.Element {
       return false;
     }
   };
-  
+
   useEffect(() => {
     getLinks();
   }, [id]);
-  
-  return ( 
+
+  return (
     <div className={styles.links}>
-        <Typography.Text onClick={() => getLinks()}>
-          <ChangeLinkForm
-            links={links}
-            canEdit={canEdit()}
-            />
-        </Typography.Text>
+      <Typography.Text onClick={() => getLinks()}>
+        <ChangeLinkForm links={links} canEdit={canEdit()} />
+      </Typography.Text>
     </div>
   );
 }
