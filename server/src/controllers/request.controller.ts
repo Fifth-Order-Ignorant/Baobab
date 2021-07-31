@@ -86,6 +86,7 @@ export class RequestController {
 
   @ApiResponse({ status: 200, description: 'Role is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @JwtAuth(Role.ADMIN)
   @Patch('approve')
   async editRole(@Body() reqBody: EditRoleRequest) {
     const requestId = reqBody.requestId;

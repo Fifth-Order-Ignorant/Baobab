@@ -10,7 +10,7 @@ import {
   ErrorResponse,
 } from 'baobab-common';
 import axios from 'axios';
-import { AuthContext } from 'src/providers/AuthProvider';
+import { AuthContext } from '../providers/AuthProvider';
 
 type Id = {
   /**
