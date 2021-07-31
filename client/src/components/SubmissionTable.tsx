@@ -29,7 +29,7 @@ export interface SubmissionTableProps {
 /**
  * Renders the submissions.
  */
-export default function SubmissionTable(props: SubmissionTableProps): JSX.Element {
+function SubmissionTable(props: SubmissionTableProps): JSX.Element {
   const [data, setData] = useState<AssignmentSubmissionResponse[]>([]);
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
@@ -74,6 +74,14 @@ export default function SubmissionTable(props: SubmissionTableProps): JSX.Elemen
       <Typography.Link href={`/api/submission/file/${id}`}>
         Download
       </Typography.Link>
+    );
+  };
+
+  const EditButton = (id: number) => {
+    return (
+      <Button onClick={() => UpdateOpen(id)} disabled={edit != -1}>
+        Edit
+      </Button>
     );
   };
 
@@ -154,13 +162,7 @@ export default function SubmissionTable(props: SubmissionTableProps): JSX.Elemen
         submit: string,
         info: AssignmentSubmissionResponse,
         index: number,
-      ) => {
-        return (
-          <Button onClick={() => UpdateOpen(index)} disabled={edit != -1}>
-            Edit
-          </Button>
-        );
-      },
+      ) => EditButton(index),
     },
   ];
 
@@ -228,3 +230,4 @@ export default function SubmissionTable(props: SubmissionTableProps): JSX.Elemen
     </div>
   );
 }
+export default SubmissionTable;

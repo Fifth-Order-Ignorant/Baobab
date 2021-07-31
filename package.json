@@ -4,5 +4,8 @@
     "common",
     "server",
     "client"
-  ]
+  ],
+  "dependencies": {
+    "baobab-server": "file:server"
+  }
 }

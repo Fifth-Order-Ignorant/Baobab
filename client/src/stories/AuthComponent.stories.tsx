@@ -1,6 +1,7 @@
 import AuthComponent from '../components/AuthComponent';
 import { Meta } from '@storybook/react';
 import { AuthContext } from '../providers/AuthProvider';
+import { Role } from 'baobab-server/src/entities/role.entity';
 
 export default {
   title: 'AuthComponent',
@@ -16,6 +17,8 @@ export const LoggedIn = (): JSX.Element => (
       fullName: 'John Doe',
       integrityHash: '',
       exp: 0,
+      role: Role.DEFAULT,
+      iat: 0,
     }}
   >
     <AuthComponent />
