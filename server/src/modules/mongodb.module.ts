@@ -1,4 +1,11 @@
-import { Global, Module } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  CacheModule,
+  Global,
+  Inject,
+  Module,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../entities/user.entity';
@@ -20,6 +27,11 @@ import { RequestSchema } from '../dao/mongodb/schemas/request.schema';
 import { RequestMongoDAO } from '../dao/mongodb/requests.mdb';
 import { AssignmentMongoDAO } from '../dao/mongodb/assignments.mdb';
 import { MulterModule } from '@nestjs/platform-express';
+import { Submission } from '../entities/submission.entity';
+import { SubmissionSchema } from '../dao/mongodb/schemas/submisison.schema';
+import { SubmissionMongoDAO } from '../dao/mongodb/submissions.mdb';
+import { Cache } from 'cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Global()
 @Module({
@@ -38,9 +50,17 @@ import { MulterModule } from '@nestjs/platform-express';
       { name: Request.name, schema: RequestSchema },
       { name: Assignment.name, schema: AssignmentSchema },
       { name: Team.name, schema: TeamSchema },
+      { name: Submission.name, schema: SubmissionSchema },
     ]),
     MulterModule.registerAsync({
       useClass: MulterConfigService,
+    }),
+    CacheModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        url: configService.get<string>('redisUri'),
+      }),
     }),
   ],
   providers: [
@@ -50,15 +70,26 @@ import { MulterModule } from '@nestjs/platform-express';
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
     { provide: 'TeamDAO', useClass: TeamMongoDAO },
+    { provide: 'SubmissionDAO', useClass: SubmissionMongoDAO },
   ],
   exports: [
     MulterModule,
+    CacheModule,
     { provide: 'MulterDAO', useClass: MulterMongoDAO },
     { provide: 'UserProfileDAO', useClass: UserProfileMongoDAO },
     { provide: 'PostDAO', useClass: PostMongoDAO },
     { provide: 'RequestDAO', useClass: RequestMongoDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentMongoDAO },
     { provide: 'TeamDAO', useClass: TeamMongoDAO },
+    { provide: 'SubmissionDAO', useClass: SubmissionMongoDAO },
   ],
 })
-export class MongoDBDAOModule {}
+export class MongoDBDAOModule implements OnModuleDestroy {
+  constructor(@Inject(CACHE_MANAGER) private _cacheManager: Cache) {}
+
+  onModuleDestroy() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this._cacheManager.store.getClient().quit();
+  }
+}

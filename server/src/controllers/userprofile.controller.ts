@@ -14,8 +14,9 @@ import {
   RegisterRequest,
   ProfilePaginationRequest,
   ProfileViewRequest,
+  ProfileLinksRequest,
   ProfileResponse,
-  ProfilePictureRequest,
+  UploadFileRequest,
 } from 'baobab-common';
 import { ValidationError } from 'yup';
 import { ConfigService } from '@nestjs/config';
@@ -71,6 +72,23 @@ export class UserProfileController {
     }
   }
 
+  @Post('links')
+  @ApiResponse({
+    status: 201,
+    description: 'The links are correctly fetched.',
+  })
+  @ApiResponse({ status: 400, description: 'The request is invalid.' })
+  async getLinks(@Body() reqBody: ProfileLinksRequest) {
+    const id = reqBody.userId;
+    if (await this._userProfileService.isValidProfile(id)) {
+      return this._userProfileService.getLinks(id);
+    } else {
+      throw new BadRequestException({
+        errors: [],
+      });
+    }
+  }
+
   @Get('pagination')
   async pagination(
     @Query() query: ProfilePaginationRequest,
@@ -86,13 +104,10 @@ export class UserProfileController {
   @ApiOkResponse({ description: 'Profile picture download successful.' })
   @ApiNotFoundResponse({ description: 'Profile picture not found.' })
   @Get('picture/:id')
-  async getPicture(
-    @Param() params: ProfilePictureRequest,
-    @Res() res: Response,
-  ) {
+  async getPicture(@Param() params: UploadFileRequest, @Res() res: Response) {
     const picture = await this._userProfileService.getPicture(params.id);
     if (picture) {
-      res.header('Content-Type', picture.info.mimetype);
+      res.contentType(picture.info.mimetype);
       picture.data.pipe(res);
     } else {
       throw new NotFoundException();

@@ -60,6 +60,10 @@ export class Profile {
     return this._externalLinks;
   }
 
+  set externalLinks(newLinks: string[]) {
+    this._externalLinks = newLinks;
+  }
+
   get role(): Role {
     return this._role;
   }

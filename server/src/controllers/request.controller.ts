@@ -21,7 +21,6 @@ import { ApiResponse } from '@nestjs/swagger';
 import { JwtAuth } from './jwt.decorator';
 import { Role } from '../entities/role.entity';
 import { Request } from '../entities/request.entity';
-
 import { UserProfileService } from '../services/userprofile.service';
 
 @Controller('request')
@@ -38,7 +37,10 @@ export class RequestController {
   async requestRole(@Body() reqBody: RoleRequest, @Req() req) {
     const today = new Date();
 
-    if (!Object.values<string>(Role).includes(reqBody.role)) {
+    if (
+      !Object.values<string>(Role).includes(reqBody.role) ||
+      (reqBody.role as Role) == Role.ADMIN
+    ) {
       throw new BadRequestException({
         errors: [],
       });
@@ -59,6 +61,7 @@ export class RequestController {
   }
 
   @Get('pagination')
+  @JwtAuth(Role.ADMIN)
   async pagination(
     @Query() query: RequestPaginationRequest,
   ): Promise<RoleRequestResponse[]> {
@@ -83,6 +86,7 @@ export class RequestController {
 
   @ApiResponse({ status: 200, description: 'Role is updated.' })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @JwtAuth(Role.ADMIN)
   @Patch('approve')
   async editRole(@Body() reqBody: EditRoleRequest) {
     const requestId = reqBody.requestId;

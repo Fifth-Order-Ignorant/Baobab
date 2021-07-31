@@ -16,6 +16,8 @@ export const LoggedIn = (): JSX.Element => (
       fullName: 'John Doe',
       integrityHash: '',
       exp: 0,
+      role: 'Default',
+      iat: 0,
     }}
   >
     <AuthComponent />

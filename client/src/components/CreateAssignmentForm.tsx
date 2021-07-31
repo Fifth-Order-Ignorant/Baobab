@@ -1,30 +1,35 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Form, Input, InputNumber, Typography, Upload } from 'antd';
-import React, { useEffect, useState } from 'react';
 import {
-  SingleAssignmentResponse,
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Upload,
+  message,
+  Typography,
+} from 'antd';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import {
   CreateAssignmentRequest,
   CreateAssignmentRequestSchema,
   ErrorResponse,
+  ResourceCreatedResponse,
 } from 'baobab-common';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import styles from '../../styles/CreateAssignment.module.css';
-import * as mime from 'mime';
-import { UploadOutlined } from '@ant-design/icons';
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useState } from 'react';
 import { RcFile } from 'antd/lib/upload';
+import axios from 'axios';
+import { UploadOutlined } from '@ant-design/icons';
+import * as mime from 'mime';
+import styles from '../../styles/CreateAssignment.module.css';
+
 /**
- * Renders form to upload assignment
+ * Assignment creation form.
  */
 function CreateAssignmentForm(): JSX.Element {
-  const [mark, setMark] = useState(1);
-
-  const [state, setState] = useState('default');
-
-  const [file, setFile] = useState<string | Blob | RcFile>();
+  const [created, setCreated] = useState(false);
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
@@ -32,36 +37,33 @@ function CreateAssignmentForm(): JSX.Element {
     resolver: yupResolver(CreateAssignmentRequestSchema),
   });
 
-  const onSubmit = async (data: CreateAssignmentRequest) => {
-    let assId;
-    data.maxMark = mark;
-    data.description = document.getElementById('content')?.innerHTML as string;
-    try {
-      setState('done');
-      await axios
-        .post('/api/assignment/create', data)
-        .then(
-          (returned) =>
-            (assId = (returned.data as SingleAssignmentResponse).id),
-        );
-    } catch (error) {
-      const { errors } = error.response.data as ErrorResponse;
+  const [file, setFile] = useState<RcFile>();
 
-      for (const error of errors) {
-        setError(error.path as keyof CreateAssignmentRequest, {
-          message: error.message,
-        });
+  const onSubmit: SubmitHandler<CreateAssignmentRequest> = async (data) => {
+    try {
+      const id = (
+        await axios.post<ResourceCreatedResponse>(
+          '/api/assignment/create',
+          data,
+        )
+      ).data.id;
+
+      if (file) {
+        const fileData = new FormData();
+        fileData.append('fileup', file);
+
+        axios
+          .post(`/api/assignment/fileup/${id}`, fileData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          })
+          .then(() => setCreated(true))
+          .catch(() => message.error('File uploading failed.'));
+      } else {
+        setCreated(true);
       }
-    }
-    if (file) {
-      const data = new FormData();
-      data.append('fileup', file);
-      try {
-        await axios.post(('/api/assignment/fileup/' + assId) as string, data, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-      } catch (error) {
-        const { errors } = error.response.data as ErrorResponse;
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response) {
+        const { errors } = e.response.data as ErrorResponse;
 
         for (const error of errors) {
           setError(error.path as keyof CreateAssignmentRequest, {
@@ -71,94 +73,80 @@ function CreateAssignmentForm(): JSX.Element {
       }
     }
   };
-  useEffect(() => {
-    setMark(
-      document
-        .getElementById('mark')
-        ?.getAttribute('aria-valuenow') as unknown as number,
-    );
-  }, [setMark, mark]);
 
   return (
-    <div>
-      <div className={styles.body}>
-        <Form onFinish={handleSubmit(onSubmit)} color="White">
-          {state === 'done' && (
-            <Typography>
-              <h2>Assignment has been created.</h2>
-            </Typography>
-          )}
-          {state === 'default' && (
-            <Form.Item
-              label="Assignment Title"
-              name="title"
-              validateStatus={errors.name ? 'error' : ''}
-              help={errors.name?.message}
-            >
-              <Input {...register('name')} />
-            </Form.Item>
-          )}
-          {state === 'default' && (
-            <Form.Item
-              label="This assignment will be out of "
-              name="maxMark"
-              validateStatus={errors.maxMark ? 'error' : ''}
-              help={errors.maxMark?.message}
-            >
-              <InputNumber
-                id="mark"
-                value={mark}
-                min={1}
-                {...register('maxMark')}
-                onChange={setMark}
-              />
-            </Form.Item>
-          )}
-          {state === 'default' && (
-            <Form.Item
-              label="Content"
-              name="content"
-              validateStatus={errors.description ? 'error' : ''}
-              help={errors.description?.message}
-            >
-              <Input.TextArea
-                id="content"
-                rows={3}
-                {...register('description')}
-              />
-            </Form.Item>
-          )}
-          {state === 'default' && (
-            <Form.Item
-              label="File"
-              name="file"
-              validateStatus={errors.description ? 'error' : ''}
-              help={errors.description?.message}
-            >
-              <Upload
-                maxCount={1}
-                beforeUpload={(options) => (setFile(options), false)}
-                showUploadList={true}
-                accept={`${mime.getType('jpg')},
-                         ${mime.getType('png')},
-                         ${mime.getType('pdf')},
-                         ${mime.getType('mp3')},
-                         ${mime.getType('mp4')}`}
+    <div className={styles.body}>
+      {created ? (
+        <Typography.Title>Assignment has been created.</Typography.Title>
+      ) : (
+        <Form onFinish={handleSubmit(onSubmit)}>
+          <Controller
+            name="name"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Form.Item
+                label="Assignment Title"
+                validateStatus={errors.name ? 'error' : ''}
+                help={errors.name?.message}
               >
-                <Button icon={<UploadOutlined />}>Upload</Button>
-              </Upload>
-            </Form.Item>
-          )}
-          {state === 'default' && (
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                Create Assignment
-              </Button>
-            </Form.Item>
-          )}
+                <Input {...field} />
+              </Form.Item>
+            )}
+          />
+          <Controller
+            name="maxMark"
+            control={control}
+            defaultValue={0}
+            render={({ field }) => (
+              <Form.Item
+                label="This assignment will be out of "
+                validateStatus={errors.maxMark ? 'error' : ''}
+                help={errors.maxMark?.message}
+              >
+                <InputNumber {...field} />
+              </Form.Item>
+            )}
+          />
+          <Controller
+            name="description"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Form.Item
+                label="Content"
+                validateStatus={errors.description ? 'error' : ''}
+                help={errors.description?.message}
+              >
+                <Input.TextArea {...field} />
+              </Form.Item>
+            )}
+          />
+
+          <Form.Item>
+            <Upload
+              maxCount={1}
+              accept={`${mime.getType('jpg')}, ${mime.getType('png')}, 
+                   ${mime.getType('pdf')}, ${mime.getType('mp3')},
+                   ${mime.getType('mp4')}`}
+              beforeUpload={(file) => {
+                setFile(file);
+                return false;
+              }}
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={isSubmitting}>
+              Submit
+            </Button>
+          </Form.Item>
         </Form>
-      </div>
+      )}
     </div>
   );
 }
+
 export default CreateAssignmentForm;
