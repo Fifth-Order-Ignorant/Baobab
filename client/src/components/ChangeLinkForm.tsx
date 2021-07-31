@@ -75,7 +75,7 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
               style={{ padding: '10px 30px 0px 30px' }}
             >
               {state === 'default' && links[0] != 'No Link Available' && (
-                <a href={links[0]}>{links[0]}</a>
+                <a href={links[0]} target="_blank">{links[0]}</a>
               )}
               {state === 'default' && links[0] == 'No Link Available' && (
                 <p>{links[0]}</p>
@@ -105,7 +105,7 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
               style={{ padding: '0px 30px 0px 30px' }}
             >
               {state === 'default' && links[1] != 'No Link Available' && (
-                <a href={links[1]}>{links[1]}</a>
+                <a href={links[1]} target="_blank">{links[1]}</a>
               )}
               {state === 'default' && links[1] == 'No Link Available' && (
                 <p>{links[1]}</p>
@@ -135,7 +135,7 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
               style={{ padding: '0px 30px 0px 30px' }}
             >
               {state === 'default' && links[2] != 'No Link Available' && (
-                <a href={links[2]}>{links[2]}</a>
+                <a href={links[2]} target="_blank">{links[2]}</a>
               )}
               {state === 'default' && links[2] == 'No Link Available' && (
                 <p>{links[2]}</p>
