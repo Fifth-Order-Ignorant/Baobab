@@ -8,7 +8,6 @@ import {
   TablePaginationConfig,
   Typography,
 } from 'antd';
-
 import {
   UploadFeedbackRequest,
   UploadFeedbackRequestSchema,
@@ -38,7 +37,9 @@ export interface SubmissionTableProps {
 /**
  * Renders the submissions.
  */
-function SubmissionTable(props: SubmissionTableProps): JSX.Element {
+export default function SubmissionTable(
+  props: SubmissionTableProps,
+): JSX.Element {
   const [data, setData] = useState<AssignmentSubmissionResponse[]>([]);
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
@@ -239,4 +240,3 @@ function SubmissionTable(props: SubmissionTableProps): JSX.Element {
     </div>
   );
 }
-export default SubmissionTable;
