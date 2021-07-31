@@ -8,10 +8,11 @@ import {
   Req,
   Param,
   NotFoundException,
+  Query,
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
-  UseGuards,
+  Res,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -19,26 +20,35 @@ import { SubmissionService } from '../services/submission.service';
 import * as mime from 'mime';
 import {
   AssignmentSubmissionResponse,
-  GetSingleSubmissionRequest,
+  GetSingleSubAssRequest,
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
+  FileRequest,
+  SubmissionPaginationRequest,
+  SubmissionPaginationResponse,
 } from 'baobab-common';
-
-import { JwtAuthGuard } from './jwt.guard';
 import { JwtAuth } from './jwt.decorator';
 import {
   ApiResponse,
   ApiCreatedResponse,
   ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
-import { Submission } from 'src/entities/submission.entity';
+import { Response } from 'express';
+import { Submission } from '../entities/submission.entity';
+import { UserProfileService } from '../services/userprofile.service';
+import { Role } from '../entities/role.entity';
 
 @Controller('submission')
 export class SubmissionController {
-  constructor(private _submissionService: SubmissionService) {}
+  constructor(
+    private _submissionService: SubmissionService,
+    private _userProfileService: UserProfileService,
+  ) {}
 
-  @JwtAuth()
+  @JwtAuth(Role.MENTOR, Role.ADMIN)
   @Get('get/:id')
   @ApiResponse({ status: 200, description: 'The submission was found.' })
   @ApiResponse({
@@ -46,7 +56,7 @@ export class SubmissionController {
     description: 'No submission found for this user on this assignment.',
   })
   async getUserSubmission(
-    @Param() params: GetSingleSubmissionRequest,
+    @Param() params: GetSingleSubAssRequest,
     @Req() req,
   ): Promise<AssignmentSubmissionResponse> {
     const submission: Submission =
@@ -59,9 +69,10 @@ export class SubmissionController {
         errors: [],
       });
     }
+    const name = await this._userProfileService.getFullName(submission.userId);
     return {
       id: submission.id,
-      userId: submission.userId,
+      name: name,
       assignmentId: submission.assignmentId,
       timestamp: submission.timestamp.toString(),
       mark: submission.mark,
@@ -69,16 +80,49 @@ export class SubmissionController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @JwtAuth(Role.MENTOR, Role.ADMIN)
+  @Get('pagination/:id')
+  async pagination(
+    @Param() params: GetSingleSubAssRequest,
+    @Query() query: SubmissionPaginationRequest,
+  ): Promise<SubmissionPaginationResponse> {
+    const submissions: Submission[] =
+      await this._submissionService.getPaginatedSubmissions(
+        query.start,
+        query.end,
+        params.id,
+      );
+    const subRes: AssignmentSubmissionResponse[] = [];
+    for (const submission of submissions) {
+      const name = await this._userProfileService.getFullName(
+        submission.userId,
+      );
+      subRes.push({
+        id: submission.id,
+        name: name,
+        assignmentId: submission.assignmentId,
+        timestamp: submission.timestamp.toString(),
+        mark: submission.mark,
+        feedback: submission.feedback,
+      });
+    }
+    return {
+      data: subRes,
+      total: await this._submissionService.getCount(params.id),
+    };
+  }
+
+  @JwtAuth()
   @Put('create')
-  @ApiResponse({ status: 201, description: 'The assignment is created.' })
+  @ApiResponse({ status: 201, description: 'The submission is created.' })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   async createSubmission(
     @Body() reqBody: SubmissionCreateRequest,
+    @Req() req,
   ): Promise<ResourceCreatedResponse> {
     const submission: Submission =
       await this._submissionService.createSubmission(
-        reqBody.userId,
+        req.user.id,
         new Date(),
         reqBody.assignmentId,
       );
@@ -134,6 +178,20 @@ export class SubmissionController {
     );
     if (!rv) {
       throw new BadRequestException();
+    }
+  }
+
+  @ApiOkResponse({ description: 'File download successful.' })
+  @ApiNotFoundResponse({ description: 'File not found.' })
+  @Get('file/:id')
+  async getSubFile(@Param() params: FileRequest, @Res() res: Response) {
+    const subFile = await this._submissionService.getFile(params.id);
+    if (subFile) {
+      res.attachment(subFile.info.originalName);
+      res.contentType(subFile.info.mimetype);
+      subFile.data.pipe(res);
+    } else {
+      throw new NotFoundException();
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { CacheModule, Global, Module } from '@nestjs/common';
 import { AssignmentInMemory } from '../dao/memory/assignments.mem';
 import { PostInMemory } from '../dao/memory/posts.mem';
 import { RequestInMemory } from '../dao/memory/requests.mem';
@@ -14,6 +14,7 @@ import { MulterLocalDAO } from '../dao/memory/files.mem';
     MulterModule.register({
       storage: diskStorage({}), // store files in OS temp directory, in memory behavior without possibility for memory leaks
     }),
+    CacheModule.register(), // in memory cache
   ],
   providers: [
     { provide: 'MulterDAO', useClass: MulterLocalDAO },
@@ -25,6 +26,7 @@ import { MulterLocalDAO } from '../dao/memory/files.mem';
   ],
   exports: [
     MulterModule,
+    CacheModule,
     { provide: 'MulterDAO', useClass: MulterLocalDAO },
     { provide: 'AssignmentDAO', useClass: AssignmentInMemory },
     { provide: 'PostDAO', useClass: PostInMemory },

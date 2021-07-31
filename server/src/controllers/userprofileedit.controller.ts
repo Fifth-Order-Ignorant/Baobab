@@ -65,7 +65,7 @@ export class UserProfileEditController {
         reqBody.firstName,
         reqBody.lastName,
       );
-      this._authService.markSessionsStale(id, true);
+      await this._authService.markSessionsStale(id, true);
     } else {
       throw new BadRequestException({
         errors: [],
