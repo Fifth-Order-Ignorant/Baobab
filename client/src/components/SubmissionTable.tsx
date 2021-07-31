@@ -19,6 +19,12 @@ import {
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import { Table, TablePaginationConfig, Typography } from 'antd';
+
+import {
+  AssignmentSubmissionResponse,
+  SubmissionPaginationResponse,
+} from 'baobab-common';
 
 export interface SubmissionTableProps {
   outOf: number;
