@@ -2,7 +2,7 @@
 
 **Sprint Goal**: Implement the four assignment-related features (viewing an assignment, uploading a submission, viewing submissions as a mentor, and leaving feedback for assignments as a mentor), and add social media links to a user’s profile.
 
-**Team Capacity**: Our team members have a range of responsibilities across different courses and jobs. Each team member agrees to commit 20 hours for sprint 3. If a team member reaches their limit, we will divide the additional hours between the other teammates. If that’s not possible, we will move corresponding tasks to future sprints.
+**Team Capacity**: Our team members have a range of responsibilities across different courses and jobs. Each team member agrees to commit 20 hours for sprint 4. If a team member reaches their limit, we will divide the additional hours between the other teammates. If that’s not possible, we will move corresponding tasks to future sprints.
 
 **Spikes**: 
 
