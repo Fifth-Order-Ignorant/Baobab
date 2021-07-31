@@ -68,8 +68,7 @@ const Profiles = (): JSX.Element => {
               }}
               size="large"
               renderItem={(item) => (
-                <Link href={'/profile/' + item.id}>
-                  <a>
+                <a href={'/profile/' + item.id} target="_blank" rel="noreferrer">
                     <List.Item>
                       <List.Item.Meta
                         avatar={
@@ -83,7 +82,6 @@ const Profiles = (): JSX.Element => {
                       />
                     </List.Item>
                   </a>
-                </Link>
               )}
             />
           </InfiniteScroll>
