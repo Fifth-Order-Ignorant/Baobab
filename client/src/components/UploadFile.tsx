@@ -74,37 +74,39 @@ function UploadFile(info: Id): JSX.Element {
 
   return (
     <div>
-    {authState && <Form onFinish={handleSubmit(onSubmit)}>
-      <Form.Item>
-        <h4>Upload Your Submission</h4>
-      </Form.Item>
-      <Form.Item>
-        <Upload
-          maxCount={1}
-          beforeUpload={(options) => (
-            setFile(options), setStatus('file'), false
-          )}
-          showUploadList={true}
-          accept={`${mime.getType('jpg')},
+      {authState && (
+        <Form onFinish={handleSubmit(onSubmit)}>
+          <Form.Item>
+            <h4>Upload Your Submission</h4>
+          </Form.Item>
+          <Form.Item>
+            <Upload
+              maxCount={1}
+              beforeUpload={(options) => (
+                setFile(options), setStatus('file'), false
+              )}
+              showUploadList={true}
+              accept={`${mime.getType('jpg')},
             ${mime.getType('png')},
             ${mime.getType('pdf')},
             ${mime.getType('mp3')},
             ${mime.getType('mp4')}`}
-        >
-          <Button icon={<UploadOutlined />}>Upload</Button>
-        </Upload>
-      </Form.Item>
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={isSubmitting}
-          disabled={status != 'file'}
-        >
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>}
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isSubmitting}
+              disabled={status != 'file'}
+            >
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
     </div>
   );
 }

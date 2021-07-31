@@ -1,5 +1,13 @@
-import React, { useState, useEffect, Key } from 'react';
-import { Button, Form, Input, InputNumber, Table, TablePaginationConfig, Typography } from 'antd';
+import React, { useState, useEffect } from 'react';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Table,
+  TablePaginationConfig,
+  Typography,
+} from 'antd';
 
 import {
   UploadFeedbackRequest,
@@ -21,7 +29,7 @@ export interface SubmissionTableProps {
 /**
  * Renders the submissions.
  */
-export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
+export default function SubmissionTable(props: SubmissionTableProps): JSX.Element {
   const [data, setData] = useState<AssignmentSubmissionResponse[]>([]);
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
@@ -33,31 +41,33 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-    reset
-  } = useForm<UploadFeedbackRequest>({resolver: yupResolver(UploadFeedbackRequestSchema)});
+    reset,
+  } = useForm<UploadFeedbackRequest>({
+    resolver: yupResolver(UploadFeedbackRequestSchema),
+  });
 
-  const onSubmit: SubmitHandler<UploadFeedbackRequest>= async(prop) => {
+  const onSubmit: SubmitHandler<UploadFeedbackRequest> = async (prop) => {
     prop.id = data[edit].id;
     const newData = data;
-     newData[edit].mark = prop.mark;
-     newData[edit].feedback = prop.feedback;
-     setData(newData);
-     try {
-       await axios.patch('/api/submission/feedback', prop)
-       console.log(data);
-       UpdateOpen(edit);
-      } catch (e) {
-        if (axios.isAxiosError(e) && e.response) {
-          const { errors } = e.response.data as ErrorResponse;
-  
-          for (const error of errors) {
-            setError(error.path as keyof UploadFeedbackRequest, {
-              message: error.message,
-            });
-          }
+    newData[edit].mark = prop.mark;
+    newData[edit].feedback = prop.feedback;
+    setData(newData);
+    try {
+      await axios.patch('/api/submission/feedback', prop);
+      console.log(data);
+      UpdateOpen(edit);
+    } catch (e) {
+      if (axios.isAxiosError(e) && e.response) {
+        const { errors } = e.response.data as ErrorResponse;
+
+        for (const error of errors) {
+          setError(error.path as keyof UploadFeedbackRequest, {
+            message: error.message,
+          });
         }
       }
-  }
+    }
+  };
 
   const Download = (id: number) => {
     return (
@@ -67,19 +77,17 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
     );
   };
 
-  const UpdateOpen=(index: number) => {
+  const UpdateOpen = (index: number) => {
     if (edit == -1) {
-    setEdit(index);
-    
-    reset({mark: data[index].mark, feedback:data[index].feedback});
-    }
-    else if (edit == index) {
+      setEdit(index);
+
+      reset({ mark: data[index].mark, feedback: data[index].feedback });
+    } else if (edit == index) {
       setEdit(-1);
-    }
-    else {
+    } else {
       setEdit(edit);
     }
-  }
+  };
 
   /**
    * Handles table changes in pagination
@@ -142,75 +150,81 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
       title: 'Submit',
       dataIndex: 'submit',
       key: 'submit',
-      render: (submit: string, info: AssignmentSubmissionResponse, index: number) => {
-        return(<Button onClick={()=> UpdateOpen(index)} disabled={edit!=-1}>
-        Edit
-      </Button>)
+      render: (
+        submit: string,
+        info: AssignmentSubmissionResponse,
+        index: number,
+      ) => {
+        return (
+          <Button onClick={() => UpdateOpen(index)} disabled={edit != -1}>
+            Edit
+          </Button>
+        );
       },
     },
   ];
 
   return (
     <div>
-    {edit != -1 && <Form onFinish={handleSubmit(onSubmit)}>
-      
-     <Controller
-      name={"id"}
-      control={control}
-      defaultValue={edit}
-      render={({field}) => (
-      <Form.Item
-      >
-    {false && <InputNumber size={"small"} {...field}
-      />}
-      </Form.Item>
-      )}
-      />
-      <h4>Feedback</h4>
-      <Controller
-      name={"mark"}
-      control={control}
-      defaultValue={data[edit].mark || 0}
-      render={({field}) => (
-      <Form.Item
-      label={"New Mark"}
-      validateStatus={errors.mark ? 'error' : ''}
-      help={errors.mark?.message}
-      >
-    <InputNumber min={0} max={props.outOf} id={'mark'} {...field}
-      />
-      </Form.Item>
-      )}
-      />
-      <Controller
-      name={"feedback"}
-      defaultValue={data[edit].feedback}
-      control={control}
-      render={({field}) => <Form.Item
-      label={"Feedback:"}
-        validateStatus={errors.feedback ? 'error' : ''}
-        help={errors.feedback?.message}
-      >
-        <Input.TextArea id={'feedback'} {...field} />
-      </Form.Item>
-      }/>
-      <Form.Item>
+      {edit != -1 && (
+        <Form onFinish={handleSubmit(onSubmit)}>
+          <Controller
+            name={'id'}
+            control={control}
+            defaultValue={edit}
+            render={({ field }) => (
+              <Form.Item>
+                {false && <InputNumber size={'small'} {...field} />}
+              </Form.Item>
+            )}
+          />
+          <h4>Feedback</h4>
+          <Controller
+            name={'mark'}
+            control={control}
+            defaultValue={data[edit].mark || 0}
+            render={({ field }) => (
+              <Form.Item
+                label={'New Mark'}
+                validateStatus={errors.mark ? 'error' : ''}
+                help={errors.mark?.message}
+              >
+                <InputNumber min={0} max={props.outOf} id={'mark'} {...field} />
+              </Form.Item>
+            )}
+          />
+          <Controller
+            name={'feedback'}
+            defaultValue={data[edit].feedback}
+            control={control}
+            render={({ field }) => (
+              <Form.Item
+                label={'Feedback:'}
+                validateStatus={errors.feedback ? 'error' : ''}
+                help={errors.feedback?.message}
+              >
+                <Input.TextArea id={'feedback'} {...field} />
+              </Form.Item>
+            )}
+          />
+          <Form.Item>
             <Button type="primary" htmlType="submit" loading={isSubmitting}>
-        Update
-      </Button>
-            </Form.Item>
-    </Form>}
-    <Table
-      dataSource={data}
-      columns={columns}
-      loading={loading}
-      pagination={{
-        current,
-        total,
-        pageSize: props.pageSize,
-      }}
-      onChange={handleTableChange}
-    />
+              Update
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
+      <Table
+        dataSource={data}
+        columns={columns}
+        loading={loading}
+        pagination={{
+          current,
+          total,
+          pageSize: props.pageSize,
+        }}
+        onChange={handleTableChange}
+      />
     </div>
   );
 }
