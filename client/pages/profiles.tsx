@@ -1,5 +1,6 @@
 import { Row, Col, Typography, List, Avatar } from 'antd';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import styles from '../styles/ProfileList.module.css';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -67,24 +68,22 @@ const Profiles = (): JSX.Element => {
               }}
               size="large"
               renderItem={(item) => (
-                <a
-                  href={'/profile/' + item.id}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <List.Item>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          src={`/api/user/picture/${item.id.toString()}`}
-                          icon={<UserOutlined />}
-                        />
-                      }
-                      title={item.firstName + ' ' + item.lastName}
-                      description={item.jobTitle}
-                    />
-                  </List.Item>
-                </a>
+                <Link href={'/profile/' + item.id}>
+                  <a>
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={
+                          <Avatar
+                            src={`/api/user/picture/${item.id.toString()}`}
+                            icon={<UserOutlined />}
+                          />
+                        }
+                        title={item.firstName + ' ' + item.lastName}
+                        description={item.jobTitle}
+                      />
+                    </List.Item>
+                  </a>
+                </Link>
               )}
             />
           </InfiniteScroll>
