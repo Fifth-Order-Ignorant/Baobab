@@ -27,24 +27,24 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [edit, setEdit] = useState(-1);
-  const [mark, setMark] = useState<number>();
-  const [feedback, setFeedback] = useState<string>();
 
   const {
     control,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
+    reset
   } = useForm<UploadFeedbackRequest>({resolver: yupResolver(UploadFeedbackRequestSchema)});
 
   const onSubmit: SubmitHandler<UploadFeedbackRequest>= async(prop) => {
-    prop.id = edit;
+    prop.id = data[edit].id;
     const newData = data;
      newData[edit].mark = prop.mark;
      newData[edit].feedback = prop.feedback;
      setData(newData);
      try {
        await axios.patch('/api/submission/feedback', prop)
+       console.log(data);
        UpdateOpen(edit);
       } catch (e) {
         if (axios.isAxiosError(e) && e.response) {
@@ -70,6 +70,8 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
   const UpdateOpen=(index: number) => {
     if (edit == -1) {
     setEdit(index);
+    
+    reset({mark: data[index].mark, feedback:data[index].feedback});
     }
     else if (edit == index) {
       setEdit(-1);
@@ -147,6 +149,7 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
       },
     },
   ];
+
   return (
     <div>
     {edit != -1 && <Form onFinish={handleSubmit(onSubmit)}>
@@ -157,8 +160,6 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
       defaultValue={edit}
       render={({field}) => (
       <Form.Item
-      validateStatus={errors.mark ? 'error' : ''}
-      help={errors.mark?.message}
       >
     {false && <InputNumber size={"small"} {...field}
       />}
@@ -190,7 +191,7 @@ export function SubmissionTable(props: SubmissionTableProps): JSX.Element {
         validateStatus={errors.feedback ? 'error' : ''}
         help={errors.feedback?.message}
       >
-        <Input.TextArea {...field} />
+        <Input.TextArea id={'feedback'} {...field} />
       </Form.Item>
       }/>
       <Form.Item>
