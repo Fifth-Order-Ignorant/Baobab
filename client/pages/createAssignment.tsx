@@ -7,7 +7,7 @@ export default function CreateAssignment(): JSX.Element {
   const authContext = useContext(AuthContext);
   const isMentor = authContext
     ? authContext.role.toString() === 'Mentor' ||
-    authContext.role.toString() === 'Admin'
+      authContext.role.toString() === 'Admin'
     : false;
   if (isMentor) {
     return (
@@ -17,6 +17,9 @@ export default function CreateAssignment(): JSX.Element {
     );
   }
   return (
-    <ErrorPage statusCode={403} title={'You do not have permissions to view this page'} />
+    <ErrorPage
+      statusCode={403}
+      title={'You do not have permissions to view this page'}
+    />
   );
 }
