@@ -9,11 +9,77 @@ import * as cookieParser from 'cookie-parser';
 import { YupValidationPipe } from '../src/controllers/yup.pipe';
 import { AssignmentInMemory } from '../src/dao/memory/assignments.mem';
 import { FileInfo } from '../src/entities/fileinfo.entity';
-import { Connection } from 'mongoose';
-import { DEFAULT_DB_CONNECTION } from '@nestjs/mongoose/dist/mongoose.constants';
+import { UserProfileDAO } from '../src/dao/userprofiles';
+import { Role } from '../src/entities/role.entity';
+
+/**
+ * Returns a SuperAgentTest for testing
+ * @param app Nest application
+ * @param firstName first name of user
+ * @param lastName last name of user
+ * @param email email of user
+ * @param password password of user
+ * @returns agent for testing
+ */
+async function getUserAgent(
+  app: INestApplication,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+): Promise<request.SuperAgentTest> {
+  const agent = request.agent(app.getHttpServer());
+  await agent.post('/user/register').send({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+  });
+  await agent.post('/auth/login').send({
+    email: email,
+    password: password,
+  });
+  return agent;
+}
+
+async function getRoleAgent(
+  app: INestApplication,
+  userProfileDAO: UserProfileDAO,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  role: Role,
+): Promise<request.SuperAgentTest> {
+  const agent = request.agent(app.getHttpServer());
+  await agent.post('/user/register').send({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+  });
+  await agent.post('/auth/login').send({
+    email: email,
+    password: password,
+  });
+  await agent.post('/auth/logout');
+  const { id } = await userProfileDAO.getUserByEmail(email);
+  const profile = await userProfileDAO.getProfileById(id);
+  profile.role = role;
+  await userProfileDAO.updateProfile(profile);
+  await agent.post('/auth/login').send({
+    email: email,
+    password: password,
+  });
+  return agent;
+}
+import { clean } from './clean';
 
 describe('Assignment Create API Test', () => {
   let app: INestApplication;
+  let userAgent: request.SuperAgentTest;
+  let adminAgent: request.SuperAgentTest;
+  let userProfileDAO: UserProfileDAO;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -22,35 +88,35 @@ describe('Assignment Create API Test', () => {
 
     app = moduleRef.createNestApplication();
     const { httpAdapter } = app.get(HttpAdapterHost);
+    userProfileDAO = moduleRef.get<UserProfileDAO>('UserProfileDAO');
     app.useGlobalFilters(new CustomExceptionsFilter(httpAdapter));
 
     app.useGlobalPipes(new YupValidationPipe());
     app.use(cookieParser());
     await app.init();
+
+    userAgent = await getUserAgent(
+      app,
+      'rich',
+      'tree',
+      'rich@tree.com',
+      'richtree',
+    );
+
+    // Setup an admin agent.
+    adminAgent = await getRoleAgent(
+      app,
+      userProfileDAO,
+      'cool',
+      'dude',
+      'cool.dude@mail.utoronto.ca',
+      'utm',
+      Role.ADMIN,
+    );
   });
 
   it(`lets you create a new assignment`, async () => {
-    const agent = request.agent(app.getHttpServer());
-
-    await agent
-      .post('/user/register')
-      .send({
-        firstName: 'ethan',
-        lastName: 'lam',
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
-    await agent
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
-    return agent
+    return adminAgent
       .post('/assignment/create')
       .send({
         name: 'A1',
@@ -61,17 +127,7 @@ describe('Assignment Create API Test', () => {
   });
 
   it(`lets you create a new assignment and gives the correct id`, async (done) => {
-    const agent = request.agent(app.getHttpServer());
-
-    await agent
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
-    const response = await agent.post('/assignment/create').send({
+    const response = await adminAgent.post('/assignment/create').send({
       name: 'A2',
       description: 'poop',
       maxMark: 50,
@@ -81,31 +137,13 @@ describe('Assignment Create API Test', () => {
   });
 
   it(`lets you view an assignment`, async () => {
-    const agent = request.agent(app.getHttpServer());
-
-    await agent
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
-    return await agent.get('/assignment/get/0').expect(HttpStatus.OK);
+    return await userAgent.get('/assignment/get/0').expect(HttpStatus.OK);
   });
 
   it(`lets you view an assignment and the given details are correct`, async (done) => {
-    const agent = request.agent(app.getHttpServer());
-
-    await agent
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
-    const response = await agent.get('/assignment/get/0').expect(HttpStatus.OK);
+    const response = await userAgent
+      .get('/assignment/get/0')
+      .expect(HttpStatus.OK);
     expect(response.body.name).toBe('A1');
     expect(response.body.description).toBe('hi');
     expect(response.body.maxMark).toBe(100);
@@ -113,27 +151,13 @@ describe('Assignment Create API Test', () => {
   });
 
   it(`does not let you view an assignment that does not exist`, async () => {
-    const agent = request.agent(app.getHttpServer());
-
-    await agent
-      .post('/auth/login')
-      .send({
-        email: 'ethan@mail.com',
-        password: 'mcs',
-      })
-      .expect(HttpStatus.CREATED);
-
-    return await agent.get('/assignment/get/3').expect(HttpStatus.NOT_FOUND);
+    return await userAgent
+      .get('/assignment/get/3')
+      .expect(HttpStatus.NOT_FOUND);
   });
 
   afterAll(async () => {
-    const conn = app.get<Connection>(DEFAULT_DB_CONNECTION);
-    if (conn) {
-      const cols = await conn.db.collections();
-      for (const col of cols) {
-        await col.deleteMany({});
-      }
-    }
+    await clean(app);
     await app.close();
   });
 });

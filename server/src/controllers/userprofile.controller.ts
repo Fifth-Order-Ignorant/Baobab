@@ -107,7 +107,7 @@ export class UserProfileController {
   async getPicture(@Param() params: UploadFileRequest, @Res() res: Response) {
     const picture = await this._userProfileService.getPicture(params.id);
     if (picture) {
-      res.header('Content-Type', picture.info.mimetype);
+      res.contentType(picture.info.mimetype);
       picture.data.pipe(res);
     } else {
       throw new NotFoundException();

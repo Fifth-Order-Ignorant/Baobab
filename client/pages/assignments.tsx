@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import styles from '../styles/ProfileList.module.css';
 import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
+import Link from 'next/link';
+
 /**
  * Interface for the props that are required for each assignment preview
  */
@@ -67,18 +69,22 @@ const Assignments = (): JSX.Element => {
               }}
               size="large"
               renderItem={(item) => (
-                <List.Item
-                  style={{
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <List.Item.Meta
-                    title={item.name}
-                    description={item.description}
-                  />
-                  {'-/' + item.maxMark}
-                </List.Item>
+                <Link href={'/assignment/' + item.id}>
+                  <a>
+                    <List.Item
+                      style={{
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      <List.Item.Meta
+                        title={item.name}
+                        description={item.description}
+                      />
+                      {'-/' + item.maxMark}
+                    </List.Item>
+                  </a>
+                </Link>
               )}
             />
           </InfiniteScroll>

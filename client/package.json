@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint \"pages/**/*.{ts,tsx}\" \"src/**/*.{ts,tsx}\" --fix",
+    "lint": "eslint \"{pages,src}/**/*.{ts,tsx}\" --fix",
+    "lint:ci": "eslint \"{pages,src}/**/*.{ts,tsx}\"",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

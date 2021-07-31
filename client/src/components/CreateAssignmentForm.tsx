@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Form, Input, InputNumber, Typography, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
-  SingleAssignmentResponse,
+  ResourceCreatedResponse,
   CreateAssignmentRequest,
   CreateAssignmentRequestSchema,
   ErrorResponse,
@@ -39,10 +39,8 @@ function CreateAssignmentForm(): JSX.Element {
     try {
       setState('done');
       await axios
-        .post('/api/assignment/create', data)
-        .then(
-          (returned) => (id = (returned.data as SingleAssignmentResponse).id),
-        );
+        .post<ResourceCreatedResponse>('/api/assignment/create', data)
+        .then((returned) => (id = returned.data.id));
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
 
