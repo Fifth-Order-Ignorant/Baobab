@@ -26,6 +26,7 @@ export * from "./requests/RoleRequest.dto";
 export * from "./requests/SubmissionCreateRequest.dto";
 export * from "./requests/SubmissionPaginationRequest.dto";
 export * from "./requests/TeamRequest.dto";
+export * from "./requests/UploadFeedbackRequest.dto";
 export * from "./requests/UploadFileRequest.dto";
 export * from "./requests/UserPostsPaginationRequest.dto";
 export * from "./requests/UserRepliesPaginationRequest.dto";
