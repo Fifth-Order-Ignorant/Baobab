@@ -21,8 +21,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
 export interface SubmissionTableProps {
+  /**
+   * Maximum mark for the assignment.
+   */
   outOf: number;
+  /**
+   * The number of submissions to be fetched on one page.
+   */
   pageSize: number;
+  /**
+   * Fetches submission data.
+   */
   fetchData: (page: number) => Promise<SubmissionPaginationResponse>;
 }
 

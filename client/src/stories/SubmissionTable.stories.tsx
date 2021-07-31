@@ -1,4 +1,4 @@
-import SubmissionTable from 'src/components/SubmissionTable';
+import SubmissionTable from '../components/SubmissionTable';
 import { Meta } from '@storybook/react';
 
 export default {

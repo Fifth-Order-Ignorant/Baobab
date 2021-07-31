@@ -1,7 +1,7 @@
 import RequestFeed from '../components/RequestFeed';
 import { Meta } from '@storybook/react';
 import { AuthContext } from '../providers/AuthProvider';
-import { Role } from 'baobab-server/src/entities/role.entity';
+import { Role } from 'baobab-common';
 
 export default {
   title: 'RequestFeed',

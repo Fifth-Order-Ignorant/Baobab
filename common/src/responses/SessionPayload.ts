@@ -1,4 +1,5 @@
 import { Role } from 'baobab-server/src/entities/role.entity';
+export { Role } from 'baobab-server/src/entities/role.entity';
 
 export class SessionPayload {
   id!: number;
