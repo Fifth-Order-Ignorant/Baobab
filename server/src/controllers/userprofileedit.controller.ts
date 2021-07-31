@@ -12,7 +12,12 @@ import {
 } from '@nestjs/common';
 import { UserProfileService } from '../services/userprofile.service';
 import { Response } from 'express';
-import { EditNameRequest, EditJobRequest, EditBioRequest, EditLinksRequest } from 'baobab-common';
+import {
+  EditNameRequest,
+  EditJobRequest,
+  EditBioRequest,
+  EditLinksRequest,
+} from 'baobab-common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,

@@ -14,6 +14,7 @@ import {
   RegisterRequest,
   ProfilePaginationRequest,
   ProfileViewRequest,
+  ProfileLinksRequest,
   ProfileResponse,
   UploadFileRequest,
 } from 'baobab-common';
@@ -64,6 +65,23 @@ export class UserProfileController {
     const id = reqBody.userId;
     if (await this._userProfileService.isValidProfile(id)) {
       return this._userProfileService.getProfile(id);
+    } else {
+      throw new BadRequestException({
+        errors: [],
+      });
+    }
+  }
+
+  @Post('links')
+  @ApiResponse({
+    status: 201,
+    description: 'The links are correctly fetched.',
+  })
+  @ApiResponse({ status: 400, description: 'The request is invalid.' })
+  async getLinks(@Body() reqBody: ProfileLinksRequest) {
+    const id = reqBody.userId;
+    if (await this._userProfileService.isValidProfile(id)) {
+      return this._userProfileService.getLinks(id);
     } else {
       throw new BadRequestException({
         errors: [],

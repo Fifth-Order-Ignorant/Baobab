@@ -1,0 +1,163 @@
+import { Form, Button, Input } from 'antd';
+import React, { useEffect, useState } from 'react';
+import {
+  ErrorResponse,
+  EditLinksRequest,
+  EditLinksRequestSchema,
+} from 'baobab-common';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
+
+type Link = {
+  /**
+   * A list of links on the user's profile
+   */
+  links: string[];
+  /**
+   * Whether the links can be edited
+   */
+  canEdit: boolean;
+};
+
+/**
+ * Renders the textbook for editing the links, and displays them
+ */
+export default function ChangeLinksForm(linkProps: Link): JSX.Element {
+  const [state, setState] = useState('default');
+  const [links, setLinks] = useState<string[]>([]);
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<EditLinksRequest>({
+    resolver: yupResolver(EditLinksRequestSchema),
+  });
+
+  const onSubmit = async (data: EditLinksRequest) => {
+    try {
+      await axios.patch('/api/profile/editlinks', data);
+      changeState();
+      setLinks(data.links);
+    } catch (error) {
+      const { errors } = error.response.data as ErrorResponse;
+      console.log(errors);
+    }
+  };
+
+  const changeState = () => {
+    if (state == 'default' && linkProps.canEdit) {
+      setState('edit');
+    } else if (state == 'edit') {
+      setState('default');
+    }
+  };
+
+  useEffect(() => {
+    setLinks(linkProps.links);
+  }, [linkProps]);
+
+  useEffect(() => {
+    setLinks(linkProps.links);
+  }, []);
+
+  return (
+    <Form onFinish={handleSubmit(onSubmit)}>
+      <Controller
+        control={control}
+        name="links.0"
+        render={({ field }) => (
+          <Form.Item>
+            <div
+              onClick={() => {
+                changeState();
+              }}
+              style={{ padding: '10px 30px 0px 30px' }}
+            >
+              {state === 'default' && links[0] != 'No Link Available' && (
+                <a href={links[0]}>{links[0]}</a>
+              )}
+              {state === 'default' && links[0] == 'No Link Available' && (
+                <p>{links[0]}</p>
+              )}
+            </div>
+            {state === 'edit' && (
+              <Form.Item
+                name="link.0"
+                style={{ display: 'inline-block', width: '50%' }}
+                validateStatus={errors.links ? 'error' : ''}
+              >
+                <Input size="large" {...field} />
+              </Form.Item>
+            )}
+          </Form.Item>
+        )}
+      />
+      <Controller
+        control={control}
+        name="links.1"
+        render={({ field }) => (
+          <Form.Item>
+            <div
+              onClick={() => {
+                changeState();
+              }}
+              style={{ padding: '0px 30px 0px 30px' }}
+            >
+              {state === 'default' && links[1] != 'No Link Available' && (
+                <a href={links[1]}>{links[1]}</a>
+              )}
+              {state === 'default' && links[1] == 'No Link Available' && (
+                <p>{links[1]}</p>
+              )}{' '}
+            </div>
+            {state === 'edit' && (
+              <Form.Item
+                name="link.1"
+                style={{ display: 'inline-block', width: '50%' }}
+                validateStatus={errors.links ? 'error' : ''}
+              >
+                <Input size="large" {...field} />
+              </Form.Item>
+            )}
+          </Form.Item>
+        )}
+      />
+      <Controller
+        control={control}
+        name="links.2"
+        render={({ field }) => (
+          <Form.Item>
+            <div
+              onClick={() => {
+                changeState();
+              }}
+              style={{ padding: '0px 30px 0px 30px' }}
+            >
+              {state === 'default' && links[2] != 'No Link Available' && (
+                <a href={links[2]}>{links[2]}</a>
+              )}
+              {state === 'default' && links[2] == 'No Link Available' && (
+                <p>{links[2]}</p>
+              )}{' '}
+            </div>
+            {state === 'edit' && (
+              <Form.Item
+                name="link.2"
+                style={{ display: 'inline-block', width: '50%' }}
+                validateStatus={errors.links ? 'error' : ''}
+              >
+                <Input size="large" {...field} />
+              </Form.Item>
+            )}
+          </Form.Item>
+        )}
+      />
+      {state === 'edit' && (
+        <Button type="primary" htmlType="submit">
+          Save
+        </Button>
+      )}
+    </Form>
+  );
+}
