@@ -1,7 +1,6 @@
 import RequestFeed from '../components/RequestFeed';
 import { Meta } from '@storybook/react';
 import { AuthContext } from '../providers/AuthProvider';
-import { Role } from 'baobab-common';
 
 export default {
   title: 'RequestFeed',
@@ -17,7 +16,7 @@ export const Basic = (): JSX.Element => (
       fullName: 'John Doe',
       integrityHash: '',
       exp: 0,
-      role: Role.DEFAULT,
+      role: 'Default',
       iat: 0,
     }}
   >
