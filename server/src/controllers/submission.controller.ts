@@ -12,9 +12,10 @@ import {
   BadRequestException,
   InternalServerErrorException,
   UploadedFile,
+  Patch,
   Res,
 } from '@nestjs/common';
-
+import { Role } from '../entities/role.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { SubmissionService } from '../services/submission.service';
 import * as mime from 'mime';
@@ -24,6 +25,7 @@ import {
   UploadFileRequest,
   ResourceCreatedResponse,
   SubmissionCreateRequest,
+  UploadFeedbackRequest,
   FileRequest,
   SubmissionPaginationRequest,
   SubmissionPaginationResponse,
@@ -39,7 +41,6 @@ import {
 import { Response } from 'express';
 import { Submission } from '../entities/submission.entity';
 import { UserProfileService } from '../services/userprofile.service';
-import { Role } from '../entities/role.entity';
 
 @Controller('submission')
 export class SubmissionController {
@@ -178,6 +179,26 @@ export class SubmissionController {
     );
     if (!rv) {
       throw new BadRequestException();
+    }
+  }
+
+  @ApiResponse({ status: 200, description: 'Updated feedback successfully.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 401, description: 'No logged in account.' })
+  @ApiResponse({ status: 403, description: 'User is not a mentor.' })
+  @JwtAuth(Role.ADMIN, Role.MENTOR)
+  @Patch('feedback')
+  async updateFeedback(@Body() reqBody: UploadFeedbackRequest) {
+    if (
+      !(await this._submissionService.uploadFeedback(
+        reqBody.id,
+        reqBody.mark,
+        reqBody.feedback,
+      ))
+    ) {
+      throw new BadRequestException({
+        errors: [],
+      });
     }
   }
 

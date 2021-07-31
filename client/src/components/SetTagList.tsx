@@ -8,7 +8,13 @@ import Tags from '../constants/Tags';
  * @param props Contains a function that passes in the current tags.
  */
 export default function SetTagList(props: {
+  /**
+   * actions to be completed when there's a new tag
+   */
   onTagChange: (tags: string[]) => void;
+  /**
+   * Tags of the post
+   */
   tags: string[];
 }): JSX.Element {
   const [inputTag, setInputTag] = useState('');

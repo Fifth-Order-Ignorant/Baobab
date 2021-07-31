@@ -5,6 +5,6 @@ export class SessionPayload {
   fullName!: string;
   integrityHash!: string;
   exp!: number;
-  role!: Role;
+  role!: Role | string;
   iat!: number;
 }

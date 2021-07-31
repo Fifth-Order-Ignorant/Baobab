@@ -29,7 +29,6 @@ function CreateTeamForm(): JSX.Element {
       });
     } catch (error) {
       const { errors } = error.response.data as ErrorResponse;
-      console.log(error);
 
       for (const error of errors) {
         setError(error.path as keyof CreateTeamRequest, {

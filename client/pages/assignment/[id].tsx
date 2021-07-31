@@ -5,7 +5,7 @@ import { AssignmentResponse } from 'baobab-common';
 import { Col, Row, Spin } from 'antd';
 import AssignmentView from '../../src/components/AssignmentView';
 import styles from '../../styles/Assignment.module.css';
-import { SubmissionTable } from '../../src/components/SubmissionTable';
+import SubmissionTable from '../../src/components/SubmissionTable';
 import { AuthContext } from '../../src/providers/AuthProvider';
 import UploadFile from 'src/components/UploadFile';
 
