@@ -10,9 +10,9 @@ import Link from 'next/link';
 function Navbar(): JSX.Element {
   const authContext = useContext(AuthContext);
   const isMentor = authContext
-    ? authContext.role.toString() === 'Mentor' : false;
-  const isAdmin = authContext
-    ? authContext.role.toString() === 'Admin' : false;
+    ? authContext.role.toString() === 'Mentor'
+    : false;
+  const isAdmin = authContext ? authContext.role.toString() === 'Admin' : false;
   return (
     <Row justify="space-between" align="middle">
       <Col>
