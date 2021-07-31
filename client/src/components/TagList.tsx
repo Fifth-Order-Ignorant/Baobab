@@ -3,7 +3,7 @@ import TagToColor from '../constants/TagToColor';
 
 /**
  * Renders tags of the given post.
- * @param props Contains list of tags
+ * @param tags Contains list of tags
  */
 export default function TagList(props: { tags: string[] }): JSX.Element {
   return (

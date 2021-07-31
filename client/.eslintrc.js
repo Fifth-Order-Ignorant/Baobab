@@ -30,4 +30,5 @@ module.exports = {
     'react/react-in-jsx-scope':
       'off' /* importing react is done automatically by Next.js */,
   },
+  ignorePatterns: ['.eslintrc.js', '/src/dtos/*']
 };

@@ -16,6 +16,8 @@ export const Basic = (): JSX.Element => (
       fullName: 'John Doe',
       integrityHash: '',
       exp: 0,
+      role: Role.DEFAULT,
+      iat: 0,
     }}
   >
     <RequestComponent

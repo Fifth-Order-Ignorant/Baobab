@@ -27,7 +27,6 @@ function RoleRequestForm(): JSX.Element {
       data.description = (
         document.getElementById('description') as HTMLInputElement
       ).value;
-      console.log(data);
       setState('done');
       await axios.post('/api/request/role', data);
     } catch (error) {
@@ -70,6 +69,7 @@ function RoleRequestForm(): JSX.Element {
                       <Select.Option value="Service Provider Representative">
                         Service Provider Representative
                       </Select.Option>
+                      <Select.Option value="Mentor">Mentor</Select.Option>
                     </Select>
                   )}
                   name="role"

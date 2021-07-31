@@ -41,17 +41,23 @@ export class AuthController {
       });
     }
 
-    const { jwt, integrityString } = await this._authService.genJwt(user.id);
+    const { jwt, integrityString, payload } = await this._authService.genJwt(
+      user.id,
+    );
+
+    const maxAge = payload.exp - Date.now() / 1000;
 
     res.cookie('SESSION_JWT', jwt, {
       secure: this._configService.get<boolean>('production'),
       sameSite: 'lax',
+      maxAge: maxAge * 1000,
     });
 
     res.cookie('SESSION_INT', integrityString, {
       httpOnly: true,
       secure: this._configService.get<boolean>('production'),
       sameSite: 'lax',
+      maxAge: maxAge * 1000,
     });
   }
 
