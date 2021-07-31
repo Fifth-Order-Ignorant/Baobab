@@ -22,11 +22,7 @@ export function Links(id: Id): JSX.Element {
       .then((response) => {
         const tempList = response.data;
         if (tempList.length == 0) {
-          setLinks([
-            'No Link Available',
-            'No Link Available',
-            'No Link Available',
-          ]);
+          setLinks(['', '', '']);
         } else {
           setLinks(tempList);
         }

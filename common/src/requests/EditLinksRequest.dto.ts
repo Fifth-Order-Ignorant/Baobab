@@ -4,6 +4,7 @@ export class EditLinksRequest {
   links!: string[];
 }
 
+// @ts-ignore
 export const EditLinksRequestSchema: SchemaOf<EditLinksRequest> = object({
-  links: array().of(string().required()),
+  links: array().of(string()),
 });
