@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import * as mime from 'mime';
 import { Button, Form, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -10,6 +10,7 @@ import {
   ErrorResponse,
 } from 'baobab-common';
 import axios from 'axios';
+import { AuthContext } from 'src/providers/AuthProvider';
 
 type Id = {
   /**
@@ -25,6 +26,7 @@ type Id = {
 function UploadFile(info: Id): JSX.Element {
   const [file, setFile] = useState<string | Blob | RcFile>();
   const [status, setStatus] = useState('default');
+  const authState = useContext(AuthContext);
 
   const {
     handleSubmit,
@@ -71,37 +73,41 @@ function UploadFile(info: Id): JSX.Element {
   };
 
   return (
-    <Form onFinish={handleSubmit(onSubmit)}>
-      <Form.Item>
-        <h4>Upload Your Submission</h4>
-      </Form.Item>
-      <Form.Item>
-        <Upload
-          maxCount={1}
-          beforeUpload={(options) => (
-            setFile(options), setStatus('file'), false
-          )}
-          showUploadList={true}
-          accept={`${mime.getType('jpg')},
+    <div>
+      {authState && (
+        <Form onFinish={handleSubmit(onSubmit)}>
+          <Form.Item>
+            <h4>Upload Your Submission</h4>
+          </Form.Item>
+          <Form.Item>
+            <Upload
+              maxCount={1}
+              beforeUpload={(options) => (
+                setFile(options), setStatus('file'), false
+              )}
+              showUploadList={true}
+              accept={`${mime.getType('jpg')},
             ${mime.getType('png')},
             ${mime.getType('pdf')},
             ${mime.getType('mp3')},
             ${mime.getType('mp4')}`}
-        >
-          <Button icon={<UploadOutlined />}>Upload</Button>
-        </Upload>
-      </Form.Item>
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          loading={isSubmitting}
-          disabled={status != 'file'}
-        >
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isSubmitting}
+              disabled={status != 'file'}
+            >
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
+    </div>
   );
 }
 export default UploadFile;

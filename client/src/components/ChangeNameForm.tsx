@@ -48,7 +48,6 @@ function ChangeNameForm(name: Name): JSX.Element {
     data.lastName = (
       document.getElementById('lastName') as HTMLInputElement
     ).value;
-    console.log(data);
     setFirstName(data.firstName);
     setLastName(data.lastName);
     try {

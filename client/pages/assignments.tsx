@@ -31,7 +31,6 @@ const Assignments = (): JSX.Element => {
         end: page * 10,
       },
     });
-    console.log(newAssignments.data);
     return newAssignments.data;
   };
   const loadMore = async (page: number) => {

@@ -119,4 +119,14 @@ export class SubmissionMongoDAO implements SubmissionDAO {
     }
     return ans[0];
   }
+
+  async getCount(assignmentId: number): Promise<number> {
+    return this._submissions
+      .find(
+        await this._submissions.translateAliases({
+          assignmentId: assignmentId,
+        }),
+      )
+      .countDocuments();
+  }
 }

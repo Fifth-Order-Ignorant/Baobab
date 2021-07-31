@@ -27,7 +27,6 @@ function RoleRequestForm(): JSX.Element {
       data.description = (
         document.getElementById('description') as HTMLInputElement
       ).value;
-      console.log(data);
       setState('done');
       await axios.post('/api/request/role', data);
     } catch (error) {

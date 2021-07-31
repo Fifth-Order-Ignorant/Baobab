@@ -9,10 +9,5 @@ export default {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const Basic = (): JSX.Element => (
-  <SetTagList
-    tags={Tags}
-    onTagChange={(tags: string[]) => {
-      console.log(tags);
-    }}
-  />
+  <SetTagList tags={Tags} onTagChange={(tags: string[]) => {}} />
 );
