@@ -69,8 +69,7 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
         defaultValue=""
         render={({ field }) => (
           <Form.Item>
-            <div
-            >
+            <div>
               {state === 'default' && links[0] != '' && (
                 <a href={links[0]} target="_blank" rel="noreferrer">
                   {links[0]}
@@ -98,8 +97,7 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
         defaultValue=""
         render={({ field }) => (
           <Form.Item>
-            <div
-            >
+            <div>
               {state === 'default' && links[1] != '' && (
                 <a href={links[1]} target="_blank" rel="noreferrer">
                   {links[1]}
@@ -127,8 +125,7 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
         defaultValue=""
         render={({ field }) => (
           <Form.Item>
-            <div
-            >
+            <div>
               {state === 'default' && links[2] != '' && (
                 <a href={links[2]} target="_blank" rel="noreferrer">
                   {links[2]}

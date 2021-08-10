@@ -35,7 +35,7 @@ export default function Profile(): JSX.Element {
               {id && <AvatarComponent id={parseInt(id as string, 10)} />}
             </Row>
             <Row justify="start">
-              <div style={{ 'paddingLeft': '40px', 'paddingBottom': '20px' }}>
+              <div style={{ paddingLeft: '40px', paddingBottom: '20px' }}>
                 <Links id={parseInt(id as string, 10)} />
               </div>
             </Row>
