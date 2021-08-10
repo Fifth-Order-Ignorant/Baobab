@@ -70,10 +70,6 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
         render={({ field }) => (
           <Form.Item>
             <div
-              onClick={() => {
-                changeState();
-              }}
-              style={{ padding: '10px 30px 0px 30px' }}
             >
               {state === 'default' && links[0] != '' && (
                 <a href={links[0]} target="_blank" rel="noreferrer">
@@ -103,10 +99,6 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
         render={({ field }) => (
           <Form.Item>
             <div
-              onClick={() => {
-                changeState();
-              }}
-              style={{ padding: '0px 30px 0px 30px' }}
             >
               {state === 'default' && links[1] != '' && (
                 <a href={links[1]} target="_blank" rel="noreferrer">
@@ -136,10 +128,6 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
         render={({ field }) => (
           <Form.Item>
             <div
-              onClick={() => {
-                changeState();
-              }}
-              style={{ padding: '0px 30px 0px 30px' }}
             >
               {state === 'default' && links[2] != '' && (
                 <a href={links[2]} target="_blank" rel="noreferrer">
@@ -165,6 +153,11 @@ export default function ChangeLinksForm(linkProps: Link): JSX.Element {
       {state === 'edit' && (
         <Button type="primary" htmlType="submit">
           Save
+        </Button>
+      )}
+      {state !== 'edit' && (
+        <Button onClick={changeState} block>
+          Edit Links
         </Button>
       )}
     </Form>
