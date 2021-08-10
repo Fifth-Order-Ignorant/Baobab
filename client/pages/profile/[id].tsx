@@ -31,8 +31,14 @@ export default function Profile(): JSX.Element {
         <Row>
           <Col span={2} />
           <Col span={4}>
-            {id && <AvatarComponent id={parseInt(id as string, 10)} />}
-            <Links id={parseInt(id as string, 10)} />
+            <Row>
+              {id && <AvatarComponent id={parseInt(id as string, 10)} />}
+            </Row>
+            <Row justify="start">
+              <div style={{ 'paddingLeft': '40px', 'paddingBottom': '20px' }}>
+                <Links id={parseInt(id as string, 10)} />
+              </div>
+            </Row>
           </Col>
           <Col span={1} />
           <Col className={styles.tabContents} span={13}>
