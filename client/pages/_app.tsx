@@ -22,10 +22,12 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         <Layout.Header style={{ background: '#fff' }}>
           <Navbar />
         </Layout.Header>
-        <Layout.Content>
+        <Layout.Content style={{ minHeight: 'calc(100vh - 64px)' }}>
           <Component {...pageProps} />
         </Layout.Content>
-        <Layout.Footer />
+        <Layout.Footer style={{ margin: '0 auto' }}>
+          Made With ❤ By Fifth Order Ignorant
+        </Layout.Footer>
       </Layout>
     </AuthProvider>
   );
