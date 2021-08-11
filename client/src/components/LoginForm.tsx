@@ -3,6 +3,7 @@ import { ErrorResponse, LoginRequest, LoginRequestSchema } from 'baobab-common';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import styles from '../../styles/Form.module.css';
 
 type LoginFormProps = {
   /**
@@ -40,7 +41,11 @@ function LoginForm({ onSuccess }: LoginFormProps): JSX.Element {
   };
 
   return (
-    <Form onFinish={handleSubmit(onSubmit)}>
+    <Form
+      onFinish={handleSubmit(onSubmit)}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
+    >
       <Form.Item
         label="Email"
         name="email"
@@ -59,8 +64,8 @@ function LoginForm({ onSuccess }: LoginFormProps): JSX.Element {
         <Input.Password {...register('password')} />
       </Form.Item>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit" loading={isSubmitting}>
+      <Form.Item className={styles.submit} wrapperCol={{ offset: 19, span: 5 }}>
+        <Button type="primary" htmlType="submit" loading={isSubmitting} block>
           Login
         </Button>
       </Form.Item>
